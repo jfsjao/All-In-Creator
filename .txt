@@ -87,6 +87,9 @@
 │   │   │       │    └── viptech.jpg
 │   │   │       ├── 📁 empresa/ 
 │   │   │       │    └── selfie-nico.jpg
+│   │   │       ├── 📁 depoimentos/ 
+│   │   │       │    ├── joaoguilherme.JPG
+│   │   │       │    └── gustavojose.JPG
 │   │   │       │
 |   │   │       ├── nicowork-logo-dark.png
 |   │   │       └── nicowork-logo.png

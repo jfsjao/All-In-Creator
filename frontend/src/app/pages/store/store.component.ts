@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { RouterModule, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-store',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, RouterLink],
   templateUrl: './store.component.html',
   styleUrls: ['./store.component.scss']
 })
@@ -15,6 +15,9 @@ export class StoreComponent {
     years: 1,
     satisfaction: 100
   };
+
+  joaoGuilhermeImage = 'assets/images/depoimentos/joaoguilherme.png';
+  gustavoJoseImage = 'assets/images/depoimentos/gustavojose.png';
 
   premiumFeatures = [
     "Baixar Reels",
