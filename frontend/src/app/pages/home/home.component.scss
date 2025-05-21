@@ -1,91 +1,203 @@
 .blog-home {
   background-color: var(--bg-color);
-
-  /* Carrossel Fullscreen */
-  .fullscreen-carousel {
-    height: 100vh;
-    width: 100%;
+  
+  /* Carrossel Hero - Versão Atualizada */
+  .hero-carousel {
     position: relative;
+    height: 100vh;
+    max-height: 900px;
     overflow: hidden;
-    margin-top: -70px; // Compensa a navbar fixa
+    margin-top: -70px; // Compensa a navbar
+    padding-top: 70px; // Adiciona espaço para a navbar
+    
+    // Garante que o carrossel cubra toda a largura
+    width: 100vw;
+    left: 50%;
+    transform: translateX(-50%);
+    margin-left: calc(-50vw + 50%);
+    margin-right: calc(-50vw + 50%);
 
-    .carousel-container {
+    // Overlay gradiente
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
       height: 100%;
-      position: relative;
+      background:rgba(0, 72, 87, 0.829) ;
+      z-index: 1;
+    }
 
-      .carousel-slide {
+    .carousel-track {
+      height: 100%;
+      width: 100%;
+      position: relative;
+      transition: transform 0.5s ease-out;
+    }
+
+    .carousel-slide {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+
+      .carousel-slide img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain; // Mostra a imagem inteira, pode criar barras laterais ou superior/inferior
+        object-position: center;
+        filter: brightness(1);
+        background-color: rgba(0, 72, 87); // Cor de fundo para áreas não preenchidas
+      }
+      &.active {
+        opacity: 1;
+        z-index: 1;
+      }
+
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center;
+        filter: brightness(1);
+      }
+
+      .slide-overlay {
         position: absolute;
         top: 0;
         left: 0;
         width: 100%;
         height: 100%;
-        opacity: 0;
-        transition: opacity 1s ease-in-out;
+        z-index: 1;
+      }
 
-        &.active {
+      .slide-content {
+        position: absolute;
+        bottom: 20%;
+        left: 10%;
+        max-width: 600px;
+        color: var(--text-light);
+        z-index: 2;
+        transform: translateY(30px);
+        transition: transform 0.8s ease;
+        opacity: 0;
+
+        .active & {
+          transform: translateY(0);
           opacity: 1;
         }
 
-        img {
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
-          filter: brightness(0.7); // Escurece a imagem para melhor contraste
+        .slide-title {
+          font-size: clamp(2rem, 5vw, 3.5rem);
+          font-weight: 700;
+          margin-bottom: 1.5rem;
+          line-height: 1.2;
+          text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
         }
 
-        .carousel-caption {
-          position: absolute;
-          top: 50%;
-          left: 50%;
-          transform: translate(-50%, -50%);
-          text-align: center;
-          color: var(--text-light);
-          background-color: rgba(0, 52, 87, 0.7); // --color-dark com transparência
-          padding: 2rem;
-          border-radius: 8px;
-          max-width: 80%;
-          backdrop-filter: blur(5px);
-          border: 1px solid rgba(255, 255, 255, 0.1);
+        .slide-description {
+          font-size: clamp(1rem, 2vw, 1.25rem);
+          margin-bottom: 2rem;
+          opacity: 0.9;
+          line-height: 1.6;
+        }
 
-          h1 {
-            font-size: clamp(2rem, 5vw, 3.5rem); // Responsivo
-            margin-bottom: 1rem;
+        .slide-button {
+          display: inline-block;
+          padding: 0.8rem 2rem;
+          background-color: var(--color-light);
+          color: var(--color-dark);
+          border-radius: 50px;
+          font-weight: 600;
+          text-decoration: none;
+          transition: all 0.3s ease;
+          border: 2px solid transparent;
+
+          &:hover {
+            background-color: transparent;
             color: var(--text-light);
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-          }
-
-          p {
-            font-size: clamp(1rem, 2vw, 1.3rem);
-            opacity: 0.9;
+            border-color: var(--text-light);
           }
         }
       }
     }
 
-    .carousel-controls {
+    .carousel-nav {
       position: absolute;
-      bottom: 2rem;
-      left: 50%;
-      transform: translateX(-50%);
+      bottom: 40px;
+      left: 0;
+      width: 100%;
       display: flex;
-      gap: 1rem;
-      z-index: 10;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 5%;
+      z-index: 3;
 
-      button {
-        background: var(--navbar-bg);
-        color: var(--text-light);
+      .nav-arrow {
+        background: rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(5px);
         border: none;
-        padding: 0.8rem 1.5rem;
-        border-radius: 50px;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
         cursor: pointer;
         transition: all 0.3s ease;
-        font-weight: bold;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 
         &:hover {
-          background: var(--color-dark);
-          transform: scale(1.05);
+          background: rgba(255, 255, 255, 0.3);
+          transform: scale(1.1);
         }
+
+        svg {
+          width: 20px;
+          height: 20px;
+          fill: var(--text-light);
+        }
+      }
+
+      .pagination-dots {
+        display: flex;
+        gap: 10px;
+
+        span {
+          display: block;
+          width: 12px;
+          height: 12px;
+          border-radius: 50%;
+          background: rgba(255, 255, 255, 0.4);
+          cursor: pointer;
+          transition: all 0.3s ease;
+
+          &.active {
+            background: var(--text-light);
+            transform: scale(1.2);
+          }
+
+          &:hover:not(.active) {
+            background: rgba(255, 255, 255, 0.7);
+          }
+        }
+      }
+    }
+
+    @media (max-width: 768px) {
+      height: 80vh;
+      max-height: 600px;
+
+      .carousel-slide .slide-content {
+        left: 5%;
+        bottom: 15%;
+        padding-right: 5%;
+      }
+
+      .carousel-nav {
+        bottom: 20px;
       }
     }
   }
@@ -169,158 +281,155 @@
     }
   }
 
-  /* Seção de Logos - Versão Corrigida (Tela Inteira) */
-.logo-section {
-  padding: 5rem 0;
-  background-color: var(--bg-color);
-  width: 100vw; /* Ocupa toda a largura da viewport */
-  margin-left: calc(-50vw + 50%); /* Centraliza o container */
-  position: relative;
-  overflow: hidden;
-
-  .container {
-    max-width: 100%; /* Remove a limitação de largura */
-    padding: 0;
-    margin: 0;
-    overflow: visible;
-  }
-
-  h2 {
-    color: var(--color-dark);
-    margin-bottom: 3rem;
-    font-size: 2.5rem;
-    text-align: center;
+  /* Seção de Logos */
+  .logo-section {
+    padding: 5rem 0;
+    background-color: var(--bg-color);
+    width: 100vw;
+    margin-left: calc(-50vw + 50%);
     position: relative;
-    padding: 0 2rem; /* Adiciona padding apenas no título */
-    
-    &::after {
-      content: '';
-      position: absolute;
-      bottom: -15px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 80px;
-      height: 4px;
-      background: var(--color-light);
-    }
-  }
+    overflow: hidden;
 
-  .logos-wrapper {
-    width: 100%;
-    position: relative;
-  }
-
-  .logos-container {
-    display: flex;
-    gap: 4rem;
-    padding: 3rem 0;
-    width: max-content; /* Permite que o container cresça conforme necessário */
-    margin: 0 auto;
-    animation: scrollLogos 30s linear infinite;
-    will-change: transform;
-  }
-
-  .logo-item {
-    flex: 0 0 auto;
-    width: 240px;
-    height: 160px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: white;
-    border-radius: 12px;
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
-    transition: all 0.4s ease;
-    margin: 0 1rem; /* Espaçamento adicional */
-
-    &:hover {
-      transform: scale(1.05);
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    .container {
+      max-width: 100%;
+      padding: 0;
+      margin: 0;
+      overflow: visible;
     }
 
-    img {
-      max-width: 70%;
-      max-height: 70%;
-      object-fit: contain;
-      filter: grayscale(100%);
-      transition: filter 0.3s ease;
-
-      &:hover {
-        filter: grayscale(0%);
+    h2 {
+      color: var(--color-dark);
+      margin-bottom: 3rem;
+      font-size: 2.5rem;
+      text-align: center;
+      position: relative;
+      padding: 0 2rem;
+      
+      &::after {
+        content: '';
+        position: absolute;
+        bottom: -15px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 80px;
+        height: 4px;
+        background: var(--color-light);
       }
     }
-  }
 
-  /* Efeitos de gradiente nas bordas */
-  &::before,
-  &::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    width: 200px;
-    z-index: 2;
-    pointer-events: none;
-  }
-
-  &::before {
-    left: 0;
-    background: linear-gradient(90deg, var(--bg-color) 30%, transparent);
-  }
-
-  &::after {
-    right: 0;
-    background: linear-gradient(90deg, transparent, var(--bg-color) 70%);
-  }
-
-  /* Animação do carrossel */
-  @keyframes scrollLogos {
-    0% {
-      transform: translateX(0);
+    .logos-wrapper {
+      position: relative;
     }
-    100% {
-      transform: translateX(calc(-50% - 120px)); /* Centraliza perfeitamente */
-    }
-  }
 
-  /* Responsividade */
-  @media (max-width: 1200px) {
-    .logo-item {
-      width: 200px;
-      height: 140px;
-    }
-  }
-
-  @media (max-width: 768px) {
-    padding: 3rem 0;
-    
-    h2 {
-      font-size: 2rem;
+    .logos-container {
+      display: flex;
+      gap: 4rem;
+      padding: 3rem 0;
+      width: max-content; 
+      margin: 0 auto;
+      animation: scrollLogos 30s linear infinite;
+      will-change: transform;
     }
 
     .logo-item {
-      width: 160px;
-      height: 110px;
+      flex: 0 0 auto;
+      width: 240px;
+      height: 160px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+      transition: all 0.4s ease;
+      margin: 0 1rem;
+
+      &:hover {
+        transform: scale(1.05);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+      
+        img {
+          filter: grayscale(0%);
+        }
+      }
+      
+      img {
+        max-width: 150%;
+        max-height: 150%;
+        object-fit: contain;
+        filter: grayscale(80%);
+        transition: filter 0.1s ease;
+      }
     }
 
     &::before,
     &::after {
-      width: 60px;
+      content: '';
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 200px;
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    &::before {
+      left: 0;
+      background: linear-gradient(90deg, var(--bg-color) 30%, transparent);
+    }
+
+    &::after {
+      right: 0;
+      background: linear-gradient(90deg, transparent, var(--bg-color) 70%);
+    }
+
+    @keyframes scrollLogos {
+      0% {
+        transform: translateX(0);
+      }
+      100% {
+        transform: translateX(calc(-50% - 120px));
+      }
+    }
+
+    @media (max-width: 1200px) {
+      .logo-item {
+        width: 200px;
+        height: 140px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      padding: 3rem 0;
+      
+      h2 {
+        font-size: 2rem;
+      }
+
+      .logo-item {
+        width: 160px;
+        height: 110px;
+      }
+
+      &::before,
+      &::after {
+        width: 60px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .logo-item {
+        width: 140px;
+        height: 90px;
+        margin: 0 0.5rem;
+      }
+
+      .logos-container {
+        gap: 2rem;
+      }
     }
   }
 
-  @media (max-width: 480px) {
-    .logo-item {
-      width: 140px;
-      height: 90px;
-      margin: 0 0.5rem;
-    }
-
-    .logos-container {
-      gap: 2rem;
-    }
-  }
-}
   /* Seção Final */
   .text-section {
     padding: 6rem 0;
@@ -375,13 +484,6 @@
 
 /* Responsividade Aprimorada */
 @media (max-width: 992px) {
-  .fullscreen-carousel {
-    .carousel-caption {
-      padding: 1.5rem !important;
-      max-width: 90% !important;
-    }
-  }
-
   .image-text-section {
     padding: 4rem 0 !important;
 
@@ -392,201 +494,11 @@
 }
 
 @media (max-width: 768px) {
-  .fullscreen-carousel {
-    height: 80vh !important;
-
-    .carousel-caption {
-      h1 {
-        font-size: 1.8rem !important;
-      }
-
-      p {
-        font-size: 1rem !important;
-      }
-    }
-  }
-
   .text-section {
     padding: 4rem 0 !important;
 
     h2 {
       font-size: 2rem !important;
-    }
-  }
-}
-
-.hero-carousel {
-  position: relative;
-  height: 100vh;
-  max-height: 900px;
-  overflow: hidden;
-  margin-top: -70px;
-
-  .carousel-track {
-    height: 100%;
-    position: relative;
-    transition: transform 0.5s ease-out;
-  }
-
-  .carousel-slide {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    opacity: 0;
-    transition: opacity 1s ease, transform 1s ease;
-
-    &.active {
-      opacity: 1;
-      z-index: 1;
-    }
-
-    img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      object-position: center;
-      filter: brightness(0.7);
-    }
-
-    .slide-overlay {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(to bottom,
-          rgba(0, 52, 87, 0.6) 0%,
-          rgba(0, 52, 87, 0.3) 50%,
-          rgba(0, 52, 87, 0.1) 100%);
-      z-index: 1;
-    }
-
-    .slide-content {
-      position: absolute;
-      bottom: 20%;
-      left: 10%;
-      max-width: 600px;
-      color: var(--text-light);
-      z-index: 2;
-      transform: translateY(30px);
-      transition: transform 0.8s ease;
-      opacity: 0;
-
-      .active & {
-        transform: translateY(0);
-        opacity: 1;
-      }
-
-      .slide-title {
-        font-size: clamp(2rem, 5vw, 3.5rem);
-        font-weight: 700;
-        margin-bottom: 1.5rem;
-        line-height: 1.2;
-        text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-      }
-
-      .slide-description {
-        font-size: clamp(1rem, 2vw, 1.25rem);
-        margin-bottom: 2rem;
-        opacity: 0.9;
-        line-height: 1.6;
-      }
-
-      .slide-button {
-        display: inline-block;
-        padding: 0.8rem 2rem;
-        background-color: var(--color-light);
-        color: var(--color-dark);
-        border-radius: 50px;
-        font-weight: 600;
-        text-decoration: none;
-        transition: all 0.3s ease;
-        border: 2px solid transparent;
-
-        &:hover {
-          background-color: transparent;
-          color: var(--text-light);
-          border-color: var(--text-light);
-        }
-      }
-    }
-  }
-
-  .carousel-nav {
-    position: absolute;
-    bottom: 40px;
-    left: 0;
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0 5%;
-    z-index: 3;
-
-    .nav-arrow {
-      background: rgba(255, 255, 255, 0.2);
-      backdrop-filter: blur(5px);
-      border: none;
-      width: 50px;
-      height: 50px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      transition: all 0.3s ease;
-
-      &:hover {
-        background: rgba(255, 255, 255, 0.3);
-        transform: scale(1.1);
-      }
-
-      svg {
-        width: 20px;
-        height: 20px;
-        fill: var(--text-light);
-      }
-    }
-
-    .pagination-dots {
-      display: flex;
-      gap: 10px;
-
-      span {
-        display: block;
-        width: 12px;
-        height: 12px;
-        border-radius: 50%;
-        background: rgba(255, 255, 255, 0.4);
-        cursor: pointer;
-        transition: all 0.3s ease;
-
-        &.active {
-          background: var(--text-light);
-          transform: scale(1.2);
-        }
-
-        &:hover:not(.active) {
-          background: rgba(255, 255, 255, 0.7);
-        }
-      }
-    }
-  }
-
-  @media (max-width: 768px) {
-    height: 80vh;
-    max-height: 600px;
-
-    .carousel-slide .slide-content {
-      left: 5%;
-      bottom: 15%;
-      padding-right: 5%;
-    }
-
-    .carousel-nav {
-      bottom: 20px;
     }
   }
 }

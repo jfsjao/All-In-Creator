@@ -12,11 +12,12 @@ import { CountUpModule } from 'ngx-countup';
 })
 export class AboutComponent {
   clients = [
-    { logo: 'logo-nike-256.png', name: 'Marca 1' },
-    { logo: 'logo-nike-256.png', name: 'Marca 2' },
-    { logo: 'logo-nike-256.png', name: 'Marca 3' },
-    { logo: 'logo-nike-256.png', name: 'Marca 4' },
-    { logo: 'logo-nike-256.png', name: 'Marca 5' },
+    { logo: 'playtruco.png', name: 'Play Truco' },
+    { logo: 'estilovivo.png', name: 'Estilo Vivo' },
+    { logo: 'mid.png', name: 'MID Conveniencia' },
+    { logo: 'pedraoferramentas.png', name: 'Pedro Ferramentas' },
+    { logo: 'viptech.png', name: 'Vip Tech' },
+    { logo: 'azznatural.png', name: 'Azz Natural' },
   ];
 
   // Valores para as animações

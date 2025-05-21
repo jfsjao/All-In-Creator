@@ -47,6 +47,12 @@
 │   │   │   │    │     ├── about.component.spec.ts
 │   │   │   │    │     ├── about.component.ts
 │   │   │   │    │     └── about.component.html
+│   │   │   │    │
+│   │   │   │    ├── 📁 store/ 
+│   │   │   │    │     ├── store.component.scss
+│   │   │   │    │     ├── store.component.spec.ts
+│   │   │   │    │     ├── store.component.ts
+│   │   │   │    │     └── store.component.html
 │   │   │   │
 │   │   │   ├── 📁 config/ 
 │   │   │   │    ├── app.config.server.ts
@@ -69,13 +75,24 @@
 │   │   ├── 📁 assets/
 │   │   │   └── 📁 images/
 │   │   │       ├── 📁 carrosel/
-│   │   │       │    ├── carrosel-exemplo-1.jpg
-│   │   │       │    └── carrosel-exemplo-2.jpg 
+│   │   │       │    ├── banner1.jpg
+│   │   │       │    ├── banner2.jpg
+│   │   │       │    └── banner3.jpg
 |   │   │       ├── 📁 logos/
-│   │   │       |    └── nike-exemplo.jpg
+│   │   │       │    ├── azznatural.jpg
+│   │   │       │    ├── estilovivo.jpg
+│   │   │       │    ├── mid.jpg
+│   │   │       │    ├── pedraoferramentas.jpg
+│   │   │       │    ├── playtruco.jpg
+│   │   │       │    └── viptech.jpg
+│   │   │       ├── 📁 empresa/ 
+│   │   │       │    └── selfie-nico.jpg
+│   │   │       │
 |   │   │       ├── nicowork-logo-dark.png
-|   │   │       ├── nicowork-logo.png
-│   │   │       └── selfie-nico.jpg
+|   │   │       └── nicowork-logo.png
+│   │   │
+│   │   ├── 📁 environment/
+│   │   │   └── environment.prod.ts
 │   │   │
 │   │   ├── index.html
 │   │   ├── main.server.ts
@@ -84,6 +101,9 @@
 │   │   └── styles.scss
 │   │
 │   ├── .editorconfig
+│   ├── .firebaserc
+│   ├── firebase.json
+│   ├── firebase-config.ts
 │   ├── angular.json
 │   ├── package-lock.json
 │   ├── package.json

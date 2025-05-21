@@ -1,23 +1,45 @@
-# Python
+# === BACKEND (Python) ===
 __pycache__/
 *.py[cod]
 *.egg-info/
 venv/
+.venv/
+env/
+.env
+.python-version
 
-
-# Node (Angular)
-/node_modules
-/dist
-/tmp
-/out-tsc
-/.angular/cache
-frontend/.angular/
-frontend/dist/
+# === FRONTEND (Angular/Node) ===
+# Dependências
+node_modules/
 frontend/node_modules/
+.npm
+.yarn-integrity
+bower_components/
 
-#IDEs and Logs
+# Builds
+dist/
+frontend/dist/
+.angular/
+frontend/.angular/
+tmp/
+out-tsc/
+*.tgz
+
+# Firebase
+.firebase/
+.firebaserc
+*.firebase-debug.log
+.dataconnect
+
+# IDEs e Configurações
 .vscode/
-*.logs
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Sistemas
 .DS_Store
 Thumbs.db
-

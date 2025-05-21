@@ -27,32 +27,42 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
   // Configuração do carrossel principal
   slides: Slide[] = [
     {
-      image: 'assets/images/carrosel/carrosel-exemplo-1.jpg',
+      image: 'assets/images/carrosel/banner1.gif',
       alt: 'Imagem destaque 1',
       title: 'Bem-vindo ao Nosso Blog',
       description: 'Descubra conteúdos exclusivos e atualizados regularmente',
       buttonText: 'Explorar',
-      buttonLink: '/blog'
+      buttonLink: '/services'
     },
     {
-      image: 'assets/images/carrosel/carrosel-exemplo-2.jpg',
-      alt: 'Imagem destaque 2',
-      title: 'Conhecimento Compartilhado',
-      description: 'Aprenda com nossos especialistas e artigos técnicos',
-      buttonText: 'Ler Artigos',
-      buttonLink: '/artigos'
+      image: 'assets/images/carrosel/banner2.gif',
+      alt: 'Pack Edit',
+      title: 'Conteúdo de edições',
+      description: 'Packs variados para ajudar na edição de vídeos e fotos',
+      buttonText: 'Ver Packs',
+      buttonLink: '/store'
+    },
+    {
+      image: 'assets/images/carrosel/banner3.gif',
+      alt: 'Sobre nós',
+      title: 'Conheça a NicolWork',
+      description: 'Saiba como nossa empresa funciona e o que fazemos',
+      buttonText: 'Sobre Nós',
+      buttonLink: '/about'
     }
   ];
 
   // Configuração do carrossel de logos
   partnerLogos: Logo[] = [
-    { image: 'assets/images/logos/logo-nike-256.png', alt: 'Nike' },
-    { image: 'assets/images/logos/logo-nike-256.png', alt: 'Adidas' },
-    { image: 'assets/images/logos/logo-nike-256.png', alt: 'Puma' },
-    { image: 'assets/images/logos/logo-nike-256.png', alt: 'Umbro' },
-    { image: 'assets/images/logos/logo-nike-256.png', alt: 'New Balance' }
+    { image: 'assets/images/logos/playtruco.png', alt: 'Play Truco' },
+    { image: 'assets/images/logos/estilovivo.png', alt: 'Estilo Vivo' },
+    { image: 'assets/images/logos/mid.png', alt: 'MID Conveniencia' },
+    { image: 'assets/images/logos/pedraoferramentas.png', alt: 'Pedro Ferramentas' },
+    { image: 'assets/images/logos/viptech.png', alt: 'Vip Tech' },
+    { image: 'assets/images/logos/azznatural.png', alt: 'Azz Natural' },
   ];
 
+  // Variáveis para controle do carrossel
   currentSlide = 0;
   currentLogoIndex = 0;
   private carouselInterval: number | null = null;

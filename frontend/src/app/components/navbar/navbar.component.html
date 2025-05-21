@@ -1,9 +1,9 @@
 <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNavbar" [class.navbar-hidden]="isNavbarHidden">
-  <div class="container-fluid d-flex justify-content-between align-items-center">
+  <div class="container-fluid ">
 
     <!-- Logo -->
     <a class="navbar-brand" routerLink="/home">
-      <img src="assets/images/nicowork-logo.png" alt="NicoWork" class="navbar-logo">
+      <h2 id="navbar-company">NicolWork</h2>
     </a>
 
     <!-- Botão Toggle (visível em mobile) -->
@@ -19,6 +19,9 @@
         </li>
         <li class="nav-item">
           <a class="nav-link" routerLink="/services" routerLinkActive="active" (click)="closeMobileMenu()">Planos</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/store" routerLinkActive="active" (click)="closeMobileMenu()">Loja</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" routerLink="/about" routerLinkActive="active" (click)="closeMobileMenu()">Sobre</a>

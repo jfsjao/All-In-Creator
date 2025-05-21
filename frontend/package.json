@@ -4,11 +4,12 @@
   "scripts": {
     "ng": "ng",
     "dev": "ng serve --force-esbuild --poll=1000",
-    "build": "ng build --force",
-    "clean": "rm -rf .angular node_modules && npm install",
+    "build": "ng build --configuration=production --output-path=dist/public",
+    "clean": "rd /s /q dist",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "serve:ssr:frontend": "node dist/frontend/server/server.mjs"
+    "serve:ssr:frontend": "node dist/frontend/server/server.mjs",
+    "deploy": "ng build --configuration=production && firebase deploy --only hosting --force"
   },
   "private": true,
   "dependencies": {
@@ -16,20 +17,23 @@
     "@angular/common": "^19.2.10",
     "@angular/compiler": "^19.2.10",
     "@angular/core": "^19.2.10",
+    "@angular/fire": "^19.1.0",
     "@angular/forms": "^19.2.10",
     "@angular/platform-browser": "^19.2.10",
     "@angular/platform-browser-dynamic": "^19.2.10",
     "@angular/platform-server": "^19.2.10",
     "@angular/router": "^19.2.10",
     "@angular/ssr": "^19.2.11",
+    "@nguniversal/express-engine": "^7.0.2",
     "@popperjs/core": "^2.11.8",
     "bootstrap": "^5.3.2",
     "bootstrap-icons": "^1.13.1",
-    "express": "^4.18.2",
+    "express": "^4.21.2",
+    "firebase": "^11.7.3",
     "ngx-countup": "^13.2.0",
     "ngx-toastr": "^19.0.0",
     "rxjs": "~7.8.0",
-    "tslib": "^2.3.0",
+    "tslib": "^2.8.1",
     "zone.js": "~0.15.0"
   },
   "devDependencies": {

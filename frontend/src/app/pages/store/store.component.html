@@ -1,0 +1,172 @@
+<div class="plans-container">
+    <!-- Seção Hero -->
+    <section class="plans-hero">
+        <div class="hero-content">
+            <h1>Packs de Edição para Redes Sociais</h1>
+            <p class="hero-subtitle">Tudo que você precisa para criar conteúdo profissional e viralizar</p>
+        </div>
+    </section>
+
+    <!-- Seção Introdução -->
+    <section class="intro-section">
+        <div class="section-content">
+            <h2>Potencialize suas criações com nossos packs</h2>
+            <p>Desenvolvemos pacotes completos com tudo que um criador de conteúdo precisa para produzir materiais de
+                alta qualidade e engajamento. Nossos packs são atualizados mensalmente com novos recursos e tendências
+                do mercado.</p>
+
+            <div class="highlight-card">
+                <p>Muitos dos nossos criadores de conteúdo já utilizam nossos materiais para elevar a qualidade
+                    de suas publicações e aumentar o engajamento nas redes sociais.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Seção Comparação de Planos -->
+    <section class="plans-comparison">
+        <div class="section-content">
+            <h2>Escolha o plano ideal para suas necessidades</h2>
+            <p class="section-subtitle">Todos os planos incluem suporte e atualizações mensais</p>
+
+            <div class="plans-grid">
+                <!-- Plano Basic -->
+                <div class="plan-card basic">
+                    <div class="plan-header">
+                        <h3>Basic</h3>
+                        <div class="price">R$79<span>/mês</span></div>
+                        <p class="starter-pack">Para começar</p>
+                    </div>
+                    <div class="plan-features">
+                        <ul>
+                            <li *ngFor="let feature of basicFeatures">
+                                <i class="bi bi-check-circle-fill"></i> {{feature}}
+                            </li>
+                        </ul>
+                    </div>
+                    <button class="cta-button">Assinar agora</button>
+                </div>
+
+                <!-- Plano Gold -->
+                <div class="plan-card gold">
+                    <div class="plan-header">
+                        <h3>Gold</h3>
+                        <div class="price">R$129<span>/mês</span></div>
+                        <p class="popular-choice">Escolha popular</p>
+                    </div>
+                    <div class="plan-features">
+                        <ul>
+                            <li *ngFor="let feature of goldFeatures">
+                                <i class="bi bi-check-circle-fill"></i> {{feature}}
+                            </li>
+                        </ul>
+                    </div>
+                    <button class="cta-button">Assinar agora</button>
+                </div>
+
+                <!-- Plano Premium -->
+                <div class="plan-card premium">
+                    <div class="plan-header">
+                        <h3>Premium</h3>
+                        <div class="price">R$199<span>/mês</span></div>
+                        <p class="best-value">Melhor custo-benefício</p>
+                    </div>
+                    <div class="plan-features">
+                        <ul>
+                            <li *ngFor="let feature of premiumFeatures">
+                                <i class="bi bi-check-circle-fill"></i> {{feature}}
+                            </li>
+                        </ul>
+                    </div>
+                    <button class="cta-button">Assinar agora</button>
+                </div>
+
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Seção Diferenciais -->
+    <section class="differentials-section">
+        <div class="section-content">
+            <h2>Por que escolher nossos packs?</h2>
+
+            <div class="differentials-grid">
+                <div class="differential-card">
+                    <div class="icon-box">
+                        <i class="bi bi-arrow-repeat"></i>
+                    </div>
+                    <h3>Atualizações Mensais</h3>
+                    <p>Novos conteúdos adicionados todo mês para manter você na frente da concorrência</p>
+                </div>
+
+                <div class="differential-card">
+                    <div class="icon-box">
+                        <i class="bi bi-headset"></i>
+                    </div>
+                    <h3>Suporte Prioritário</h3>
+                    <p>Equipe especializada para tirar dúvidas e ajudar na implementação</p>
+                </div>
+
+                <div class="differential-card">
+                    <div class="icon-box">
+                        <i class="bi bi-lightning-charge"></i>
+                    </div>
+                    <h3>Conteúdo Viralizável</h3>
+                    <p>Materiais testados e aprovados por criadores com milhões de views</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Seção Depoimentos -->
+    <section class="testimonials-section">
+        <div class="section-content">
+            <h2>O que nossos clientes dizem</h2>
+
+            <div class="testimonials-grid">
+                <div class="testimonial-card">
+                    <div class="testimonial-content">
+                        <div class="quote-icon">
+                            <i class="bi bi-quote"></i>
+                        </div>
+                        <p>"Os packs da Nicolwork revolucionaram meu conteúdo. Meu engajamento aumentou 300% em 2
+                            meses!"</p>
+                    </div>
+                    <div class="testimonial-author">
+                        <img src="assets/images/depoimentos/joaoguilherme.JPG" alt="João Guilherme" loading="lazy">
+                        <div class="author-info">
+                            <h4>João Guilherme</h4>
+                            <p>&#64;joao.guisc</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="testimonial-card">
+                    <div class="testimonial-content">
+                        <div class="quote-icon">
+                            <i class="bi bi-quote"></i>
+                        </div>
+                        <p>"O pack premium tem TUDO que preciso. Economizo horas de trabalho com os templates prontos."
+                        </p>
+                    </div>
+                    <div class="testimonial-author">
+                        <img src="assets/images/depoimentos/gustavojose.JPG" alt="Gustavo Furlan" loading="lazy">
+                        <div class="author-info">
+                            <h4>Gustavo Furlan</h4>
+                            <p>&#64;fwrlann</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Seção CTA -->
+    <section class="cta-section">
+        <div class="cta-content">
+            <h2>Pronto para elevar seu conteúdo?</h2>
+            <p>Escolha seu plano e comece a criar como um profissional hoje mesmo</p>
+            <a routerLink="/contact" class="cta-button">Tire suas dúvidas</a>
+        </div>
+    </section>
+</div>

@@ -17,9 +17,11 @@
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
-            "outputPath": "dist/frontend",
+            "outputPath": "dist/frontend/browser",
             "index": "src/index.html",
             "browser": "src/main.ts",
+            "outputHashing": "all",
+            "namedChunks": false,
             "polyfills": [
               "zone.js"
             ],
@@ -27,7 +29,16 @@
             "inlineStyleLanguage": "scss",
             "assets": [
               "src/favicon.ico",
-              "src/assets"
+              {
+                "glob": "**/*.@(jpg|png|svg|webp|ico|gif|mp4|json)",
+                "input": "src/assets/images",
+                "output": "assets/images/"
+              },
+              {
+                "glob": "**/*.@(woff2|ttf|eot)",
+                "input": "src/assets/fonts",
+                "output": "assets/fonts/"
+              }
             ],
             "styles": [
               {
@@ -52,13 +63,13 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "700kb",
-                  "maximumError": "2mb"
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "4kb",
-                  "maximumError": "6kb"
+                  "maximumWarning": "10kb",
+                  "maximumError": "15kb"
                 }
               ],
               "outputHashing": "all",

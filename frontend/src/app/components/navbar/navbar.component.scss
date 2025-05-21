@@ -1,3 +1,12 @@
+#mainNavbar{
+  background-color: rgba(0, 72, 87, 0.753)
+}
+#navbar-company {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 0.5rem;
+}
 .navbar {
   position: fixed;
   top: 0;
@@ -6,12 +15,12 @@
   z-index: 1000;
   width: 100%;
   padding: 0.5rem 1rem;
-  background-color: rgba(0, 72, 87, 0.527);
+  background-color: rgba(0, 72, 87, 0.603);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   box-shadow: 0 2px 15px rgba(0, 0, 0, 0.493);
   border-bottom: 1px solid rgba(0, 157, 207, 0.2);
-  transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1), background-color 0.3s ease;
+  transition: transform 0.5s cubic-bezier(0.25, 0.8, 0.25, 1), background-color 0.5s ease;
   transform: translateY(0);
   opacity: 1;
 
@@ -33,6 +42,17 @@
     &:hover {
       transform: scale(1.05);
       opacity: 0.9;
+    }
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 72, 87, 0.658);
+      backdrop-filter: blur(5px);
+      z-index: -1;
     }
   }
 
@@ -56,6 +76,8 @@
       font-size: 1.5rem;
     }
   }
+
+  
 
   .navbar-collapse {
     justify-content: space-between;

@@ -9,19 +9,26 @@ import { provideToastr } from 'ngx-toastr';
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    provideHttpClient(withFetch()), // Habilita fetch API
+    provideHttpClient(withFetch()),
     provideRouter(
       routes,
-      withComponentInputBinding(), // Permite binding de inputs via rota
-      withInMemoryScrolling({ scrollPositionRestoration: 'enabled' }) // Restaura scroll
+      withComponentInputBinding(),
+      withInMemoryScrolling({ 
+        scrollPositionRestoration: 'enabled',
+        anchorScrolling: 'enabled'
+      })
     ),
     provideClientHydration(),
     provideToastr({
       positionClass: 'toast-bottom-center',
       preventDuplicates: true,
-      progressBar: true
+      progressBar: true,
+      timeOut: 3000
     }),
     provideAnimations(),
-    { provide: NgbConfig, useValue: new NgbConfig() }
+    { 
+      provide: NgbConfig, 
+      useValue: { animation: true, destroyOnHide: true } 
+    }
   ]
 };

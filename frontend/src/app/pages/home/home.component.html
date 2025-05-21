@@ -1,6 +1,7 @@
 <div class="blog-home">
   <!-- Carrossel Fullscreen -->
   <section class="hero-carousel">
+    <div class="hero-overlay"></div> <!-- Nova div para o overlay gradiente -->
     <div class="carousel-track">
       @for (slide of slides; track $index; let i = $index) {
       <div class="carousel-slide" [class.active]="currentSlide === i">
@@ -43,13 +44,13 @@
     <div class="container">
       <div class="content-wrapper">
         <div class="image-container">
-          <img src="assets/images/selfie-nico.jpg" alt="Destaque">
+          <img src="assets/images/empresa/selfie-nico.jpg" alt="Destaque">
         </div>
         <div class="text-container">
           <h2>Sobre Nós</h2>
-          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in dui mauris. Vivamus hendrerit arcu sed
-            erat molestie vehicula. Sed auctor neque eu tellus gravida at hendrerit libero consequat. Phasellus
-            scelerisque, libero a commodo feugiat, diam augue volutpat enim, in interdum tellus libero quis lectus.</p>
+          <p>A Nicolwork nasceu para impulsionar marcas e negócios com estratégias de marketing pensadas sob medida. Liderada por João Nicoletti, especialista em comunicação visual, a agência combina criatividade, dados e visão estratégica para gerar resultados reais.</p>
+          
+          <p>Com foco em engajamento, visibilidade e conversão, já ajudamos empresas a alcançarem milhões de interações e crescimento consistente.</p>
         </div>
       </div>
     </div>
