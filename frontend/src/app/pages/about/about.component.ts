@@ -17,7 +17,7 @@ export class AboutComponent {
     { logo: 'mid.png', name: 'MID Conveniencia' },
     { logo: 'pedraoferramentas.png', name: 'Pedro Ferramentas' },
     { logo: 'viptech.png', name: 'Vip Tech' },
-    { logo: 'azznatural.png', name: 'Azz Natural' },
+    { logo: 'fazznatural.png', name: 'Azz Natural' },
   ];
 
   // Valores para as animações

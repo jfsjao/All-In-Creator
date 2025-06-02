@@ -1,8 +1,4 @@
 📦 projeto-raiz/
-├── 📁 backend/
-│   ├── app.py
-│   └── requirements.txt
-│
 ├── 📁 frontend/
 │   ├── 📁 public/
 │   │
@@ -78,7 +74,7 @@
 │   │   │       │    ├── banner2.jpg
 │   │   │       │    └── banner3.jpg
 |   │   │       ├── 📁 logos/
-│   │   │       │    ├── azznatural.jpg
+│   │   │       │    ├── fazznatural.jpg
 │   │   │       │    ├── estilovivo.jpg
 │   │   │       │    ├── mid.jpg
 │   │   │       │    ├── pedraoferramentas.jpg

@@ -59,7 +59,7 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
     { image: 'assets/images/logos/mid.png', alt: 'MID Conveniencia' },
     { image: 'assets/images/logos/pedraoferramentas.png', alt: 'Pedro Ferramentas' },
     { image: 'assets/images/logos/viptech.png', alt: 'Vip Tech' },
-    { image: 'assets/images/logos/azznatural.png', alt: 'Azz Natural' },
+    { image: 'assets/images/logos/fazznatural.png', alt: 'Azz Natural' },
   ];
 
   // Variáveis para controle do carrossel
