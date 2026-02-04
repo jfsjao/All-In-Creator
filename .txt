@@ -1,64 +1,57 @@
-📦 projeto-raiz/
 ├── 📁 frontend/
 │   ├── 📁 public/
 │   │
 │   ├── 📁 src/
 │   │   ├── 📁 app/
-│   │   │   ├── 📁 components/ 
-│   │   │   │    ├── 📁 footer/ 
+│   │   │   ├── 📁 components/
+│   │   │   │    ├── 📁 footer/
 │   │   │   │    │     ├── footer.component.scss
 │   │   │   │    │     ├── footer.component.spec.ts
 │   │   │   │    │     ├── footer.component.ts
 │   │   │   │    │     └── footer.component.html
 │   │   │   │    │
-│   │   │   │    └── 📁 navbar/ 
+│   │   │   │    └── 📁 navbar/
 │   │   │   │         ├── navbar.component.scss
 │   │   │   │         ├── navbar.component.spec.ts
 │   │   │   │         ├── navbar.component.ts
 │   │   │   │         └── navbar.component.html
 │   │   │   │
-│   │   │   ├── 📁 pages/ 
-│   │   │   │    ├── 📁 home/ 
-|   │   │   │    │     ├── 📁 carrosel/
-│   │   │   │    │     │    ├── carrosel-exemplo-1.jpg
-│   │   │   │    │     │    └── carrosel-exemplo-2.jpg
-│   │   │   │    │     │
-|   │   │   │    │     ├── 📁 logos/
-│   │   │   │    │     │    └── nike-exemplo.jpg
+│   │   │   ├── 📁 pages/
+│   │   │   │    ├── 📁 home/
 │   │   │   │    │     │
 │   │   │   │    │     ├── home.component.scss
 │   │   │   │    │     ├── home.component.spec.ts
 │   │   │   │    │     ├── home.component.ts
 │   │   │   │    │     └── home.component.html
 │   │   │   │    │
-│   │   │   │    ├── 📁 services/ 
+│   │   │   │    ├── 📁 services/
 │   │   │   │    │     ├── services.component.scss
 │   │   │   │    │     ├── services.component.spec.ts
 │   │   │   │    │     ├── services.component.ts
 │   │   │   │    │     └── services.component.html
 │   │   │   │    │
-│   │   │   │    ├── 📁 about/ 
+│   │   │   │    ├── 📁 about/
 │   │   │   │    │     ├── about.component.scss
 │   │   │   │    │     ├── about.component.spec.ts
 │   │   │   │    │     ├── about.component.ts
 │   │   │   │    │     └── about.component.html
 │   │   │   │    │
-│   │   │   │    └── 📁 store/ 
+│   │   │   │    └── 📁 store/
 │   │   │   │          ├── store.component.scss
 │   │   │   │          ├── store.component.spec.ts
 │   │   │   │          ├── store.component.ts
 │   │   │   │          └── store.component.html
 │   │   │   │
-│   │   │   ├── 📁 config/ 
+│   │   │   ├── 📁 config/
 │   │   │   │    ├── app.config.server.ts
 │   │   │   │    ├── app.config.ts
 │   │   │   │    ├── app.routes.server.ts
 │   │   │   │    └── app.routes.ts
 │   │   │   │
 │   │   │   ├── 📁 core/
-|   │   │   │   ├── 📁 core/
-|   │   │   │   │    ├── clipboard.service.ts
-|   │   │   │   │    └── clipboard.service.spec.ts
+│   │   │   │   ├── 📁 core/
+│   │   │   │   │    ├── clipboard.service.ts
+│   │   │   │   │    └── clipboard.service.spec.ts
 │   │   │   │   ├── api.service.ts
 │   │   │   │   └── api.service.spec
 │   │   │   │
@@ -73,29 +66,34 @@
 │   │   │       │    ├── banner1.jpg
 │   │   │       │    ├── banner2.jpg
 │   │   │       │    └── banner3.jpg
-|   │   │       ├── 📁 logos/
+│   │   │       ├── 📁 logos/
 │   │   │       │    ├── fazznatural.jpg
 │   │   │       │    ├── estilovivo.jpg
 │   │   │       │    ├── mid.jpg
 │   │   │       │    ├── pedraoferramentas.jpg
 │   │   │       │    ├── playtruco.jpg
 │   │   │       │    └── viptech.jpg
-│   │   │       ├── 📁 empresa/ 
+│   │   │       ├── 📁 empresa/
 │   │   │       │    └── selfie-nico.jpg
-│   │   │       ├── 📁 depoimentos/ 
+│   │   │       ├── 📁 depoimentos/
 │   │   │       │    ├── joaoguilherme.JPG
 │   │   │       │    └── gustavojose.JPG
-│   │   │       │
-|   │   │       └── nicowork-logo.ico
+│   │   │       └── nicowork-logo.ico
 │   │   │
 │   │   ├── 📁 environment/
 │   │   │   └── environment.prod.ts
+│   │   │
+│   │   ├── 📁 styles/ 
+│   │   │   ├── _reset.scss
+│   │   │   ├── _tokens.scss
+│   │   │   ├── _base.scss
+│   │   │   └── _helpers.scss
 │   │   │
 │   │   ├── index.html
 │   │   ├── main.server.ts
 │   │   ├── main.ts
 │   │   ├── server.ts
-│   │   └── styles.scss
+│   │   └── styles.scss              
 │   │
 │   ├── .editorconfig
 │   ├── .firebaserc
@@ -108,5 +106,5 @@
 │   ├── tsconfig.app.json
 │   ├── tsconfig.json
 │   └── tsconfig.spec.json
-│   
+│
 └── .gitignore

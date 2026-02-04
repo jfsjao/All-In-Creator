@@ -1,31 +1,33 @@
-<nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNavbar" [class.navbar-hidden]="isNavbarHidden">
-  <div class="container-fluid ">
+<nav class="navbar navbar-expand-lg fixed-top" [class.navbar-hidden]="isNavbarHidden">
+  <div class="container-nico navbar-inner">
 
     <!-- Logo -->
-    <a class="navbar-brand" routerLink="/home">
-      <h2 id="navbar-company">N1</h2>
+    <a class="navbar-brand" routerLink="/home" (click)="closeMobileMenu()">
+      <span class="brand">
+        <img src="/assets/images/logo-dark.webp" alt="N1" class="logo-image" />
+      </span>
     </a>
 
-    <!-- Botão Toggle (visível em mobile) -->
-    <button class="navbar-toggler" type="button" (click)="isMenuOpen = !isMenuOpen">
+    <!-- Toggle mobile -->
+    <button class="navbar-toggler" type="button" (click)="toggleMobileMenu()">
       <i class="bi bi-list"></i>
     </button>
 
-    <!-- Conteúdo da Navbar -->
-    <div class="collapse navbar-collapse" [class.show]="isMenuOpen" id="navbarContent">
+    <!-- Conteúdo -->
+    <div class="navbar-collapse" [class.show]="isMenuOpen">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item">
           <a class="nav-link" routerLink="/home" routerLinkActive="active" (click)="closeMobileMenu()">Home</a>
         </li>
-        <!-- <li class="nav-item">
-          <a class="nav-link" routerLink="/services" routerLinkActive="active" (click)="closeMobileMenu()">Planos</a>
-        </li>-->
+
         <li class="nav-item">
           <a class="nav-link" routerLink="/store" routerLinkActive="active" (click)="closeMobileMenu()">Produtos</a>
         </li>
+
         <li class="nav-item">
           <a class="nav-link" routerLink="/about" routerLinkActive="active" (click)="closeMobileMenu()">Sobre</a>
         </li>
+
         <li class="nav-item">
           <a class="nav-link" routerLink="/contact" routerLinkActive="active" (click)="closeMobileMenu()">Contato</a>
         </li>

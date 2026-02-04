@@ -12,7 +12,7 @@ import { isPlatformBrowser } from '@angular/common';
     RouterModule 
   ],
   templateUrl: './navbar.component.html',
-  styleUrl: './navbar.component.scss' // Note a mudança para styleUrl (singular)
+  styleUrl: './navbar.component.scss'
 })
 export class NavbarComponent implements OnInit {
   isNavbarHidden = false;

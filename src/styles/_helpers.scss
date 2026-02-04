@@ -1,0 +1,67 @@
+@use "tokens" as *;
+
+/* Layout */
+.container-nico {
+  width: min(100% - 32px, $container-max);
+  margin-inline: auto;
+}
+
+/* Texto */
+.text-dark {
+  color: var(--text-dark);
+}
+
+.text-light {
+  color: var(--text-light);
+}
+
+.text-muted {
+  color: var(--text-muted);
+}
+
+.text-muted-nico {
+  color: var(--text-muted);
+}
+
+/* Fundos */
+.bg-dark {
+  background-color: var(--color-bg);
+  color: var(--text-light);
+}
+
+.bg-surface,
+.bg-surface-nico {
+  background-color: var(--color-surface);
+  color: var(--text-light);
+}
+
+.bg-ice {
+  background-color: var(--color-ice);
+  color: var(--text-dark);
+}
+
+.bg-white {
+  background-color: var(--color-white);
+  color: var(--text-dark);
+}
+
+/* Botão padrão */
+.btn-primary-nico {
+  background-color: var(--color-primary);
+  color: var(--text-dark);
+  border: 0;
+  padding: 10px 16px;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: transform 0.15s ease, opacity 0.15s ease;
+}
+
+.btn-primary-nico:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+.btn-primary-nico:active {
+  transform: translateY(0);
+  opacity: 0.95;
+}

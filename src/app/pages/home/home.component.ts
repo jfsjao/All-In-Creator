@@ -24,6 +24,7 @@ interface Logo {
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss']
 })
+
 export class HomeComponent implements AfterViewInit, OnDestroy {
   // Configuração do carrossel principal
   slides: Slide[] = [
@@ -101,9 +102,6 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
       } else {
         video.pause();
       }
-    },
-    {
-      threshold: 0.4 // 40% visível
     }
   );
 
@@ -118,8 +116,6 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
     }
   }
 
-
-  // Inicializa ambos carrosséis
   private initCarousels(): void {
     this.startCarousel();
     this.startLogoCarousel();
@@ -158,7 +154,6 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
     }
   }
 
-  // Controle do carrossel de logos
   private startLogoCarousel(): void {
     this.logoInterval = window.setInterval(() => {
       this.nextLogo();

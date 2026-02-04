@@ -1,5 +1,4 @@
 <div class="blog-home">
-  <!-- Carrossel Fullscreen -->
   <section class="hero-carousel">
     <div class="hero-overlay"></div> 
     <div class="carousel-track">
@@ -39,6 +38,29 @@
     </div>
     </section>
 
+  <!-- Seção Produtos -->
+<section class="logo-section">
+  <div class="container">
+    <h2>Principal foco dos nossos produtos</h2>
+    <div class="logos-wrapper">
+      <div class="logos-container">
+        @for (logo of partnerLogos; track $index) {
+          <div class="logo-item">
+            <img [src]="logo.image" [alt]="logo.alt">
+          </div>
+        }
+      
+        @for (logo of partnerLogos; track $index) {
+          <div class="logo-item">
+            <img [src]="logo.image" [alt]="logo.alt">
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+</section> 
+
+
   <!-- Seção Video -->
 <section class="video-text-section">
   <div class="container">
@@ -57,28 +79,6 @@
     </div>
   </div>
 </section>
-
-  <!-- Seção Produtos -->
-<section class="logo-section">
-  <div class="container">
-    <h2>Nossos principais produtos</h2>
-    <div class="logos-wrapper">
-      <div class="logos-container">
-        @for (logo of partnerLogos; track $index) {
-          <div class="logo-item">
-            <img [src]="logo.image" [alt]="logo.alt">
-          </div>
-        }
-      
-        @for (logo of partnerLogos; track $index) {
-          <div class="logo-item">
-            <img [src]="logo.image" [alt]="logo.alt">
-          </div>
-        }
-      </div>
-    </div>
-  </div>
-</section> 
 
   <!-- Seção Imagem + Texto -->
   <section class="image-text-section">
