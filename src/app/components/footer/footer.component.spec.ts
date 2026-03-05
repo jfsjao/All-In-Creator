@@ -34,9 +34,9 @@ describe('FooterComponent', () => {
     it('should handle successful copy', async () => {
       const mockEvent = { preventDefault: jasmine.createSpy() } as unknown as MouseEvent;
       clipboardSpy.copyToClipboard.and.returnValue(Promise.resolve(true));
-      
+
       await component.copyContact('test@example.com', 'email', mockEvent);
-      
+
       expect(component.showNotification).toBeTrue();
       expect(component.notificationMessage).toBe('Email copiado!');
       expect(component.copiedItemType).toBe('email');
@@ -45,9 +45,9 @@ describe('FooterComponent', () => {
     it('should handle copy failure', async () => {
       const mockEvent = { preventDefault: jasmine.createSpy() } as unknown as MouseEvent;
       clipboardSpy.copyToClipboard.and.returnValue(Promise.resolve(false));
-      
+
       await component.copyContact('test@example.com', 'email', mockEvent);
-      
+
       expect(toastrSpy.error).toHaveBeenCalledWith('Falha ao copiar para a área de transferência');
     });
   });

@@ -1,4 +1,5 @@
 <div class="blog-home">
+  <!-- HERO / CAROUSEL -->
   <section class="hero-carousel">
     <div class="hero-overlay"></div> 
     <div class="carousel-track">
@@ -36,62 +37,270 @@
         </svg>
       </button>
     </div>
-    </section>
+  </section>
 
-  <!-- Seção Produtos -->
-<section class="logo-section">
-  <div class="container">
-    <h2>Principal foco dos nossos produtos</h2>
-    <div class="logos-wrapper">
-      <div class="logos-container">
-        @for (logo of partnerLogos; track $index) {
+  <!-- LOGOS -->
+  <section class="logo-section">
+    <div class="container">
+      <h2>Principal foco dos nossos produtos</h2>
+
+      <div class="logos-wrapper">
+        <div class="logos-container">
+          @for (logo of partnerLogos; track $index) {
           <div class="logo-item">
-            <img [src]="logo.image" [alt]="logo.alt">
+            <img [src]="logo.image" [alt]="logo.alt" />
+          </div>
+          }
+
+          @for (logo of partnerLogos; track $index) {
+          <div class="logo-item">
+            <img [src]="logo.image" [alt]="logo.alt" />
+          </div>
+          }
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- VIDEO -->
+  <section class="video-text-section">
+    <div class="container">
+      <div class="content-wrapper">
+        <div class="video-container">
+          <video #autoVideo muted playsinline preload="metadata">
+            <source src="assets/videos/video_exemplo.mp4" type="video/mp4" />
+            Seu navegador não suporta a tag de vídeo.
+          </video>
+        </div>
+      </div>
+    </div>
+  </section>
+
+<!-- PACK SHOWCASE -->
+<section class="pack-showcase-section">
+  <div class="showcase-content">
+    <h2>Conheça nosso Pack Supremo</h2>
+
+    <div class="showcase-wrapper">
+      <div class="cards-col cards-left">
+        @for (feature of packFeatures.slice(0, 3); track $index) {
+          <div class="feature-card">
+            <div class="feature-number">{{ feature.number }}</div>
+            <h3>{{ feature.title }}</h3>
+            <p>{{ feature.description }}</p>
           </div>
         }
-      
-        @for (logo of partnerLogos; track $index) {
-          <div class="logo-item">
-            <img [src]="logo.image" [alt]="logo.alt">
+      </div>
+
+      <div class="showcase-center">
+        <div class="product-image">
+          <img [src]="gustavoJoseImage" alt="Pack Supremo" />
+        </div>
+      </div>
+
+      <div class="cards-col cards-right">
+        @for (feature of packFeatures.slice(3, 6); track $index) {
+          <div class="feature-card">
+            <div class="feature-number">{{ feature.number }}</div>
+            <h3>{{ feature.title }}</h3>
+            <p>{{ feature.description }}</p>
           </div>
         }
       </div>
     </div>
-  </div>
-</section> 
 
-
-  <!-- Seção Video -->
-<section class="video-text-section">
-  <div class="container">
-    <div class="content-wrapper">
-      <div class="video-container">
-        <video
-          #autoVideo
-          muted
-          playsinline
-          preload="metadata"
-        >
-          <source src="assets/videos/video_exemplo.mp4" type="video/mp4">
-          Seu navegador não suporta a tag de vídeo.
-        </video>
-      </div>
+    <div class="showcase-footer">
+      <p class="showcase-description">
+        Todos na nuvem para acessar e baixar quando quiser e apenas o que quiser, de forma vitalícia.
+      </p>
+      <a href="/store" class="showcase-cta">Pack Supremo</a>
     </div>
   </div>
 </section>
 
-  <!-- Seção Imagem + Texto -->
-  <section class="image-text-section">
-    <div class="container">
-      <div class="content-wrapper">
-        <div class="image-container">
-          <img src="assets/images/empresa/nico-coringa.jpg" alt="Destaque">
+  <!-- PLANOS -->
+  <section class="pricing-section">
+    <div class="section-content">
+      <h2>Planos</h2>
+      <p class="section-subtitle">
+        Escolha o plano ideal para o seu momento. Você pode evoluir quando quiser.
+      </p>
+
+      <div class="pricing-grid">
+
+        <!-- BÁSICO -->
+        <article class="pricing-card">
+          <div class="pricing-head">
+            <span class="plan-badge">Básico</span>
+            <h3>Para começar com padrão</h3>
+
+            <div class="price">
+
+              <div class="price-top">
+                <span class="old-price">R$249</span>
+              </div>
+
+              <div class="price-main">
+                <span class="currency">R$</span>
+                <span class="value">200</span>
+                <span class="period">/mês</span>
+              </div>
+
+              <span class="pay-badge">normal</span>
+
+            </div>
+          </div>
+
+          <ul class="pricing-features">
+            <li><i class="bi bi-check2"></i> Pack base + templates</li>
+            <li><i class="bi bi-check2"></i> Atualizações mensais</li>
+            <li><i class="bi bi-check2"></i> Suporte padrão</li>
+          </ul>
+
+          <a class="pricing-cta" routerLink="/contact">Quero esse</a>
+        </article>
+
+
+        <!-- GOLD -->
+        <article class="pricing-card">
+          <div class="pricing-head">
+            <span class="plan-badge">Gold</span>
+            <h3>Mais variedade e velocidade</h3>
+
+            <div class="price">
+
+              <div class="price-top">
+                <span class="old-price">R$429</span>
+              </div>
+
+              <div class="price-main">
+                <span class="currency">R$</span>
+                <span class="value">350</span>
+                <span class="period">/mês</span>
+              </div>
+
+              <span class="pay-badge">mais popular</span>
+
+            </div>
+          </div>
+
+          <ul class="pricing-features">
+            <li><i class="bi bi-check2"></i> Packs + presets premium</li>
+            <li><i class="bi bi-check2"></i> Atualizações mensais</li>
+            <li><i class="bi bi-check2"></i> Suporte prioritário</li>
+          </ul>
+
+          <a class="pricing-cta" routerLink="/contact">Quero esse</a>
+        </article>
+
+
+        <!-- PREMIUM -->
+        <article class="pricing-card featured">
+          <div class="pricing-head">
+            <span class="plan-badge featured-badge">Mais escolhido</span>
+            <h3>O completo para crescer rápido</h3>
+
+            <div class="price">
+
+              <div class="price-top">
+                <span class="old-price">R$699</span>
+              </div>
+
+              <div class="price-main">
+                <span class="currency">R$</span>
+                <span class="value">500</span>
+                <span class="period">/mês</span>
+              </div>
+
+              <span class="pay-badge">com pix</span>
+
+            </div>
+          </div>
+
+          <ul class="pricing-features">
+            <li><i class="bi bi-check2"></i> Tudo do Gold + extras</li>
+            <li><i class="bi bi-check2"></i> Conteúdos “viralizáveis”</li>
+            <li><i class="bi bi-check2"></i> Prioridade total</li>
+          </ul>
+
+          <a class="pricing-cta" routerLink="/contact">Quero esse</a>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- DIFERENCIAIS -->
+  <section class="differentials-section">
+    <div class="section-content">
+      <h2>Por que escolher nossos packs?</h2>
+
+      <div class="differentials-grid">
+        <div class="differential-card">
+          <div class="icon-box">
+            <i class="bi bi-arrow-repeat"></i>
+          </div>
+          <h3>Atualizações Mensais</h3>
+          <p>Novos conteúdos adicionados todo mês para manter você na frente da concorrência</p>
         </div>
-        <div class="text-container">
-          <h2>Nossa Fórmula</h2>
-          <p>A Nicolwork acredita que o marketing deve ser uma extensão autêntica do seu negócio. Não aplicamos fórmulas prontas; criamos estratégias sob medida que nascem da essência de cada marca, impulsionadas por criatividade, dados e uma visão estratégica clara.</p>
-          
-          <p>Nossa missão é ir além da visibilidade, construindo engajamento genuíno que converte em crescimento real e consistente. Liderados por João Nicoletti, unimos o poder da comunicação visual à análise precisa para gerar não apenas interações, mas resultados tangíveis.</p>
+
+        <div class="differential-card">
+          <div class="icon-box">
+            <i class="bi bi-headset"></i>
+          </div>
+          <h3>Suporte Prioritário</h3>
+          <p>Equipe especializada para tirar dúvidas e ajudar na implementação</p>
+        </div>
+
+        <div class="differential-card">
+          <div class="icon-box">
+            <i class="bi bi-lightning-charge"></i>
+          </div>
+          <h3>Conteúdo Viralizável</h3>
+          <p>Materiais testados e aprovados por criadores com milhões de views</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DEPOIMENTOS -->
+  <section class="testimonials-section">
+    <div class="section-content">
+      <h2>O que nossos clientes dizem</h2>
+
+      <div class="testimonials-grid">
+        <div class="testimonial-card">
+          <div class="testimonial-content">
+            <div class="quote-icon">
+              <i class="bi bi-quote"></i>
+            </div>
+            <p>"Os packs da N1 revolucionaram meu conteúdo. Meu engajamento aumentou 300% em 2 meses!"</p>
+          </div>
+
+          <div class="testimonial-author">
+            <img [src]="joaoGuilhermeImage" alt="João Guilherme" />
+            <div class="author-info">
+              <h4>João Guilherme</h4>
+              <p>&#64;joao.guisc</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="testimonial-card">
+          <div class="testimonial-content">
+            <div class="quote-icon">
+              <i class="bi bi-quote"></i>
+            </div>
+            <p>"O pack premium tem TUDO que preciso, ainda mais por ser vitalício. Economizo horas de trabalho com os templates prontos."</p>
+          </div>
+
+          <div class="testimonial-author">
+            <img [src]="gustavoJoseImage" alt="Gustavo Furlan" />
+            <div class="author-info">
+              <h4>Gustavo Furlan</h4>
+              <p>&#64;fwrlann</p>
+            </div>
+          </div>
         </div>
       </div>
     </div>

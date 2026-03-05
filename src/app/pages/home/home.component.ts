@@ -17,6 +17,12 @@ interface Logo {
   alt: string;
 }
 
+interface PackFeature {
+  number: string;
+  title: string;
+  description: string;
+}
+
 @Component({
   selector: 'app-home',
   standalone: true,
@@ -58,6 +64,9 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
 
   private videoObserver!: IntersectionObserver;
 
+  joaoGuilhermeImage = 'assets/images/depoimentos/joaoguilherme.png';
+  gustavoJoseImage = 'assets/images/depoimentos/gustavojose.png';
+  
   // Configuração do carrossel de logos
   partnerLogos: Logo[] = [
     { image: 'assets/images/logos/playtruco.png', alt: 'Play Truco' },
@@ -66,6 +75,16 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
     { image: 'assets/images/logos/pedraoferramentas.png', alt: 'Pedro Ferramentas' },
     { image: 'assets/images/logos/viptech.png', alt: 'Vip Tech' },
     { image: 'assets/images/logos/fazznatural.png', alt: 'Fazz Natural' },
+  ];
+
+  // Configuração do pack showcase
+  packFeatures: PackFeature[] = [
+    { number: '44Gb', title: 'Anime (AMV)', description: 'Arquivos para edições de Anime AMV e MMV, incluindo clipes de animes, personagens em PNG, mangas etc...' },
+    { number: '54Gb', title: 'Mockups', description: 'Formas surreais de deixar seus projetos muito mais apresentáveis, com vários mockups de inúmeros estilos diferentes.' },
+    { number: '10Gb', title: 'Plugins e Presets', description: 'Reunimos os melhores Scripts, Plugins e Presets para usar no After Effects! Hoje é impensável editar sem eles.' },
+    { number: '104Gb', title: 'Overlays', description: 'São independente em qualquer edição, ele tem o poder de transformar algo simples em extremamente profissional.' },
+    { number: '105Gb', title: 'Pack para Photoshop', description: 'Sabendo da quantidade enorme de editores que usam esse programa, temos diversos arquivos .psd pra você!' },
+    { number: '115Gb', title: 'Templates de After Effects', description: 'Inúmeros projetos de intros, lower thirds prontos, cenários, edições finalizadas apenas para você usar como quiser!' },
   ];
 
   // Variáveis para controle do carrossel

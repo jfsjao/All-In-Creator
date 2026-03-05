@@ -30,13 +30,13 @@ export class FooterComponent implements OnDestroy {
 
   async copyContact(value: string, type: 'email' | 'phone', event: MouseEvent) {
     event.preventDefault();
-    
+
     // Reset da notificação antes de mostrar novamente
     this.showNotification = false;
-    
+
     // Pequeno delay para garantir que o reset seja processado
     await new Promise(resolve => setTimeout(resolve, 50));
-    
+
     // Limpa o timeout anterior se existir
     if (this.notificationTimeout) {
       clearTimeout(this.notificationTimeout);
@@ -44,12 +44,12 @@ export class FooterComponent implements OnDestroy {
 
     try {
       const success = await this.clipboard.copyToClipboard(value);
-      
+
       if (success) {
         this.copiedItemType = type;
         this.notificationMessage = type === 'email' ? 'Email copiado!' : 'Telefone copiado!';
         this.showNotification = true;
-        
+
         // Configura o timeout para esconder a notificação
         this.notificationTimeout = setTimeout(() => {
           this.showNotification = false;
