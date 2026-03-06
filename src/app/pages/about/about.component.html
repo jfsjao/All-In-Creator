@@ -1,114 +1,131 @@
-<div class="about-container">
-    <!-- Seção Hero -->
-    <section class="about-hero">
-        <div class="hero-content">
-            <h1>Transformando empresas através de marketing digital</h1>
-            <p class="hero-subtitle">Mais de {{stats.years}} anos criando estratégias que geram resultados reais</p>
+<div class="about-page">
+  <section class="about-hero">
+    <div class="hero-content">
+      <div class="hero-text">
+        <span class="hero-badge">Nosso projeto</span>
+        <h1>Com o proposito melhorar seu trabalho</h1>
+        <p>
+          Mais de {{ stats.years }} anos transformando o trabalho de diversos editores, designers e influenciadores 
+          com estratégias e conteúdos para gerar presença digital forte e resultados reais.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="about-story">
+    <div class="container">
+      <div class="story-grid">
+        <div class="story-text">
+          <h2>Quem somos</h2>
+
+          <p>
+            Nascido no interior de São Paulo, João Vitor, mais conhecido como N1co,
+            iniciou sua trajetória no digital em 2016 com o objetivo de construir algo próprio
+            e transformar a internet em oportunidade real de crescimento.
+          </p>
+
+          <p>
+            Desde então, a NicolWork vem unindo criatividade, posicionamento, comunicação visual
+            e estratégia para ampliar a presença de marcas e gerar resultado de verdade.
+          </p>
+
+          <div class="highlight-card">
+            <p>
+              Trabalhamos para gerar engajamento real, fortalecer marcas e criar campanhas
+              que convertem atenção em crescimento.
+            </p>
+
+            <ul class="services-list">
+              <li>Criação de conteúdo estratégico</li>
+              <li>Gestão de redes sociais</li>
+              <li>Campanhas de performance</li>
+              <li>Inbound marketing</li>
+            </ul>
+          </div>
         </div>
-    </section>
 
-    <!-- Seção Quem Somos -->
-    <section class="about-section">
-        <div class="section-content">
-            <div class="text-content">
-                <h2>QUEM SOMOS?</h2>
-                <p>Nascido no interior de São Paulo, João Vitor, mais conhecido como “N1co”.
-                    Um jovem desbravador do marketing digital que iniciou sua jornada na internet em 2016, 
-                    movido pelo desejo de romper com o modelo tradicional de trabalho e conquistar a tão sonhada liberdade financeira. 
-                    Desde cedo, enxergava na internet uma oportunidade real de transformar sua vida e construir algo próprio, 
-                    mesmo sem ter todas as respostas no início.</p>
-
-                <div class="highlight-card">
-                    <p>Trabalhando para trazer engajamento para sua marca, até chegarmos milhões de engajamentos,
-                        ampliando a visibilidade das marcas parceiras e gerando crescimento real de vendas.</p>
-                        
-                    <p>Sob a liderança do João Nicoletti - experiente em comunicação visual - unindo inovação, dados e criatividade
-                    para oferecer soluções completas em:</p>
-                          
-                    <ul class="services-list">
-                        <li>Criação de conteúdo estratégico</li>
-                        <li>Gestão de redes sociais</li>
-                        <li>Campanhas de performance</li>
-                        <li>Inbound marketing</li>
-                    </ul>
-                </div>  
-            </div>
-
-            <div class="image-content">
-                <img src="assets/images/empresa/nico-marketing.jpg" alt="Equipe Nicolwork" loading="lazy">
-            </div>
+        <div class="story-image">
+          <div class="image-frame">
+            <img src="assets/images/empresa/nico-marketing.jpg" alt="Equipe NicolWork" loading="lazy" />
+          </div>
         </div>
-    </section>
+      </div>
+    </div>
+  </section>
 
-    <!-- Seção Diferenciais -->
-    <section class="differentials-section">
-        <div class="section-content">
-            <h2>NOSSO DIFERENCIAL</h2>
+  <section class="about-differentials">
+    <div class="section-content">
+      <h2>Nosso diferencial</h2>
 
-            <div class="differentials-grid">
-                <div class="differential-card">
-                    <div class="icon-box">
-                        <i class="bi bi-diagram-3"></i> <!-- Ícone de estratégia -->
-                    </div>
-                    <h3>Nossa missão</h3>
-                    <p>Na N1 expirience, criamos espaços digitais para compartilhar conhecimento e crescimento pessoal.</p>
-                </div>
-
-                <div class="differential-card">
-                    <div class="icon-box">
-                        <i class="bi bi-bar-chart-line"></i> <!-- Ícone de dados -->
-                    </div>
-                    <h3>O que oferecemos</h3>
-                    <p>Oferecemos grupos VIP exclusivos e packs virtuais que ajudam nossos clientes a evoluir com facilidade.</p>
-                </div>
-
-                <div class="differential-card">
-                    <div class="icon-box">
-                        <i class="bi bi-lightbulb"></i> <!-- Ícone de criatividade -->
-                    </div>
-                    <h3>Criatividade</h3>
-                    <p>Produto inovador que pode ingajar seu trabalho.</p>
-                </div>
-            </div>
+      <div class="differentials-grid">
+        <div class="differential-card">
+          <div class="icon-box">
+            <i class="bi bi-diagram-3"></i>
+          </div>
+          <h3>Estratégia</h3>
+          <p>
+            Planejamento com direção clara para transformar presença digital em crescimento.
+          </p>
         </div>
-    </section>
 
-    <!-- Seção Números -->
-    <section class="numbers-section">
-        <div class="section-content">
-            <h2>EM NÚMEROS</h2>
-
-            <div class="numbers-grid">
-                <div class="number-item">
-                    <span class="number" [countUp]="stats.years">0</span>+
-                    <span class="label">Anos de mercado</span>
-                </div>
-
-                <div class="number-item">
-                    <span class="number" [countUp]="stats.clients">0</span>+
-                    <span class="label">Produtos Vendidos</span>
-                </div>
-
-                <div class="number-item">
-                    <span class="number" [countUp]="stats.engagements">0</span>+
-                    <span class="label">Engajamentos</span>
-                </div>
-
-                <div class="number-item">
-                    <span class="number" [countUp]="stats.satisfaction">0</span>%
-                    <span class="label">Satisfação</span>
-                </div>
-            </div>
+        <div class="differential-card">
+          <div class="icon-box">
+            <i class="bi bi-bar-chart-line"></i>
+          </div>
+          <h3>Performance</h3>
+          <p>
+            Decisões baseadas em resultado, dados e otimização constante.
+          </p>
         </div>
-    </section>
 
-
-    <!-- Seção CTA -->
-    <section class="cta-section">
-        <div class="cta-content">
-            <h2>Pronto para transformar sua presença digital?</h2>
-            <p>Vamos criar uma estratégia personalizada para o seu negócio</p>
-            <a routerLink="/contact" class="cta-button">Fale com nossos especialistas</a>
+        <div class="differential-card">
+          <div class="icon-box">
+            <i class="bi bi-lightbulb"></i>
+          </div>
+          <h3>Criatividade</h3>
+          <p>
+            Ideias que destacam sua marca e tornam a comunicação mais memorável.
+          </p>
         </div>
-    </section>
+      </div>
+    </div>
+  </section>
+
+  <section class="about-numbers">
+    <div class="section-content">
+      <h2>Em números</h2>
+
+      <div class="numbers-grid">
+        <div class="number-card">
+          <span class="number" [countUp]="stats.years">0</span>
+          <span class="label">Anos de mercado</span>
+        </div>
+
+        <div class="number-card">
+          <span class="number" [countUp]="stats.clients">0</span>
+          <span class="label">Produtos vendidos</span>
+        </div>
+
+        <div class="number-card">
+          <span class="number" [countUp]="stats.engagements">0</span>
+          <span class="label">Engajamentos</span>
+        </div>
+
+        <div class="number-card">
+          <span class="number" [countUp]="stats.satisfaction">0</span>
+          <span class="label">Satisfação</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="about-cta">
+    <div class="cta-box">
+      <h2>Pronto para fortalecer sua presença digital?</h2>
+      <p>
+        Vamos construir uma estratégia personalizada para posicionar sua marca do jeito certo.
+      </p>
+      <a routerLink="/contact" class="cta-button">Fale com nossos especialistas</a>
+    </div>
+  </section>
 </div>

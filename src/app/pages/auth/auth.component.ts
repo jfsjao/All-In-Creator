@@ -16,7 +16,7 @@ export class AuthComponent {
   private fb = inject(FormBuilder);
 
   isLoginMode = true;
-  isLoading = false;  //spinner de carregamento
+  isLoading = false;
 
   loginForm: FormGroup;
   registerForm: FormGroup;
@@ -43,17 +43,18 @@ export class AuthComponent {
 
   async onLogin() {
     if (this.loginForm.invalid) {
-      this.loginForm.markAllAsTouched();  // Marca campos pra mostrar erros
+      this.loginForm.markAllAsTouched();
       return;
     }
 
-    this.isLoading = true;  // Mostra spinner
+    this.isLoading = true;
 
-    const { email, password } = this.loginForm.value;
-
-    await this.authService.login(email, password);
-    
-    this.isLoading = false;
+    try {
+      const { email, password } = this.loginForm.value;
+      await this.authService.login(email, password);
+    } finally {
+      this.isLoading = false;
+    }
   }
 
   async onRegister() {
@@ -64,17 +65,22 @@ export class AuthComponent {
 
     this.isLoading = true;
 
-    const { name, email, password } = this.registerForm.value;
-    
-    await this.authService.register(email, password, name);
-    
-    this.isLoading = false;
+    try {
+      const { name, email, password } = this.registerForm.value;
+      await this.authService.register(email, password, name);
+    } finally {
+      this.isLoading = false;
+    }
   }
 
   async onGoogleLogin() {
     this.isLoading = true;
-    await this.authService.loginWithGoogle();
-    this.isLoading = false;
+
+    try {
+      await this.authService.loginWithGoogle();
+    } finally {
+      this.isLoading = false;
+    }
   }
 
   passwordMatchValidator(group: FormGroup) {

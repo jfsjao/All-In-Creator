@@ -1,171 +1,97 @@
-<!-- auth.component.html -->
-<div class="auth-container">
-  <!-- Seção Hero -->
+<div class="auth-page">
   <section class="auth-hero">
     <div class="hero-content">
-      <h1>{{ isLoginMode ? 'Acesse sua conta' : 'Crie sua conta' }}</h1>
-      <p class="hero-subtitle">
-        {{ isLoginMode ? 'Gerencie seus projetos e acompanhe seus resultados' : 'Comece a transformar seu negócio agora' }}
-      </p>
+      <div class="hero-text">
+        <span class="hero-badge">Área do cliente</span>
+        <h1>{{ isLoginMode ? 'Acesse sua conta' : 'Crie sua conta' }}</h1>
+        <p>
+          {{
+            isLoginMode
+              ? 'Gerencie seus projetos e acompanhe seus resultados com praticidade.'
+              : 'Comece agora e tenha acesso à sua área para acompanhar tudo de perto.'
+          }}
+        </p>
+      </div>
     </div>
   </section>
 
-  <!-- Seção do Formulário -->
   <section class="auth-form-section">
     <div class="section-content">
-      <div class="auth-card">
-        <h2>{{ isLoginMode ? 'Login' : 'Registro' }}</h2>
-        
-        <!-- ========== FORMULÁRIO DE LOGIN ========== -->
-        <form 
-          class="auth-form" 
-          *ngIf="isLoginMode; else registerFormTemplate"
-          [formGroup]="loginForm"
-          (ngSubmit)="onLogin()"
-        >
-          <!-- Campo Email -->
-          <div class="form-group">
-            <label for="login-email">Email</label>
-            <input 
-              type="email" 
-              id="login-email" 
-              formControlName="email"
-              placeholder="seu@email.com" 
-              [class.is-invalid]="loginEmail?.invalid && loginEmail?.touched"
-            >
-            <!-- Mensagem de erro -->
-            <small class="text-danger" *ngIf="loginEmail?.invalid && loginEmail?.touched">
-              Email inválido
-            </small>
-          </div>
-          
-          <!-- Campo Senha -->
-          <div class="form-group">
-            <label for="login-password">Senha</label>
-            <input 
-              type="password" 
-              id="login-password" 
-              formControlName="password"
-              placeholder="Sua senha"
-              [class.is-invalid]="loginPassword?.invalid && loginPassword?.touched"
-            >
-            <!-- Mensagem de erro -->
-            <small class="text-danger" *ngIf="loginPassword?.invalid && loginPassword?.touched">
-              Senha deve ter no mínimo 6 caracteres
-            </small>
-            <a href="#" class="forgot-password">Esqueceu sua senha?</a>
-          </div>
-          
-          <!-- Botão Entrar -->
-          <button 
-            type="submit" 
-            class="auth-button"
-            [disabled]="isLoading"
-          >
-            <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-2"></span>
-            {{ isLoading ? 'Entrando...' : 'Entrar' }}
-          </button>
+      <div class="auth-shell">
+        <div class="auth-copy">
+          <span class="form-badge">
+            {{ isLoginMode ? 'Login seguro' : 'Cadastro rápido' }}
+          </span>
 
-          <div class="divider">
-            <span>ou</span>
-          </div>
+          <h2>
+            {{ isLoginMode ? 'Bem-vindo de volta' : 'Crie sua conta' }}
+          </h2>
 
-          <!-- Botão Google -->
-          <button 
-            type="button" 
-            class="google-auth-button"
-            (click)="onGoogleLogin()"
-            [disabled]="isLoading"
-          >
-            <i class="bi bi-google"></i>
-            Continuar com Google
-          </button>
-        </form>
+          <p>
+            {{
+              isLoginMode
+                ? 'Entre com seus dados para acessar sua área, acompanhar projetos e visualizar suas informações.'
+                : 'Preencha os dados abaixo para criar sua conta e começar sua jornada com a NicolWork.'
+            }}
+          </p>
+        </div>
 
-        <!-- ========== FORMULÁRIO DE REGISTRO ========== -->
-        <ng-template #registerFormTemplate>
-          <form 
+        <div class="auth-card">
+          <h3>{{ isLoginMode ? 'Login' : 'Registro' }}</h3>
+
+          <!-- LOGIN -->
+          <form
             class="auth-form"
-            [formGroup]="registerForm"
-            (ngSubmit)="onRegister()"
+            *ngIf="isLoginMode; else registerFormTemplate"
+            [formGroup]="loginForm"
+            (ngSubmit)="onLogin()"
+            novalidate
           >
-            <!-- Campo Nome -->
             <div class="form-group">
-              <label for="register-name">Nome completo</label>
-              <input 
-                type="text" 
-                id="register-name" 
-                formControlName="name"
-                placeholder="Seu nome"
-                [class.is-invalid]="registerName?.invalid && registerName?.touched"
-              >
-              <small class="text-danger" *ngIf="registerName?.invalid && registerName?.touched">
-                Nome deve ter no mínimo 3 caracteres
-              </small>
-            </div>
-
-            <!-- Campo Email -->
-            <div class="form-group">
-              <label for="register-email">Email</label>
-              <input 
-                type="email" 
-                id="register-email" 
+              <label for="login-email">Email</label>
+              <input
+                type="email"
+                id="login-email"
                 formControlName="email"
                 placeholder="seu@email.com"
-                [class.is-invalid]="registerEmail?.invalid && registerEmail?.touched"
-              >
-              <small class="text-danger" *ngIf="registerEmail?.invalid && registerEmail?.touched">
-                Email inválido
-              </small>
-            </div>
-            
-            <!-- Campo Senha -->
-            <div class="form-group">
-              <label for="register-password">Senha</label>
-              <input 
-                type="password" 
-                id="register-password" 
-                formControlName="password"
-                placeholder="Mínimo 6 caracteres"
-                [class.is-invalid]="registerPassword?.invalid && registerPassword?.touched"
-              >
-              <small class="text-danger" *ngIf="registerPassword?.invalid && registerPassword?.touched">
-                Senha deve ter no mínimo 6 caracteres
+                [class.is-invalid]="loginEmail?.invalid && loginEmail?.touched"
+              />
+              <small class="text-danger" *ngIf="loginEmail?.invalid && loginEmail?.touched">
+                Email inválido.
               </small>
             </div>
 
-            <!-- Campo Confirmar Senha -->
             <div class="form-group">
-              <label for="register-confirm">Confirme sua senha</label>
-              <input 
-                type="password" 
-                id="register-confirm" 
-                formControlName="confirmPassword"
-                placeholder="Digite novamente"
-                [class.is-invalid]="registerConfirmPassword?.touched && registerForm.errors?.['passwordMismatch']"
-              >
-              <small class="text-danger" *ngIf="registerConfirmPassword?.touched && registerForm.errors?.['passwordMismatch']">
-                As senhas não coincidem
+              <label for="login-password">Senha</label>
+              <input
+                type="password"
+                id="login-password"
+                formControlName="password"
+                placeholder="Sua senha"
+                [class.is-invalid]="loginPassword?.invalid && loginPassword?.touched"
+              />
+              <small class="text-danger" *ngIf="loginPassword?.invalid && loginPassword?.touched">
+                Senha deve ter no mínimo 6 caracteres.
               </small>
+
+              <a href="#" class="forgot-password">Esqueceu sua senha?</a>
             </div>
-            
-            <!-- Botão Criar Conta -->
-            <button 
-              type="submit" 
+
+            <button
+              type="submit"
               class="auth-button"
               [disabled]="isLoading"
             >
               <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-2"></span>
-              {{ isLoading ? 'Criando conta...' : 'Criar conta' }}
+              {{ isLoading ? 'Entrando...' : 'Entrar' }}
             </button>
 
             <div class="divider">
               <span>ou</span>
             </div>
 
-            <!-- Botão Google -->
-            <button 
-              type="button" 
+            <button
+              type="button"
               class="google-auth-button"
               (click)="onGoogleLogin()"
               [disabled]="isLoading"
@@ -174,14 +100,107 @@
               Continuar com Google
             </button>
           </form>
-        </ng-template>
 
-        <!-- Link pra alternar Login/Registro -->
-        <div class="auth-switch">
-          {{ isLoginMode ? 'Não tem uma conta?' : 'Já tem uma conta?' }}
-          <a (click)="onSwitchMode()">
-            {{ isLoginMode ? 'Cadastre-se' : 'Faça login' }}
-          </a>
+          <!-- REGISTRO -->
+          <ng-template #registerFormTemplate>
+            <form
+              class="auth-form"
+              [formGroup]="registerForm"
+              (ngSubmit)="onRegister()"
+              novalidate
+            >
+              <div class="form-group">
+                <label for="register-name">Nome completo</label>
+                <input
+                  type="text"
+                  id="register-name"
+                  formControlName="name"
+                  placeholder="Seu nome"
+                  [class.is-invalid]="registerName?.invalid && registerName?.touched"
+                />
+                <small class="text-danger" *ngIf="registerName?.invalid && registerName?.touched">
+                  Nome deve ter no mínimo 3 caracteres.
+                </small>
+              </div>
+
+              <div class="form-group">
+                <label for="register-email">Email</label>
+                <input
+                  type="email"
+                  id="register-email"
+                  formControlName="email"
+                  placeholder="seu@email.com"
+                  [class.is-invalid]="registerEmail?.invalid && registerEmail?.touched"
+                />
+                <small class="text-danger" *ngIf="registerEmail?.invalid && registerEmail?.touched">
+                  Email inválido.
+                </small>
+              </div>
+
+              <div class="form-group">
+                <label for="register-password">Senha</label>
+                <input
+                  type="password"
+                  id="register-password"
+                  formControlName="password"
+                  placeholder="Mínimo 6 caracteres"
+                  [class.is-invalid]="registerPassword?.invalid && registerPassword?.touched"
+                />
+                <small class="text-danger" *ngIf="registerPassword?.invalid && registerPassword?.touched">
+                  Senha deve ter no mínimo 6 caracteres.
+                </small>
+              </div>
+
+              <div class="form-group">
+                <label for="register-confirm">Confirme sua senha</label>
+                <input
+                  type="password"
+                  id="register-confirm"
+                  formControlName="confirmPassword"
+                  placeholder="Digite novamente"
+                  [class.is-invalid]="registerConfirmPassword?.touched && registerForm.errors?.['passwordMismatch']"
+                />
+                <small
+                  class="text-danger"
+                  *ngIf="registerConfirmPassword?.touched && registerForm.errors?.['passwordMismatch']"
+                >
+                  As senhas não coincidem.
+                </small>
+              </div>
+
+              <button
+                type="submit"
+                class="auth-button"
+                [disabled]="isLoading"
+              >
+                <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-2"></span>
+                {{ isLoading ? 'Criando conta...' : 'Criar conta' }}
+              </button>
+
+              <div class="divider">
+                <span>ou</span>
+              </div>
+
+              <button
+                type="button"
+                class="google-auth-button"
+                (click)="onGoogleLogin()"
+                [disabled]="isLoading"
+              >
+                <i class="bi bi-google"></i>
+                Continuar com Google
+              </button>
+            </form>
+          </ng-template>
+
+          <div class="auth-switch">
+            <span>
+              {{ isLoginMode ? 'Não tem uma conta?' : 'Já tem uma conta?' }}
+            </span>
+            <a (click)="onSwitchMode()">
+              {{ isLoginMode ? 'Cadastre-se' : 'Faça login' }}
+            </a>
+          </div>
         </div>
       </div>
     </div>
