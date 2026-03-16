@@ -1,0 +1,163 @@
+<div class="dashboard-page">
+  <!-- HERO -->
+  <section class="dashboard-hero">
+    <div class="hero-overlay"></div>
+
+    <div class="hero-content">
+      <span class="hero-badge">Área do cliente</span>
+      <h1>Bem-vindo de volta, {{ userName }}</h1>
+      <p>
+        Acompanhe novidades, acesse seus packs liberados e descubra os conteúdos
+        mais populares da plataforma.
+      </p>
+
+      <div class="hero-actions">
+        <a routerLink="/store" class="btn btn-primary">Explorar packs</a>
+        <a href="#meus-packs" class="btn btn-secondary">Meus packs</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- CAROUSEL / NOVIDADES -->
+  <section class="dashboard-carousel-section">
+    <div class="section-header">
+      <h2>Destaques para você</h2>
+      <p>Atualizações, novidades e conteúdos em evidência.</p>
+    </div>
+
+    <div class="carousel-box">
+      <div class="carousel-track">
+        @for (slide of slides; track $index; let i = $index) {
+          <div class="carousel-slide" [class.active]="currentSlide === i">
+            <img [src]="slide.image" [alt]="slide.alt" />
+            <div class="slide-gradient"></div>
+
+            <div class="slide-content">
+              <span class="slide-tag">{{ slide.tag }}</span>
+              <h3>{{ slide.title }}</h3>
+              <p>{{ slide.description }}</p>
+              <a [routerLink]="slide.buttonLink" class="slide-button">
+                {{ slide.buttonText }}
+              </a>
+            </div>
+          </div>
+        }
+      </div>
+
+      <div class="carousel-controls">
+        <button type="button" class="nav-arrow" (click)="prevSlide()">‹</button>
+
+        <div class="pagination-dots">
+          @for (slide of slides; track $index; let i = $index) {
+            <span
+              [class.active]="currentSlide === i"
+              (click)="goToSlide(i)">
+            </span>
+          }
+        </div>
+
+        <button type="button" class="nav-arrow" (click)="nextSlide()">›</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- MEUS PACKS -->
+  <section class="dashboard-section" id="meus-packs">
+    <div class="section-header">
+      <h2>Seus packs</h2>
+      <p>Conteúdos já liberados na sua conta.</p>
+    </div>
+
+    <div class="packs-grid">
+      @for (pack of myPacks; track pack.id) {
+        <article class="pack-card owned">
+          <div class="pack-top">
+            <span class="pack-badge">Liberado</span>
+            <span class="pack-files">{{ pack.totalFiles }} arquivos</span>
+          </div>
+
+          <h3>{{ pack.name }}</h3>
+          <p>{{ pack.description }}</p>
+
+          <div class="pack-meta">
+            <span>Última atualização: {{ pack.updatedAt }}</span>
+          </div>
+
+          <div class="pack-actions">
+            <a [routerLink]="pack.link" class="btn-card primary">Acessar</a>
+            <a [href]="pack.downloadUrl" target="_blank" class="btn-card secondary">Baixar</a>
+          </div>
+        </article>
+      }
+    </div>
+  </section>
+
+  <!-- NOVIDADES -->
+  <section class="dashboard-section alt-bg">
+    <div class="section-header">
+      <h2>Novidades</h2>
+      <p>O que foi adicionado ou atualizado recentemente.</p>
+    </div>
+
+    <div class="news-grid">
+      @for (item of news; track item.id) {
+        <article class="news-card">
+          <span class="news-tag">{{ item.tag }}</span>
+          <h3>{{ item.title }}</h3>
+          <p>{{ item.description }}</p>
+          <span class="news-date">{{ item.date }}</span>
+        </article>
+      }
+    </div>
+  </section>
+
+  <!-- POPULARES -->
+  <section class="dashboard-section">
+    <div class="section-header">
+      <h2>Mais populares</h2>
+      <p>Os packs e conteúdos mais procurados pelos clientes.</p>
+    </div>
+
+    <div class="popular-grid">
+      @for (pack of popularPacks; track pack.id) {
+        <article class="popular-card">
+          <div class="popular-rank">#{{ pack.rank }}</div>
+          <h3>{{ pack.name }}</h3>
+          <p>{{ pack.description }}</p>
+          <div class="popular-footer">
+            <span>{{ pack.highlight }}</span>
+            <a [routerLink]="pack.link">Ver detalhes</a>
+          </div>
+        </article>
+      }
+    </div>
+  </section>
+
+  <!-- UPGRADE -->
+  @if (upgradeSuggestions.length > 0) {
+    <section class="dashboard-section alt-bg">
+      <div class="section-header">
+        <h2>Desbloqueie o próximo nível</h2>
+        <p>Planos acima do seu para liberar ainda mais conteúdo.</p>
+      </div>
+
+      <div class="upgrade-grid">
+        @for (plan of upgradeSuggestions; track plan.id) {
+          <article class="upgrade-card">
+            <span class="upgrade-badge">{{ plan.label }}</span>
+            <h3>{{ plan.name }}</h3>
+            <p>{{ plan.description }}</p>
+
+            <ul>
+              @for (feature of plan.features; track $index) {
+                <li>{{ feature }}</li>
+              }
+            </ul>
+
+            <a [routerLink]="plan.link" class="upgrade-btn">Fazer upgrade</a>
+          </article>
+        }
+      </div>
+    </section>
+  }
+</div>

@@ -1,7 +1,15 @@
 import { Injectable, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword,
-        signOut, User, updateProfile, sendPasswordResetEmail, GoogleAuthProvider, signInWithPopup} from 'firebase/auth';
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  signOut,
+  User,
+  updateProfile,
+  sendPasswordResetEmail,
+  GoogleAuthProvider,
+  signInWithPopup
+} from 'firebase/auth';
 import { auth } from '../../../../firebase-config';
 import { ToastrService } from 'ngx-toastr';
 
@@ -20,16 +28,16 @@ export class AuthService {
   private router = inject(Router);
   private toastr = inject(ToastrService);
 
-  // Signal para gerenciar estado do usuário
   currentUser = signal<UserData | null>(null);
   isLoading = signal<boolean>(true);
+  authInitialized = signal<boolean>(false);
 
   constructor() {
     this.initAuthListener();
   }
 
   /**
-   * Listener do Firebase Auth - Atualiza automaticamente quando user loga/desloga
+   * Listener do Firebase Auth
    */
   private initAuthListener(): void {
     auth.onAuthStateChanged((user: User | null) => {
@@ -39,12 +47,30 @@ export class AuthService {
           email: user.email,
           displayName: user.displayName,
           photoURL: user.photoURL,
-          plano: null // Vai buscar do backend depois
+          plano: null
         });
       } else {
         this.currentUser.set(null);
       }
+
       this.isLoading.set(false);
+      this.authInitialized.set(true);
+    });
+  }
+
+  /**
+   * Espera o Firebase terminar de restaurar a sessão
+   */
+  async waitForAuthInit(): Promise<void> {
+    if (this.authInitialized()) return;
+
+    await new Promise<void>((resolve) => {
+      const interval = setInterval(() => {
+        if (this.authInitialized()) {
+          clearInterval(interval);
+          resolve();
+        }
+      }, 50);
     });
   }
 
@@ -54,12 +80,11 @@ export class AuthService {
   async register(email: string, password: string, name: string): Promise<boolean> {
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-      
-      // Atualizar nome do usuário
+
       await updateProfile(userCredential.user, { displayName: name });
 
       this.toastr.success('Conta criada com sucesso!', 'Bem-vindo!');
-      this.router.navigate(['/store']);
+      this.router.navigate(['/dashboard']);
       return true;
     } catch (error: any) {
       this.handleAuthError(error);
@@ -74,7 +99,7 @@ export class AuthService {
     try {
       await signInWithEmailAndPassword(auth, email, password);
       this.toastr.success('Login realizado com sucesso!', 'Bem-vindo de volta!');
-      this.router.navigate(['/store']);
+      this.router.navigate(['/dashboard']);
       return true;
     } catch (error: any) {
       this.handleAuthError(error);
@@ -90,7 +115,7 @@ export class AuthService {
       const provider = new GoogleAuthProvider();
       await signInWithPopup(auth, provider);
       this.toastr.success('Login realizado com sucesso!', 'Bem-vindo!');
-      this.router.navigate(['/store']);
+      this.router.navigate(['/dashboard']);
       return true;
     } catch (error: any) {
       this.handleAuthError(error);
@@ -126,7 +151,7 @@ export class AuthService {
   }
 
   /**
-   * Pegar token JWT do usuário (pra enviar pro backend)
+   * Pegar token JWT do usuário
    */
   async getToken(): Promise<string | null> {
     const user = auth.currentUser;

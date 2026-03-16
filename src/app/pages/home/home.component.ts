@@ -40,7 +40,7 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
       title: 'Bem-vindo ao Nosso Blog',
       description: 'Descubra conteúdos exclusivos e atualizados regularmente',
       buttonText: 'Explorar',
-      buttonLink: '/services'
+      buttonLink: '/home'
     },
     {
       image: 'assets/images/carrosel/banner2.gif',
@@ -69,12 +69,15 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
   
   // Configuração do carrossel de logos
   partnerLogos: Logo[] = [
-    { image: 'assets/images/logos/playtruco.png', alt: 'Play Truco' },
-    { image: 'assets/images/logos/estilovivo.png', alt: 'Estilo Vivo' },
-    { image: 'assets/images/logos/mid.png', alt: 'MID Conveniencia' },
-    { image: 'assets/images/logos/pedraoferramentas.png', alt: 'Pedro Ferramentas' },
-    { image: 'assets/images/logos/viptech.png', alt: 'Vip Tech' },
-    { image: 'assets/images/logos/fazznatural.png', alt: 'Fazz Natural' },
+    { image: 'assets/images/logos/adobe_illustrator.webp', alt: 'Adobe Illustrator' },
+    { image: 'assets/images/logos/after_effects.webp', alt: 'After Effects' },
+    { image: 'assets/images/logos/lightroom.webp', alt: 'Adobe Lightroom' },
+    { image: 'assets/images/logos/premier.webp', alt: 'Adobe Premiere' },
+    { image: 'assets/images/logos/photoshop.webp', alt: 'Adobe Photoshop' },
+    { image: 'assets/images/logos/broke.webp', alt: 'Broke' },
+    { image: 'assets/images/logos/chatgpt.webp', alt: 'ChatGPT' },
+    { image: 'assets/images/logos/gemini.webp', alt: 'Gemini' },
+    { image: 'assets/images/logos/canva.webp', alt: 'Canva' }
   ];
 
   // Configuração do pack showcase
