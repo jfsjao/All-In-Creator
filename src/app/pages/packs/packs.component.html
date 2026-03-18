@@ -1,0 +1,104 @@
+<div class="packs-page">
+  <section class="packs-hero">
+    <div class="hero-content">
+      <span class="hero-badge">Catálogo exclusivo</span>
+      <h1>Seus Packs</h1>
+      <p>
+        Explore sua biblioteca, descubra novidades e veja os packs mais populares da plataforma.
+      </p>
+
+      <div class="search-box">
+        <input
+          type="text"
+          [(ngModel)]="searchTerm"
+          placeholder="Buscar packs..."
+        />
+      </div>
+    </div>
+  </section>
+
+  <section class="packs-section">
+    <div class="section-header">
+      <h2>Seus packs liberados</h2>
+    </div>
+
+    <div class="packs-row">
+      @for (pack of filterPacks(myPacks); track pack.id) {
+        <article class="pack-card">
+          <img [src]="pack.image" [alt]="pack.title" />
+          <div class="card-overlay">
+            <span class="badge">{{ pack.badge }}</span>
+            <h3>{{ pack.title }}</h3>
+            <p>{{ pack.description }}</p>
+            <a routerLink="/dashboard" class="card-btn">Abrir pack</a>
+          </div>
+        </article>
+      }
+    </div>
+  </section>
+
+  <section class="packs-section">
+    <div class="section-header">
+      <h2>Mais populares</h2>
+    </div>
+
+    <div class="packs-row">
+      @for (pack of filterPacks(popularPacks); track pack.id) {
+        <article class="pack-card" [class.locked]="pack.locked">
+          <img [src]="pack.image" [alt]="pack.title" />
+          <div class="card-overlay">
+            <span class="badge">{{ pack.badge }}</span>
+            <h3>{{ pack.title }}</h3>
+            <p>{{ pack.description }}</p>
+
+            @if (pack.locked) {
+              <a routerLink="/store" class="card-btn secondary">Fazer upgrade</a>
+            } @else {
+              <a routerLink="/dashboard" class="card-btn">Ver detalhes</a>
+            }
+          </div>
+        </article>
+      }
+    </div>
+  </section>
+
+  <section class="packs-section">
+    <div class="section-header">
+      <h2>Novidades</h2>
+    </div>
+
+    <div class="packs-row">
+      @for (pack of filterPacks(newPacks); track pack.id) {
+        <article class="pack-card">
+          <img [src]="pack.image" [alt]="pack.title" />
+          <div class="card-overlay">
+            <span class="badge">{{ pack.badge }}</span>
+            <h3>{{ pack.title }}</h3>
+            <p>{{ pack.description }}</p>
+            <a routerLink="/dashboard" class="card-btn">Explorar</a>
+          </div>
+        </article>
+      }
+    </div>
+  </section>
+
+  <section class="packs-section">
+    <div class="section-header">
+      <h2>Premium</h2>
+    </div>
+
+    <div class="packs-row">
+      @for (pack of filterPacks(premiumSuggestions); track pack.id) {
+        <article class="pack-card locked">
+          <img [src]="pack.image" [alt]="pack.title" />
+          <div class="card-overlay">
+            <span class="badge">{{ pack.badge }}</span>
+            <h3>{{ pack.title }}</h3>
+            <p>{{ pack.description }}</p>
+            <a routerLink="/store" class="card-btn secondary">Desbloquear</a>
+          </div>
+        </article>
+      }
+    </div>
+  </section>
+</div>

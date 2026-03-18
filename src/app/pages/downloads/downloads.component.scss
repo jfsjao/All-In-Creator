@@ -1,0 +1,361 @@
+:host {
+  display: block;
+  overflow-x: clip;
+}
+
+.downloads-page {
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at top left, rgba(73, 73, 196, 0.2), transparent 30%),
+    #0b0b14;
+  color: #fff;
+}
+
+.downloads-hero {
+  padding: 7rem 1.5rem 3rem;
+  background:
+    linear-gradient(180deg, rgba(8, 8, 14, 0.2), rgba(11, 11, 20, 1)),
+    url('/assets/images/empresa/nico-coringa.jpg') center/cover no-repeat;
+
+  .hero-content {
+    width: min(100%, 1200px);
+    margin: 0 auto;
+  }
+
+  .hero-badge {
+    display: inline-flex;
+    padding: 0.45rem 0.8rem;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    font-size: 0.8rem;
+    font-weight: 800;
+    margin-bottom: 1rem;
+  }
+
+  h1 {
+    margin: 0 0 0.75rem;
+    font-size: clamp(2.2rem, 5vw, 4rem);
+    font-weight: 900;
+  }
+
+  p {
+    max-width: 64ch;
+    margin: 0 0 1.5rem;
+    color: rgba(255, 255, 255, 0.78);
+    line-height: 1.7;
+  }
+}
+
+.hero-tools {
+  display: grid;
+  grid-template-columns: minmax(320px, 420px) 1fr;
+  gap: 1rem;
+  align-items: stretch;
+}
+
+.search-box {
+  input {
+    width: 100%;
+    height: 52px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: rgba(255, 255, 255, 0.08);
+    color: #fff;
+    border-radius: 999px;
+    padding: 0 1rem;
+    outline: none;
+
+    &::placeholder {
+      color: rgba(255, 255, 255, 0.55);
+    }
+  }
+}
+
+.hero-stats {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.stat-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 52px;
+  padding: 1rem 1.1rem;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+
+  strong {
+    font-size: 1.25rem;
+    font-weight: 900;
+  }
+
+  span {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.92rem;
+  }
+}
+
+.downloads-section {
+  width: min(100% - 32px, 1280px);
+  margin: 0 auto;
+  padding: 2rem 0 1rem;
+}
+
+.section-header {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.2rem;
+
+  h2 {
+    margin: 0 0 0.25rem;
+    font-size: 1.4rem;
+    font-weight: 900;
+  }
+
+  p {
+    margin: 0;
+    color: rgba(255, 255, 255, 0.68);
+  }
+}
+
+.section-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 42px;
+  padding: 0.75rem 1rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #fff;
+  font-weight: 700;
+  opacity: 0.9;
+}
+
+.downloads-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(220px, 1fr));
+  gap: 1rem;
+
+  &.compact {
+    grid-template-columns: repeat(2, minmax(280px, 1fr));
+  }
+}
+
+.download-card {
+  border-radius: 22px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.2);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+
+  &:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 24px 40px rgba(0, 0, 0, 0.32);
+  }
+
+  img {
+    width: 100%;
+    height: 210px;
+    object-fit: cover;
+  }
+}
+
+.card-content {
+  padding: 1.1rem;
+
+  h3 {
+    margin: 0 0 0.45rem;
+    font-size: 1.1rem;
+    font-weight: 900;
+  }
+
+  p {
+    margin: 0 0 1rem;
+    color: rgba(255, 255, 255, 0.74);
+    line-height: 1.55;
+    min-height: 72px;
+  }
+}
+
+.card-meta,
+.info-row,
+.card-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.card-meta {
+  margin-bottom: 0.9rem;
+}
+
+.downloaded-at,
+.info-row {
+  color: rgba(255, 255, 255, 0.62);
+  font-size: 0.88rem;
+}
+
+.status-badge {
+  display: inline-flex;
+  padding: 0.35rem 0.7rem;
+  border-radius: 999px;
+  background: rgba(44, 203, 126, 0.16);
+  border: 1px solid rgba(44, 203, 126, 0.28);
+  font-size: 0.76rem;
+  font-weight: 800;
+
+  &.update {
+    background: rgba(79, 172, 254, 0.18);
+    border-color: rgba(79, 172, 254, 0.28);
+  }
+}
+
+.info-row {
+  margin-bottom: 1rem;
+}
+
+.card-actions {
+  justify-content: flex-start;
+  flex-wrap: wrap;
+}
+
+.card-btn,
+.action-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 42px;
+  padding: 0.8rem 1rem;
+  border-radius: 999px;
+  background: #fff;
+  color: #101010;
+  text-decoration: none;
+  font-weight: 800;
+  text-align: center;
+  white-space: normal;
+  transition: 0.2s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+  }
+
+  &.secondary {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    color: #fff;
+  }
+}
+
+.spotlight {
+  padding-top: 1rem;
+}
+
+.compact-card {
+  display: grid;
+  grid-template-columns: 180px 1fr;
+
+  img {
+    height: 100%;
+  }
+
+  .card-content p {
+    min-height: auto;
+  }
+}
+
+.actions-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(280px, 1fr));
+  gap: 1rem;
+}
+
+.action-card {
+  padding: 1.25rem;
+  border-radius: 22px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.04));
+  border: 1px solid rgba(255, 255, 255, 0.08);
+
+  h3 {
+    margin: 0 0 0.5rem;
+    font-size: 1.1rem;
+  }
+
+  p {
+    margin: 0 0 1rem;
+    color: rgba(255, 255, 255, 0.72);
+    line-height: 1.6;
+  }
+}
+
+@media (max-width: 1100px) {
+  .downloads-grid {
+    grid-template-columns: repeat(2, minmax(220px, 1fr));
+  }
+
+  .card-actions {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    width: 100%;
+  }
+
+  .card-btn {
+    width: 100%;
+  }
+}
+
+@media (max-width: 900px) {
+  .hero-tools,
+  .downloads-grid.compact,
+  .actions-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .compact-card {
+    grid-template-columns: 1fr;
+
+    img {
+      height: 220px;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .downloads-hero {
+    padding-top: 6rem;
+  }
+
+  .hero-stats,
+  .downloads-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .section-header {
+    flex-direction: column;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+  }
+
+  .section-link {
+    width: 100%;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .card-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .card-btn,
+  .action-link {
+    width: 100%;
+  }
+}

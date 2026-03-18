@@ -27,13 +27,34 @@ export const routes: Routes = [
     path: 'auth', 
     loadComponent: () => import('../pages/auth/auth.component').then(m => m.AuthComponent) 
   },
+
   //privadas
+  
   {
     path: 'dashboard',
     loadComponent: () =>
       import('../pages/dashboard/dashboard.component').then(m => m.DashboardComponent),
     canActivate: [authGuard]
   },
+  {
+    path: 'packs',
+    loadComponent: () =>
+      import('../pages/packs/packs.component').then(m => m.PacksComponent),
+    canActivate: [authGuard]
+  },
+  { 
+    path: 'downloads',
+    loadComponent: () => 
+      import('../pages/downloads/downloads.component').then(m => m.DownloadsComponent), 
+    canActivate: [authGuard] 
+  },
+  { 
+    path: 'account',
+    loadComponent: () =>
+      import('../pages/account/account.component').then(m => m.AccountComponent), 
+    canActivate: [authGuard] 
+  },
+  
   {
     path: '**',
     redirectTo: 'home'

@@ -1,0 +1,123 @@
+<div class="account-page">
+  <section class="account-hero">
+    <div class="hero-content">
+      <span class="hero-badge">Minha conta</span>
+      <h1>Organize sua conta do seu jeito</h1>
+      <p>
+        Atualize seus dados, ajuste preferências e acompanhe a atividade recente para manter tudo sob controle.
+      </p>
+    </div>
+  </section>
+
+  <section class="account-shell">
+    <aside class="profile-summary">
+      <div class="profile-card">
+        <div class="avatar">{{ currentUserName.charAt(0) }}</div>
+        <h2>{{ currentUserName }}</h2>
+        <span>{{ currentUserEmail }}</span>
+
+        <div class="plan-badge">Plano ativo</div>
+
+        <div class="summary-list">
+          @for (shortcut of shortcuts; track shortcut.title) {
+            <article class="summary-item">
+              <h3>{{ shortcut.title }}</h3>
+              <p>{{ shortcut.description }}</p>
+            </article>
+          }
+        </div>
+      </div>
+    </aside>
+
+    <div class="account-content">
+      <section class="panel">
+        <div class="panel-header">
+          <div>
+            <h2>Dados principais</h2>
+            <p>Edite as informações que aparecem na sua conta.</p>
+          </div>
+          <button type="button" class="panel-btn">Salvar alterações</button>
+        </div>
+
+        <div class="form-grid">
+          <label class="field">
+            <span>Nome</span>
+            <input type="text" [(ngModel)]="profileForm.name" />
+          </label>
+
+          <label class="field">
+            <span>Email</span>
+            <input type="email" [(ngModel)]="profileForm.email" />
+          </label>
+
+          <label class="field">
+            <span>Telefone</span>
+            <input type="text" [(ngModel)]="profileForm.phone" />
+          </label>
+
+          <label class="field">
+            <span>Área de atuação</span>
+            <input type="text" [(ngModel)]="profileForm.role" />
+          </label>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-header">
+          <div>
+            <h2>Preferências</h2>
+            <p>Reorganize como a plataforma conversa com você.</p>
+          </div>
+        </div>
+
+        <div class="toggle-list">
+          <label class="toggle-card">
+            <div>
+              <strong>Receber notificações</strong>
+              <p>Avisos sobre acesso, conta e movimentações.</p>
+            </div>
+            <input type="checkbox" [(ngModel)]="preferences.notifications" />
+          </label>
+
+          <label class="toggle-card">
+            <div>
+              <strong>Novos lançamentos</strong>
+              <p>Seja avisado quando novos packs forem liberados.</p>
+            </div>
+            <input type="checkbox" [(ngModel)]="preferences.launches" />
+          </label>
+
+          <label class="toggle-card">
+            <div>
+              <strong>Visual premium</strong>
+              <p>Mantenha cartões e painéis com destaque visual mais forte.</p>
+            </div>
+            <input type="checkbox" [(ngModel)]="preferences.darkCards" />
+          </label>
+        </div>
+      </section>
+
+      <section class="panel security-panel">
+        <div class="panel-header">
+          <div>
+            <h2>Segurança e atividade</h2>
+            <p>Acompanhe o que aconteceu na sua conta recentemente.</p>
+          </div>
+          <button type="button" class="panel-btn secondary">Trocar senha</button>
+        </div>
+
+        <div class="activity-list">
+          @for (activity of recentActivity; track activity.title + activity.date) {
+            <article class="activity-item">
+              <div>
+                <h3>{{ activity.title }}</h3>
+                <p>{{ activity.detail }}</p>
+              </div>
+              <span>{{ activity.date }}</span>
+            </article>
+          }
+        </div>
+      </section>
+    </div>
+  </section>
+</div>
