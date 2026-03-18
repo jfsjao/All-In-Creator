@@ -110,6 +110,42 @@
             }
           },
           "defaultConfiguration": "development"
+        },
+        "test": {
+          "builder": "@angular/build:karma",
+          "options": {
+            "tsConfig": "tsconfig.spec.json",
+            "karmaConfig": "karma.conf.cjs",
+            "polyfills": [
+              "zone.js",
+              "zone.js/testing"
+            ],
+            "stylePreprocessorOptions": {
+              "includePaths": ["src/styles"]
+            },
+            "assets": [
+              "src/favicon.ico",
+              {
+                "glob": "**/*.@(jpg|png|svg|webp|ico|gif|mp4|json)",
+                "input": "src/assets/",
+                "output": "assets/"
+              },
+              {
+                "glob": "**/*.@(woff2|ttf|eot|otf)",
+                "input": "src/assets/fonts",
+                "output": "assets/fonts/"
+              }
+            ],
+            "styles": [
+              "node_modules/bootstrap/dist/css/bootstrap.min.css",
+              "node_modules/bootstrap-icons/font/bootstrap-icons.css",
+              "src/styles.scss"
+            ],
+            "scripts": [
+              "node_modules/@popperjs/core/dist/umd/popper.min.js",
+              "node_modules/bootstrap/dist/js/bootstrap.min.js"
+            ]
+          }
         }
       }
     }
