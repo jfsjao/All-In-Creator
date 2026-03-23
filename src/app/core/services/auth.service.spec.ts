@@ -31,18 +31,18 @@ describe('AuthService', () => {
   });
 
   it('logs in with Google using Firebase popup', async () => {
-    spyOn(firebaseAuth, 'signInWithPopup').and.resolveTo({} as firebaseAuth.UserCredential);
+    const popupSpy = spyOn<any>(service, 'signInWithGooglePopup').and.resolveTo({} as firebaseAuth.UserCredential);
 
     const result = await service.loginWithGoogle();
 
     expect(result).toBeTrue();
-    expect(firebaseAuth.signInWithPopup).toHaveBeenCalled();
+    expect(popupSpy).toHaveBeenCalled();
     expect(routerSpy.navigate).toHaveBeenCalledWith(['/dashboard']);
     expect(toastrSpy.success).toHaveBeenCalled();
   });
 
   it('surfaces Firebase popup errors', async () => {
-    spyOn(firebaseAuth, 'signInWithPopup').and.rejectWith({ code: 'auth/popup-closed-by-user' });
+    spyOn<any>(service, 'signInWithGooglePopup').and.rejectWith({ code: 'auth/popup-closed-by-user' });
 
     const result = await service.loginWithGoogle();
 

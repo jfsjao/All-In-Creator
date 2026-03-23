@@ -113,7 +113,7 @@ export class AuthService {
   async loginWithGoogle(): Promise<boolean> {
     try {
       const provider = new GoogleAuthProvider();
-      await signInWithPopup(auth, provider);
+      await this.signInWithGooglePopup(provider);
       this.toastr.success('Login realizado com sucesso!', 'Bem-vindo!');
       this.router.navigate(['/dashboard']);
       return true;
@@ -121,6 +121,10 @@ export class AuthService {
       this.handleAuthError(error);
       return false;
     }
+  }
+
+  private signInWithGooglePopup(provider: GoogleAuthProvider): Promise<unknown> {
+    return signInWithPopup(auth, provider);
   }
 
   /**
