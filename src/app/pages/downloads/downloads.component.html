@@ -2,28 +2,29 @@
   <section class="downloads-hero">
     <div class="hero-content">
       <span class="hero-badge">Central de downloads</span>
-      <h1>Seus últimos packs baixados</h1>
+      <h1>Seus ultimos packs baixados</h1>
       <p>
-        Acompanhe seus downloads recentes, veja atualizações disponíveis e volte rapidamente para os materiais que você mais usa.
+        Acompanhe seus downloads recentes, veja atualizacoes disponiveis e volte rapidamente para os materiais que voce mais usa.
       </p>
 
       <div class="hero-tools">
         <div class="search-box">
           <input
             type="text"
-            [(ngModel)]="searchTerm"
+            [ngModel]="searchTerm"
+            (ngModelChange)="onSearchChange($event)"
             placeholder="Buscar nos downloads..."
           />
         </div>
 
         <div class="hero-stats">
           <article class="stat-card">
-            <strong>{{ recentDownloads.length }}</strong>
+            <strong>{{ totalDownloads }}</strong>
             <span>Downloads recentes</span>
           </article>
           <article class="stat-card">
-            <strong>2</strong>
-            <span>Atualizações disponíveis</span>
+            <strong>{{ totalUpdates }}</strong>
+            <span>Atualizacoes disponiveis</span>
           </article>
         </div>
       </div>
@@ -33,13 +34,13 @@
   <section class="downloads-section">
     <div class="section-header">
       <div>
-        <h2>Últimos baixados</h2>
+        <h2>Ultimos baixados</h2>
         <p>Retome seus arquivos com um clique.</p>
       </div>
       <a routerLink="/packs" class="section-link">Ver biblioteca completa</a>
     </div>
 
-    <div class="downloads-grid">
+    <div class="downloads-grid" *ngIf="!isLoading && !hasError; else downloadsState">
       @for (item of filteredRecentDownloads; track item.id) {
         <article class="download-card">
           <img [src]="item.image" [alt]="item.title" />
@@ -66,17 +67,25 @@
         </article>
       }
     </div>
+    <ng-template #downloadsState>
+      <p class="downloads-empty" *ngIf="hasError">
+        Nao foi possivel carregar seus downloads agora.
+      </p>
+      <p class="downloads-empty" *ngIf="!hasError">
+        Carregando seus downloads...
+      </p>
+    </ng-template>
   </section>
 
   <section class="downloads-section spotlight">
     <div class="section-header">
       <div>
-        <h2>Talvez você queira baixar também</h2>
-        <p>Sugestões com base nos seus últimos acessos.</p>
+        <h2>Talvez voce queira baixar tambem</h2>
+        <p>Sugestoes com base nos seus ultimos acessos.</p>
       </div>
     </div>
 
-    <div class="downloads-grid compact">
+    <div class="downloads-grid compact" *ngIf="recommendedDownloads.length > 0">
       @for (item of recommendedDownloads; track item.id) {
         <article class="download-card compact-card">
           <img [src]="item.image" [alt]="item.title" />
@@ -101,8 +110,8 @@
   <section class="downloads-section actions-panel">
     <div class="section-header">
       <div>
-        <h2>Ações rápidas</h2>
-        <p>Atalhos úteis para organizar seus próximos passos.</p>
+        <h2>Acoes rapidas</h2>
+        <p>Atalhos uteis para organizar seus proximos passos.</p>
       </div>
     </div>
 

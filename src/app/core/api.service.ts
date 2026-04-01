@@ -120,6 +120,55 @@ export interface MeusPacksResponse {
   packs: PackResponse[];
 }
 
+export interface UsuarioPerfilResponse {
+  usuario: {
+    id: number;
+    nome: string | null;
+    email: string;
+    telefone: string | null;
+    area_atuacao: string | null;
+    foto_url: string | null;
+    criado_em: string;
+    atualizado_em: string;
+  };
+}
+
+export interface AtualizarPerfilPayload {
+  nome: string;
+  email: string;
+  telefone: string;
+  area_atuacao: string;
+}
+
+export interface DownloadsResumoResponse {
+  total_downloads: number;
+  total_atualizacoes: number;
+  downloads_recentes: Array<{
+    id: number;
+    slug: string;
+    nome: string;
+    descricao: string;
+    capa_url: string | null;
+    tamanho_gb: string | null;
+    versao_atual: string | null;
+    versao_baixada: string | null;
+    baixado_em: string;
+    possui_atualizacao: boolean;
+  }>;
+  sugestoes: Array<{
+    id: number;
+    slug: string;
+    nome: string;
+    descricao: string;
+    capa_url: string | null;
+    tamanho_gb: string | null;
+    versao_atual: string | null;
+    versao_baixada: string | null;
+    baixado_em: string;
+    possui_atualizacao: boolean;
+  }>;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -197,5 +246,50 @@ export class ApiService {
     );
 
     return this.http.get<MeusPacksResponse>(`${this.backendUrl}/usuarios/me/packs`, { headers });
+  }
+
+  getMeuPerfil(usuarioId: number): Observable<UsuarioPerfilResponse> {
+    return this.http.get<UsuarioPerfilResponse>(`${this.backendUrl}/usuarios/me/perfil`, {
+      headers: new HttpHeaders({
+        'x-usuario-id': String(usuarioId)
+      })
+    });
+  }
+
+  atualizarMeuPerfil(
+    usuarioId: number,
+    payload: AtualizarPerfilPayload
+  ): Observable<{ message: string; usuario: UsuarioPerfilResponse['usuario'] }> {
+    return this.http.put<{ message: string; usuario: UsuarioPerfilResponse['usuario'] }>(
+      `${this.backendUrl}/usuarios/me/perfil`,
+      payload,
+      {
+        headers: new HttpHeaders({
+          'x-usuario-id': String(usuarioId)
+        })
+      }
+    );
+  }
+
+  getDownloadsResumo(usuarioId: number, busca = ''): Observable<DownloadsResumoResponse> {
+    const params = busca ? `?limite=4&sugestoes=2&busca=${encodeURIComponent(busca)}` : '?limite=4&sugestoes=2';
+
+    return this.http.get<DownloadsResumoResponse>(`${this.backendUrl}/downloads/me${params}`, {
+      headers: new HttpHeaders({
+        'x-usuario-id': String(usuarioId)
+      })
+    });
+  }
+
+  registrarDownload(usuarioId: number, packId: number): Observable<{ message: string }> {
+    return this.http.post<{ message: string }>(
+      `${this.backendUrl}/downloads/registrar`,
+      { pack_id: packId },
+      {
+        headers: new HttpHeaders({
+          'x-usuario-id': String(usuarioId)
+        })
+      }
+    );
   }
 }

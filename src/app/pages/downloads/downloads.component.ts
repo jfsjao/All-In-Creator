@@ -1,7 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
+import { firstValueFrom } from 'rxjs';
+import { ApiService } from '@core/api.service';
+import { AuthService } from '@core/services/auth.service';
+import { mapPackWithImage } from '@core/pack-image-map';
 
 interface DownloadItem {
   id: number;
@@ -28,74 +32,19 @@ interface QuickAction {
   templateUrl: './downloads.component.html',
   styleUrl: './downloads.component.scss',
 })
-export class DownloadsComponent {
+export class DownloadsComponent implements OnInit {
+  private apiService = inject(ApiService);
+  private authService = inject(AuthService);
+
   searchTerm = '';
+  isLoading = false;
+  hasError = false;
+  totalDownloads = 0;
+  totalUpdates = 0;
+  private searchTimeout?: number;
 
-  recentDownloads: DownloadItem[] = [
-    {
-      id: 1,
-      title: 'Kit After Effects',
-      description: 'Pacote com templates, presets e elementos para acelerar edições.',
-      image: 'assets/images/packs/kit_after_effects.webp',
-      downloadedAt: 'Hoje, 09:42',
-      size: '12.4 GB',
-      version: 'v4.2',
-      status: 'Disponivel'
-    },
-    {
-      id: 2,
-      title: 'Pack IA',
-      description: 'Coleção com assets modernos para criativos e conteúdos virais.',
-      image: 'assets/images/packs/IA.webp',
-      downloadedAt: 'Ontem, 21:15',
-      size: '8.9 GB',
-      version: 'v2.8',
-      status: 'Atualizacao'
-    },
-    {
-      id: 3,
-      title: 'Emojis',
-      description: 'Biblioteca leve para enriquecer cortes rápidos, shorts e reels.',
-      image: 'assets/images/packs/emojis.webp',
-      downloadedAt: '14 Mar, 18:03',
-      size: '1.1 GB',
-      version: 'v1.6',
-      status: 'Disponivel'
-    },
-    {
-      id: 4,
-      title: 'Baixar Reels',
-      description: 'Materiais essenciais para creators que precisam de agilidade.',
-      image: 'assets/images/packs/baixar_reels.webp',
-      downloadedAt: '12 Mar, 13:27',
-      size: '5.2 GB',
-      version: 'v3.1',
-      status: 'Disponivel'
-    }
-  ];
-
-  recommendedDownloads: DownloadItem[] = [
-    {
-      id: 5,
-      title: 'Canva Pack',
-      description: 'Artes prontas, templates e elementos para redes sociais.',
-      image: 'assets/images/packs/canva.webp',
-      downloadedAt: 'Sugestão',
-      size: '3.7 GB',
-      version: 'v2.0',
-      status: 'Disponivel'
-    },
-    {
-      id: 6,
-      title: 'Premiere Pack',
-      description: 'Transições, LUTs e presets para edição profissional.',
-      image: 'assets/images/packs/premiere.webp',
-      downloadedAt: 'Sugestão',
-      size: '14.8 GB',
-      version: 'v5.0',
-      status: 'Atualizacao'
-    }
-  ];
+  recentDownloads: DownloadItem[] = [];
+  recommendedDownloads: DownloadItem[] = [];
 
   quickActions: QuickAction[] = [
     {
@@ -106,21 +55,98 @@ export class DownloadsComponent {
     },
     {
       label: 'Atualizar downloads',
-      detail: 'Confira novas versões dos arquivos que você já baixou.',
+      detail: 'Confira novas versoes dos arquivos que voce ja baixou.',
       action: 'Ver novidades',
       link: '/store'
     }
   ];
 
+  async ngOnInit(): Promise<void> {
+    await this.carregarResumo();
+  }
+
+  async carregarResumo(): Promise<void> {
+    await this.authService.waitForAuthInit();
+    const usuarioId = this.authService.currentUser()?.backendUserId;
+
+    if (!usuarioId) {
+      this.hasError = true;
+      return;
+    }
+
+    this.isLoading = true;
+    this.hasError = false;
+
+    try {
+      const response = await firstValueFrom(
+        this.apiService.getDownloadsResumo(usuarioId, this.searchTerm)
+      );
+      this.totalDownloads = response.total_downloads;
+      this.totalUpdates = response.total_atualizacoes;
+      this.recentDownloads = response.downloads_recentes.map((item) => this.mapDownloadItem(item));
+      this.recommendedDownloads = response.sugestoes.map((item) =>
+        this.mapDownloadItem(item, 'Sugestao')
+      );
+    } catch {
+      this.hasError = true;
+    } finally {
+      this.isLoading = false;
+    }
+  }
+
+  onSearchChange(value: string): void {
+    this.searchTerm = value;
+    if (this.searchTimeout) {
+      window.clearTimeout(this.searchTimeout);
+    }
+
+    this.searchTimeout = window.setTimeout(() => {
+      this.carregarResumo();
+    }, 350);
+  }
+
+  private mapDownloadItem(
+    item: {
+      id: number;
+      slug: string;
+      nome: string;
+      descricao: string;
+      capa_url: string | null;
+      tamanho_gb: string | null;
+      versao_atual: string | null;
+      versao_baixada: string | null;
+      baixado_em: string;
+      possui_atualizacao: boolean;
+    },
+    fallbackDate?: string,
+  ): DownloadItem {
+    const packWithImage = mapPackWithImage({ slug: item.slug, nome: item.nome });
+
+    return {
+      id: item.id,
+      title: item.nome,
+      description: item.descricao,
+      image: item.capa_url || packWithImage.image,
+      downloadedAt: fallbackDate ?? this.formatDate(item.baixado_em),
+      size: item.tamanho_gb ? `${item.tamanho_gb} GB` : '--',
+      version: item.versao_atual ? `v${item.versao_atual}` : '--',
+      status: item.possui_atualizacao ? 'Atualizacao' : 'Disponivel'
+    };
+  }
+
+  private formatDate(dateString: string): string {
+    const date = new Date(dateString);
+    if (Number.isNaN(date.getTime())) return '--';
+
+    return date.toLocaleDateString('pt-BR', {
+      day: '2-digit',
+      month: 'short',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+  }
+
   get filteredRecentDownloads(): DownloadItem[] {
-    const term = this.searchTerm.trim().toLowerCase();
-
-    if (!term) return this.recentDownloads;
-
-    return this.recentDownloads.filter((item) =>
-      item.title.toLowerCase().includes(term) ||
-      item.description.toLowerCase().includes(term) ||
-      item.status.toLowerCase().includes(term)
-    );
+    return this.recentDownloads;
   }
 }

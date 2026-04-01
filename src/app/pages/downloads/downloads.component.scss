@@ -137,6 +137,12 @@
   opacity: 0.9;
 }
 
+.downloads-empty {
+  color: rgba(255, 255, 255, 0.7);
+  padding: 1.5rem 0;
+  text-align: center;
+}
+
 .downloads-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(220px, 1fr));

@@ -4,7 +4,7 @@
       <span class="hero-badge">Minha conta</span>
       <h1>Organize sua conta do seu jeito</h1>
       <p>
-        Atualize seus dados, ajuste preferências e acompanhe a atividade recente para manter tudo sob controle.
+        Atualize seus dados, ajuste preferencias e acompanhe a atividade recente para manter tudo sob controle.
       </p>
     </div>
   </section>
@@ -16,7 +16,7 @@
         <h2>{{ currentUserName }}</h2>
         <span>{{ currentUserEmail }}</span>
 
-        <div class="plan-badge">Plano ativo</div>
+        <div class="plan-badge">Conta ativa</div>
 
         <div class="summary-list">
           @for (shortcut of shortcuts; track shortcut.title) {
@@ -34,9 +34,11 @@
         <div class="panel-header">
           <div>
             <h2>Dados principais</h2>
-            <p>Edite as informações que aparecem na sua conta.</p>
+            <p>Edite as informacoes que aparecem na sua conta.</p>
           </div>
-          <button type="button" class="panel-btn">Salvar alterações</button>
+          <button type="button" class="panel-btn" (click)="salvarPerfil()" [disabled]="isSaving">
+            {{ isSaving ? 'Salvando...' : 'Salvar alteracoes' }}
+          </button>
         </div>
 
         <div class="form-grid">
@@ -56,7 +58,7 @@
           </label>
 
           <label class="field">
-            <span>Área de atuação</span>
+            <span>Area de atuacao</span>
             <input type="text" [(ngModel)]="profileForm.role" />
           </label>
         </div>
@@ -65,34 +67,26 @@
       <section class="panel">
         <div class="panel-header">
           <div>
-            <h2>Preferências</h2>
-            <p>Reorganize como a plataforma conversa com você.</p>
+            <h2>Preferencias</h2>
+            <p>Reorganize como a plataforma conversa com voce.</p>
           </div>
         </div>
 
         <div class="toggle-list">
           <label class="toggle-card">
             <div>
-              <strong>Receber notificações</strong>
-              <p>Avisos sobre acesso, conta e movimentações.</p>
+              <strong>Receber notificacoes</strong>
+              <p>Avisos sobre acesso, conta e movimentacoes.</p>
             </div>
             <input type="checkbox" [(ngModel)]="preferences.notifications" />
           </label>
 
           <label class="toggle-card">
             <div>
-              <strong>Novos lançamentos</strong>
+              <strong>Novos lancamentos</strong>
               <p>Seja avisado quando novos packs forem liberados.</p>
             </div>
             <input type="checkbox" [(ngModel)]="preferences.launches" />
-          </label>
-
-          <label class="toggle-card">
-            <div>
-              <strong>Visual premium</strong>
-              <p>Mantenha cartões e painéis com destaque visual mais forte.</p>
-            </div>
-            <input type="checkbox" [(ngModel)]="preferences.darkCards" />
           </label>
         </div>
       </section>
@@ -100,10 +94,12 @@
       <section class="panel security-panel">
         <div class="panel-header">
           <div>
-            <h2>Segurança e atividade</h2>
+            <h2>Seguranca e atividade</h2>
             <p>Acompanhe o que aconteceu na sua conta recentemente.</p>
           </div>
-          <button type="button" class="panel-btn secondary">Trocar senha</button>
+          <button type="button" class="panel-btn secondary" (click)="trocarSenha()">
+            Trocar senha
+          </button>
         </div>
 
         <div class="activity-list">
