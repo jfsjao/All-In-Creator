@@ -3,6 +3,11 @@ import { Router } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 import {
   GoogleAuthProvider,
+  createUserWithEmailAndPassword,
+  updateProfile,
+  sendEmailVerification,
+  sendPasswordResetEmail,
+  signInWithEmailAndPassword,
   signInWithPopup,
   signInWithRedirect,
   signOut,
@@ -33,8 +38,16 @@ export class AuthService {
   currentUser = signal<UserData | null>(null);
   isLoading = signal<boolean>(true);
   authInitialized = signal<boolean>(false);
+  authNotice = signal<string | null>(null);
+  authError = signal<string | null>(null);
+  private pendingVerificationKey = 'pending_verification_email';
 
   constructor() {
+    const cachedNotice = sessionStorage.getItem('auth_notice');
+    if (cachedNotice) {
+      this.authNotice.set(cachedNotice);
+    }
+
     this.initAuthListener();
   }
 
@@ -44,6 +57,16 @@ export class AuthService {
   private initAuthListener(): void {
     auth.onAuthStateChanged(async (user: User | null) => {
       if (user) {
+        if (!user.emailVerified) {
+          await signOut(auth);
+          this.setNotice('Faltou verificar o email. Para continuar, verifique o email e realize o login.');
+          this.clearBackendSession();
+          this.currentUser.set(null);
+          this.isLoading.set(false);
+          this.authInitialized.set(true);
+          return;
+        }
+
         this.currentUser.set({
           backendUserId: null,
           uid: user.uid,
@@ -56,12 +79,8 @@ export class AuthService {
 
         await this.syncBackendUser(user);
       } else {
-        const cached = this.getBackendSession();
-        if (cached) {
-          this.currentUser.set(cached);
-        } else {
-          this.currentUser.set(null);
-        }
+        this.clearBackendSession();
+        this.currentUser.set(null);
       }
 
       this.isLoading.set(false);
@@ -114,16 +133,21 @@ export class AuthService {
    */
   async register(email: string, password: string, name: string): Promise<boolean> {
     try {
-      await firstValueFrom(this.apiService.registerEmail({
-        nome: name,
-        email,
-        senha: password
-      }));
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      if (name) {
+        await updateProfile(userCredential.user, { displayName: name });
+      }
 
+      await sendEmailVerification(userCredential.user);
+      await signOut(auth);
       this.toastr.success('Conta criada! Verifique seu email para confirmar.', 'Bem-vindo!');
+      this.setNotice('Verifique o email cadastrado para concluir seu acesso.');
+      this.setPendingVerificationEmail(email);
       return true;
     } catch (error: any) {
-      this.handleBackendError(error);
+      this.clearNotice();
+      this.clearError();
+      this.handleAuthError(error);
       return false;
     }
   }
@@ -133,17 +157,36 @@ export class AuthService {
    */
   async login(email: string, password: string): Promise<boolean> {
     try {
-      const response = await firstValueFrom(this.apiService.loginEmail({
-        email,
-        senha: password
-      }));
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
 
-      this.setBackendSession(response.token, response.usuario);
+      if (!userCredential.user.emailVerified) {
+        await sendEmailVerification(userCredential.user);
+        await signOut(auth);
+        this.clearError();
+        this.setNotice('Verifique o email cadastrado para concluir seu acesso.');
+        this.setPendingVerificationEmail(email);
+        this.toastr.warning('Confirme seu email para entrar. Enviamos um novo link.', 'Verificacao');
+        return false;
+      }
+
+      this.clearNotice();
+      this.clearError();
+      this.clearPendingVerificationEmail();
       this.toastr.success('Login realizado com sucesso!', 'Bem-vindo de volta!');
       this.router.navigate(['/dashboard']);
       return true;
     } catch (error: any) {
-      this.handleBackendError(error);
+      const pendingEmail = this.getPendingVerificationEmail();
+      if (pendingEmail && pendingEmail.toLowerCase() === email.toLowerCase()) {
+        this.clearError();
+        this.setNotice('Verifique o email cadastrado para concluir seu acesso.');
+        this.toastr.warning('Confirme seu email para entrar. Enviamos um novo link.', 'Verificacao');
+        return false;
+      }
+
+      this.clearNotice();
+      this.clearError();
+      this.handleAuthError(error);
       return false;
     }
   }
@@ -167,6 +210,7 @@ export class AuthService {
       this.router.navigate(['/dashboard']);
       return true;
     } catch (error: any) {
+      this.clearError();
       this.handleAuthError(error);
       return false;
     }
@@ -216,19 +260,25 @@ export class AuthService {
    */
   async resetPassword(email: string): Promise<boolean> {
     try {
-      await firstValueFrom(this.apiService.requestPasswordReset({ email }));
+      await sendPasswordResetEmail(auth, email);
       this.toastr.success('Email de recuperacao enviado!', 'Verifique sua caixa de entrada');
       return true;
     } catch (error: any) {
-      this.handleBackendError(error);
+      this.clearError();
+      this.handleAuthError(error);
       return false;
     }
   }
+
 
   /**
    * Pegar token JWT do usuario
    */
   async getToken(): Promise<string | null> {
+    if (auth.currentUser) {
+      return await auth.currentUser.getIdToken();
+    }
+
     return localStorage.getItem('nicol_auth_token');
   }
 
@@ -236,7 +286,14 @@ export class AuthService {
    * Verificar se usuario esta logado
    */
   isAuthenticated(): boolean {
-    return this.currentUser() !== null;
+    const current = this.currentUser();
+    if (!current) return false;
+
+    if (current.authProvider === 'firebase') {
+      return auth.currentUser?.emailVerified === true;
+    }
+
+    return true;
   }
 
   /**
@@ -251,7 +308,7 @@ export class AuthService {
       'auth/user-disabled': 'Usuario desabilitado',
       'auth/user-not-found': 'Usuario nao encontrado',
       'auth/wrong-password': 'Senha incorreta',
-      'auth/invalid-credential': 'Credenciais invalidas',
+      'auth/invalid-credential': 'Email ou senha incorretos',
       'auth/too-many-requests': 'Muitas tentativas. Tente mais tarde',
       'auth/network-request-failed': 'Erro de conexao. Verifique sua internet',
       'auth/popup-closed-by-user': 'Login cancelado',
@@ -260,6 +317,20 @@ export class AuthService {
     };
 
     const message = errorMessages[error.code] || 'Erro ao realizar operacao';
+
+    if (error.code === 'auth/user-not-found') {
+      this.clearNotice();
+      this.setError('Email nao cadastrado.');
+    } else if (error.code === 'auth/wrong-password') {
+      this.clearNotice();
+      this.setError('Senha incorreta.');
+    } else if (error.code === 'auth/invalid-credential') {
+      this.clearNotice();
+      this.setError('Email ou senha incorretos.');
+    } else if (error.code === 'auth/invalid-email') {
+      this.clearNotice();
+      this.setError('Email invalido.');
+    }
     this.toastr.error(message, 'Erro de Autenticacao');
   }
 
@@ -275,6 +346,36 @@ export class AuthService {
     }
 
     this.toastr.error(message || 'Erro ao realizar operacao', 'Erro de Autenticacao');
+  }
+
+  private setNotice(message: string): void {
+    this.authNotice.set(message);
+    sessionStorage.setItem('auth_notice', message);
+  }
+
+  clearNotice(): void {
+    this.authNotice.set(null);
+    sessionStorage.removeItem('auth_notice');
+  }
+
+  private setPendingVerificationEmail(email: string): void {
+    sessionStorage.setItem(this.pendingVerificationKey, email);
+  }
+
+  private getPendingVerificationEmail(): string | null {
+    return sessionStorage.getItem(this.pendingVerificationKey);
+  }
+
+  private clearPendingVerificationEmail(): void {
+    sessionStorage.removeItem(this.pendingVerificationKey);
+  }
+
+  private setError(message: string): void {
+    this.authError.set(message);
+  }
+
+  clearError(): void {
+    this.authError.set(null);
   }
 
   private setBackendSession(token: string, usuario: {

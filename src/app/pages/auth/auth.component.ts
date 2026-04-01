@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { AuthService } from '@core/services/auth.service';
@@ -10,15 +10,17 @@ import { AuthService } from '@core/services/auth.service';
   templateUrl: './auth.component.html',
   styleUrls: ['./auth.component.scss']
 })
-export class AuthComponent {
+export class AuthComponent implements OnInit {
   private authService = inject(AuthService);
   private fb = inject(FormBuilder);
 
   isLoginMode = true;
+  isForgotMode = false;
   isLoading = false;
 
   loginForm: FormGroup;
   registerForm: FormGroup;
+  forgotForm: FormGroup;
 
   
   constructor() {
@@ -30,15 +32,48 @@ export class AuthComponent {
     this.registerForm = this.fb.group({
       name: ['', [Validators.required, Validators.minLength(3)]],
       email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(8)]],
+      password: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(8),
+          this.passwordStrengthValidator
+        ]
+      ],
       confirmPassword: ['', Validators.required]
     }, { 
       validators: this.passwordMatchValidator
     });
+
+    this.forgotForm = this.fb.group({
+      email: ['', [Validators.required, Validators.email]]
+    });
+  }
+
+  ngOnInit(): void {
+    this.authService.clearNotice();
+    this.authService.clearError();
   }
 
   onSwitchMode() {
     this.isLoginMode = !this.isLoginMode;
+    this.isForgotMode = false;
+    this.authService.clearNotice();
+    this.authService.clearError();
+  }
+
+  onOpenForgotPassword(event: Event) {
+    event.preventDefault();
+    this.isForgotMode = true;
+    this.authService.clearNotice();
+    this.authService.clearError();
+  }
+
+  onBackToLogin() {
+    this.isForgotMode = false;
+    this.isLoginMode = true;
+    this.authService.clearNotice();
+    this.authService.clearError();
   }
 
   async onLogin() {
@@ -71,6 +106,10 @@ export class AuthComponent {
 
       if (ok) {
         this.isLoginMode = true;
+        this.isForgotMode = false;
+        this.loginForm.patchValue({ email, password: '' });
+        this.registerForm.patchValue({ password: '', confirmPassword: '' });
+        this.registerForm.reset();
       }
     } finally {
       this.isLoading = false;
@@ -87,20 +126,21 @@ export class AuthComponent {
     }
   }
 
-  async onForgotPassword(event: Event) {
-    event.preventDefault();
-
-    const email = this.loginForm.get('email')?.value;
-
-    if (!email || this.loginEmail?.invalid) {
-      this.loginForm.get('email')?.markAsTouched();
+  async onSubmitForgotPassword() {
+    if (this.forgotForm.invalid) {
+      this.forgotForm.markAllAsTouched();
       return;
     }
+
+    const email = this.forgotForm.get('email')?.value;
 
     this.isLoading = true;
 
     try {
       await this.authService.resetPassword(email);
+      this.isForgotMode = false;
+      this.isLoginMode = true;
+      this.loginForm.patchValue({ email });
     } finally {
       this.isLoading = false;
     }
@@ -113,10 +153,39 @@ export class AuthComponent {
     return password === confirmPassword ? null : { passwordMismatch: true };
   }
 
+  passwordStrengthValidator(control: { value: string }) {
+    const value = control.value || '';
+
+    const hasUppercase = /[A-Z]/.test(value);
+    const hasNumber = /\d/.test(value);
+    const hasSymbol = /[^A-Za-z0-9]/.test(value);
+
+    return hasUppercase && hasNumber && hasSymbol ? null : {
+      passwordStrength: {
+        hasUppercase,
+        hasNumber,
+        hasSymbol
+      }
+    };
+  }
+
   get loginEmail() { return this.loginForm.get('email'); }
   get loginPassword() { return this.loginForm.get('password'); }
   get registerName() { return this.registerForm.get('name'); }
   get registerEmail() { return this.registerForm.get('email'); }
   get registerPassword() { return this.registerForm.get('password'); }
   get registerConfirmPassword() { return this.registerForm.get('confirmPassword'); }
+  get forgotEmail() { return this.forgotForm.get('email'); }
+
+  get registerPasswordErrors() {
+    return this.registerPassword?.errors?.['passwordStrength'] || null;
+  }
+
+  get authNotice() {
+    return this.authService.authNotice();
+  }
+
+  get authError() {
+    return this.authService.authError();
+  }
 }

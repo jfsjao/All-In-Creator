@@ -37,12 +37,25 @@
         </div>
 
         <div class="auth-card">
-          <h3>{{ isLoginMode ? 'Login' : 'Registro' }}</h3>
+          <h3>
+            {{
+              isForgotMode
+                ? 'Recuperar senha'
+                : (isLoginMode ? 'Login' : 'Registro')
+            }}
+          </h3>
+
+          <div class="auth-notice" *ngIf="authNotice">
+            {{ authNotice }}
+          </div>
+          <div class="auth-error" *ngIf="authError">
+            {{ authError }}
+          </div>
 
           <!-- LOGIN -->
           <form
             class="auth-form"
-            *ngIf="isLoginMode; else registerFormTemplate"
+            *ngIf="isLoginMode && !isForgotMode; else registerFormTemplate"
             [formGroup]="loginForm"
             (ngSubmit)="onLogin()"
             novalidate
@@ -74,7 +87,7 @@
                 Senha deve ter no minimo 8 caracteres.
               </small>
 
-              <a href="#" class="forgot-password" (click)="onForgotPassword($event)">
+              <a href="#" class="forgot-password" (click)="onOpenForgotPassword($event)">
                 Esqueceu sua senha?
               </a>
             </div>
@@ -103,8 +116,44 @@
             </button>
           </form>
 
-          <!-- REGISTRO -->
+          <!-- REGISTRO / RECUPERAR -->
           <ng-template #registerFormTemplate>
+            <form
+              class="auth-form"
+              *ngIf="isForgotMode; else registerRealTemplate"
+              [formGroup]="forgotForm"
+              (ngSubmit)="onSubmitForgotPassword()"
+              novalidate
+            >
+              <div class="form-group">
+                <label for="forgot-email">Email</label>
+                <input
+                  type="email"
+                  id="forgot-email"
+                  formControlName="email"
+                  placeholder="seu@email.com"
+                  [class.is-invalid]="forgotEmail?.invalid && forgotEmail?.touched"
+                />
+                <small class="text-danger" *ngIf="forgotEmail?.invalid && forgotEmail?.touched">
+                  Email invalido.
+                </small>
+              </div>
+
+              <button
+                type="submit"
+                class="auth-button"
+                [disabled]="isLoading"
+              >
+                <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-2"></span>
+                {{ isLoading ? 'Enviando...' : 'Enviar link' }}
+              </button>
+
+              <div class="auth-switch">
+                <a (click)="onBackToLogin()">Voltar ao login</a>
+              </div>
+            </form>
+
+            <ng-template #registerRealTemplate>
             <form
               class="auth-form"
               [formGroup]="registerForm"
@@ -151,6 +200,17 @@
                 <small class="text-danger" *ngIf="registerPassword?.invalid && registerPassword?.touched">
                   Senha deve ter no minimo 8 caracteres.
                 </small>
+                <div class="password-hints" *ngIf="registerPassword?.touched">
+                  <span class="hint" *ngIf="registerPasswordErrors && !registerPasswordErrors.hasUppercase">
+                    Precisa de ao menos 1 letra maiuscula.
+                  </span>
+                  <span class="hint" *ngIf="registerPasswordErrors && !registerPasswordErrors.hasNumber">
+                    Precisa de ao menos 1 numero.
+                  </span>
+                  <span class="hint" *ngIf="registerPasswordErrors && !registerPasswordErrors.hasSymbol">
+                    Precisa de ao menos 1 simbolo.
+                  </span>
+                </div>
               </div>
 
               <div class="form-group">
@@ -179,6 +239,10 @@
                 {{ isLoading ? 'Criando conta...' : 'Criar conta' }}
               </button>
 
+              <p class="register-hint">
+                Ao se cadastrar, voce recebera um email para verificar sua conta.
+              </p>
+
               <div class="divider">
                 <span>ou</span>
               </div>
@@ -193,9 +257,10 @@
                 Continuar com Google
               </button>
             </form>
+            </ng-template>
           </ng-template>
 
-          <div class="auth-switch">
+          <div class="auth-switch" *ngIf="!isForgotMode">
             <span>
               {{ isLoginMode ? 'Nao tem uma conta?' : 'Ja tem uma conta?' }}
             </span>
