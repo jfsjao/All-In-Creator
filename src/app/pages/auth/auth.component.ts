@@ -93,7 +93,7 @@ export class AuthComponent implements OnInit {
   }
 
   async onRegister() {
-    if (this.registerForm.invalid) {
+    if (this.registerForm.invalid && !this.canSubmitRegisterWithWarning()) {
       this.registerForm.markAllAsTouched();
       return;
     }
@@ -114,6 +114,27 @@ export class AuthComponent implements OnInit {
     } finally {
       this.isLoading = false;
     }
+  }
+
+  private canSubmitRegisterWithWarning(): boolean {
+    const form = this.registerForm;
+    const password = this.registerPassword;
+    const hasStrengthError = !!password?.errors?.['passwordStrength'];
+    const hasPasswordMismatch = !!form.errors?.['passwordMismatch'];
+
+    if (!hasStrengthError || hasPasswordMismatch) {
+      return false;
+    }
+
+    const controls = Object.keys(form.controls);
+    for (const key of controls) {
+      const control = form.get(key);
+      if (!control) continue;
+      if (key === 'password' && hasStrengthError) continue;
+      if (control.invalid) return false;
+    }
+
+    return true;
   }
 
   async onGoogleLogin() {

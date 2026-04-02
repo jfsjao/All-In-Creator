@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '@core/services/auth.service';
 import { ApiService } from '@core/api.service';
-import { ToastrService } from 'ngx-toastr';
+import { SafeToastrService } from '@core/services/safe-toastr.service';
 import { firstValueFrom } from 'rxjs';
 
 interface AccountShortcut {
@@ -27,7 +27,7 @@ interface AccountActivity {
 export class AccountComponent implements OnInit {
   private authService = inject(AuthService);
   private apiService = inject(ApiService);
-  private toastr = inject(ToastrService, { optional: true });
+  private toastr = inject(SafeToastrService);
 
   profileForm = {
     name: '',
@@ -103,7 +103,7 @@ export class AccountComponent implements OnInit {
       };
     } catch {
       this.preencherFallback();
-      this.toastr?.error('Nao foi possivel carregar o perfil.', 'Erro');
+      this.toastr.error('Nao foi possivel carregar o perfil.', 'Erro');
     } finally {
       this.isLoading = false;
     }
@@ -121,7 +121,7 @@ export class AccountComponent implements OnInit {
   async salvarPerfil(): Promise<void> {
     const usuarioId = this.authService.currentUser()?.backendUserId;
     if (!usuarioId) {
-      this.toastr?.error('Usuario nao identificado.', 'Erro');
+      this.toastr.error('Usuario nao identificado.', 'Erro');
       return;
     }
 
@@ -144,9 +144,9 @@ export class AccountComponent implements OnInit {
         role: response.usuario.area_atuacao ?? this.profileForm.role
       };
 
-      this.toastr?.success('Perfil atualizado com sucesso.', 'Sucesso');
+      this.toastr.success('Perfil atualizado com sucesso.', 'Sucesso');
     } catch (error: any) {
-      this.toastr?.error(error?.error?.message || 'Nao foi possivel salvar o perfil.', 'Erro');
+      this.toastr.error(error?.error?.message || 'Nao foi possivel salvar o perfil.', 'Erro');
     } finally {
       this.isSaving = false;
     }
@@ -156,7 +156,7 @@ export class AccountComponent implements OnInit {
     const email = this.profileForm.email || this.authService.currentUser()?.email;
 
     if (!email) {
-      this.toastr?.error('Informe um email valido para recuperar a senha.', 'Erro');
+      this.toastr.error('Informe um email valido para recuperar a senha.', 'Erro');
       return;
     }
 
