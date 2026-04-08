@@ -58,7 +58,7 @@ export class ResetPasswordComponent implements OnInit {
       this.toastr.success('Senha redefinida com sucesso.', 'Sucesso');
       this.router.navigate(['/auth']);
     } catch (error: any) {
-      const message = error?.error?.message || 'Nao foi possivel redefinir a senha.';
+      const message = error?.error?.message || 'Não foi possível redefinir a senha.';
       this.toastr.error(message, 'Erro');
     } finally {
       this.isLoading = false;

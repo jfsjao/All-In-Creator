@@ -59,7 +59,7 @@ export class AuthService {
       if (user) {
         if (!user.emailVerified) {
           await signOut(auth);
-          this.setNotice('Faltou verificar o email. Para continuar, verifique o email e realize o login.');
+          this.setNotice('Faltou verificar o e-mail. Para continuar, verifique o e-mail e faça login.');
           this.clearBackendSession();
           this.currentUser.set(null);
           this.isLoading.set(false);
@@ -108,12 +108,12 @@ export class AuthService {
         plano: response.plano_atual?.slug ?? null
       });
     } catch (error) {
-      console.error('Erro ao sincronizar usuario com o backend:', error);
+      console.error('Erro ao sincronizar usuário com o backend:', error);
     }
   }
 
   /**
-   * Espera o Firebase terminar de restaurar a sessao
+   * Espera o Firebase terminar de restaurar a sessão
    */
   async waitForAuthInit(): Promise<void> {
     if (this.authInitialized()) return;
@@ -140,8 +140,8 @@ export class AuthService {
 
       await sendEmailVerification(userCredential.user);
       await signOut(auth);
-      this.toastr.success('Conta criada! Verifique seu email para confirmar.', 'Bem-vindo!');
-      this.setNotice('Verifique o email cadastrado para concluir seu acesso.');
+      this.toastr.success('Conta criada! Verifique seu e-mail para confirmar.', 'Bem-vindo!');
+      this.setNotice('Verifique o e-mail cadastrado para concluir seu acesso.');
       this.setPendingVerificationEmail(email);
       return true;
     } catch (error: any) {
@@ -163,9 +163,9 @@ export class AuthService {
         await sendEmailVerification(userCredential.user);
         await signOut(auth);
         this.clearError();
-        this.setNotice('Verifique o email cadastrado para concluir seu acesso.');
+        this.setNotice('Verifique o e-mail cadastrado para concluir seu acesso.');
         this.setPendingVerificationEmail(email);
-        this.toastr.warning('Confirme seu email para entrar. Enviamos um novo link.', 'Verificacao');
+        this.toastr.warning('Confirme seu e-mail para entrar. Enviamos um novo link.', 'Verificação');
         return false;
       }
 
@@ -179,8 +179,8 @@ export class AuthService {
       const pendingEmail = this.getPendingVerificationEmail();
       if (pendingEmail && pendingEmail.toLowerCase() === email.toLowerCase()) {
         this.clearError();
-        this.setNotice('Verifique o email cadastrado para concluir seu acesso.');
-        this.toastr.warning('Confirme seu email para entrar. Enviamos um novo link.', 'Verificacao');
+        this.setNotice('Verifique o e-mail cadastrado para concluir seu acesso.');
+        this.toastr.warning('Confirme seu e-mail para entrar. Enviamos um novo link.', 'Verificação');
         return false;
       }
 
@@ -248,7 +248,7 @@ export class AuthService {
 
       this.clearBackendSession();
       this.currentUser.set(null);
-      this.toastr.info('Voce saiu da conta', 'Ate logo!');
+      this.toastr.info('Você saiu da conta.', 'Até logo!');
       this.router.navigate(['/home']);
     } catch (error: any) {
       this.toastr.error('Erro ao sair', 'Tente novamente');
@@ -261,7 +261,7 @@ export class AuthService {
   async resetPassword(email: string): Promise<boolean> {
     try {
       await sendPasswordResetEmail(auth, email);
-      this.toastr.success('Email de recuperacao enviado!', 'Verifique sua caixa de entrada');
+      this.toastr.success('E-mail de recuperação enviado!', 'Verifique sua caixa de entrada');
       return true;
     } catch (error: any) {
       this.clearError();
@@ -272,7 +272,7 @@ export class AuthService {
 
 
   /**
-   * Pegar token JWT do usuario
+   * Pegar token JWT do usuário
    */
   async getToken(): Promise<string | null> {
     if (auth.currentUser) {
@@ -283,7 +283,7 @@ export class AuthService {
   }
 
   /**
-   * Verificar se usuario esta logado
+   * Verificar se o usuário está logado
    */
   isAuthenticated(): boolean {
     const current = this.currentUser();
@@ -301,26 +301,26 @@ export class AuthService {
    */
   private handleAuthError(error: any): void {
     const errorMessages: { [key: string]: string } = {
-      'auth/email-already-in-use': 'Este email ja esta em uso',
-      'auth/invalid-email': 'Email invalido',
-      'auth/operation-not-allowed': 'Operacao nao permitida',
-      'auth/weak-password': 'Senha muito fraca (minimo 6 caracteres)',
-      'auth/user-disabled': 'Usuario desabilitado',
-      'auth/user-not-found': 'Usuario nao encontrado',
+      'auth/email-already-in-use': 'Este e-mail já está em uso',
+      'auth/invalid-email': 'E-mail inválido',
+      'auth/operation-not-allowed': 'Operação não permitida',
+      'auth/weak-password': 'Senha muito fraca (mínimo de 6 caracteres)',
+      'auth/user-disabled': 'Usuário desabilitado',
+      'auth/user-not-found': 'Usuário não encontrado',
       'auth/wrong-password': 'Senha incorreta',
       'auth/invalid-credential': 'Email ou senha incorretos',
       'auth/too-many-requests': 'Muitas tentativas. Tente mais tarde',
-      'auth/network-request-failed': 'Erro de conexao. Verifique sua internet',
+      'auth/network-request-failed': 'Erro de conexão. Verifique sua internet',
       'auth/popup-closed-by-user': 'Login cancelado',
       'auth/popup-blocked': 'Popup bloqueado. Vamos continuar em outra janela.',
-      'auth/unauthorized-domain': 'Dominio nao autorizado no Firebase.'
+      'auth/unauthorized-domain': 'Domínio não autorizado no Firebase.'
     };
 
-    const message = errorMessages[error.code] || 'Erro ao realizar operacao';
+    const message = errorMessages[error.code] || 'Erro ao realizar operação';
 
     if (error.code === 'auth/user-not-found') {
       this.clearNotice();
-      this.setError('Email nao cadastrado.');
+      this.setError('E-mail não cadastrado.');
     } else if (error.code === 'auth/wrong-password') {
       this.clearNotice();
       this.setError('Senha incorreta.');
@@ -329,9 +329,9 @@ export class AuthService {
       this.setError('Email ou senha incorretos.');
     } else if (error.code === 'auth/invalid-email') {
       this.clearNotice();
-      this.setError('Email invalido.');
+      this.setError('E-mail inválido.');
     }
-    this.toastr.error(message, 'Erro de Autenticacao');
+    this.toastr.error(message, 'Erro de Autenticação');
   }
 
   private handleBackendError(error: any): void {
@@ -339,13 +339,13 @@ export class AuthService {
     const message = error?.error?.message;
 
     if (status && message) {
-      const title = status === 403 ? 'Verificacao pendente' : 'Erro de Autenticacao';
+      const title = status === 403 ? 'Verificação pendente' : 'Erro de Autenticação';
       const type = status === 403 ? 'warning' : 'error';
       this.toastr[type](message, title);
       return;
     }
 
-    this.toastr.error(message || 'Erro ao realizar operacao', 'Erro de Autenticacao');
+    this.toastr.error(message || 'Erro ao realizar operação', 'Erro de Autenticação');
   }
 
   private setNotice(message: string): void {

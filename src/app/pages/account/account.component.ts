@@ -47,18 +47,18 @@ export class AccountComponent implements OnInit {
       description: 'Mantenha seus dados principais e forma de contato organizados.'
     },
     {
-      title: 'Ajustar preferencias',
-      description: 'Controle avisos da plataforma e novidades da sua conta.'
+      title: 'Ajustar preferências',
+      description: 'Controle os avisos da plataforma e as novidades da sua conta.'
     },
     {
-      title: 'Reforcar seguranca',
-      description: 'Revise senha, acesso recente e protecao da sua conta.'
+      title: 'Reforçar segurança',
+      description: 'Revise a senha, o acesso recente e a proteção da sua conta.'
     }
   ];
 
   recentActivity: AccountActivity[] = [
     {
-      title: 'Download concluido',
+      title: 'Download concluído',
       detail: 'Kit After Effects foi baixado com sucesso.',
       date: 'Hoje, 09:42'
     },
@@ -68,7 +68,7 @@ export class AccountComponent implements OnInit {
       date: 'Ontem, 21:17'
     },
     {
-      title: 'Preferencias salvas',
+      title: 'Preferências salvas',
       detail: 'Recebimento de novidades foi mantido ativo.',
       date: '14 Mar, 19:10'
     }
@@ -103,7 +103,7 @@ export class AccountComponent implements OnInit {
       };
     } catch {
       this.preencherFallback();
-      this.toastr.error('Nao foi possivel carregar o perfil.', 'Erro');
+      this.toastr.error('Não foi possível carregar o perfil.', 'Erro');
     } finally {
       this.isLoading = false;
     }
@@ -121,7 +121,7 @@ export class AccountComponent implements OnInit {
   async salvarPerfil(): Promise<void> {
     const usuarioId = this.authService.currentUser()?.backendUserId;
     if (!usuarioId) {
-      this.toastr.error('Usuario nao identificado.', 'Erro');
+      this.toastr.error('Usuário não identificado.', 'Erro');
       return;
     }
 
@@ -146,7 +146,7 @@ export class AccountComponent implements OnInit {
 
       this.toastr.success('Perfil atualizado com sucesso.', 'Sucesso');
     } catch (error: any) {
-      this.toastr.error(error?.error?.message || 'Nao foi possivel salvar o perfil.', 'Erro');
+      this.toastr.error(error?.error?.message || 'Não foi possível salvar o perfil.', 'Erro');
     } finally {
       this.isSaving = false;
     }
@@ -156,7 +156,7 @@ export class AccountComponent implements OnInit {
     const email = this.profileForm.email || this.authService.currentUser()?.email;
 
     if (!email) {
-      this.toastr.error('Informe um email valido para recuperar a senha.', 'Erro');
+      this.toastr.error('Informe um e-mail válido para recuperar a senha.', 'Erro');
       return;
     }
 

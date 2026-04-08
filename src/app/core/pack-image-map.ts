@@ -10,12 +10,12 @@ const PACK_IMAGES: Record<string, string> = {
   'biblioteca-premium-avancada-de-elementos': 'assets/images/packs/elementos.webp',
   'pack-de-emojis-exclusivos-pro': 'assets/images/packs/emojis.webp',
   'colecao-premium-de-icones-profissionais': 'assets/images/packs/icones.webp',
-  'efeitos-e-trilhas-sonoras': 'assets/images/packs/VFX.webp',
+  'efeitos-e-trilhas-sonoras': 'assets/images/packs/Efeitos-e-Trilha-Sonoras.webp',
   'kit-avancado-de-edicao-de-video-pro': 'assets/images/packs/capa_pack_edição.webp',
   'pack-adobe-premiere-pro-completo': 'assets/images/packs/premiere.webp',
   'pack-adobe-photoshop-completo': 'assets/images/packs/kit_photoshop.webp',
   'pack-de-transicoes-cinematograficas': 'assets/images/packs/transições.webp',
-  'pack-coreldraw-avancado': 'assets/images/packs/programas.webp',
+  'pack-coreldraw-avancado': 'assets/images/packs/Pacote-CorelDraw.webp',
   'pack-adobe-illustrator-profissional': 'assets/images/packs/illustrator_Pack.webp',
   'pack-adobe-lightroom-profissional': 'assets/images/packs/presets_lightroom.webp',
   'pack-after-effects-cinematografico': 'assets/images/packs/kit_after_effects.webp',
@@ -28,10 +28,11 @@ const PACK_IMAGES: Record<string, string> = {
   'pack-vfx-cinematografico-profissional': 'assets/images/packs/VFX.webp',
   'ferramenta-profissional-de-download-de-reels': 'assets/images/packs/baixar_reels.webp',
   'banco-exclusivo-de-videos-profissionais': 'assets/images/packs/banco_de_videos.webp',
-  'modelos-profissionais-de-gestao-em-excel': 'assets/images/packs/programas.webp',
+  'modelos-profissionais-de-gestao-em-excel': 'assets/images/packs/Modelos-Excel.webp',
   'biblioteca-de-conteudos-plr-premium': 'assets/images/packs/Pack_PLRs.webp',
   'suite-de-ferramentas-online-profissionais': 'assets/images/packs/ferramentas_online.webp',
-  'kit-completo-de-marketing-digital': 'assets/images/packs/PACK_VIRAL.webp'
+  'kit-completo-de-marketing-digital': 'assets/images/packs/kit-marketing.webp',
+  
 };
 
 function normalizePackKey(value?: string | null): string {

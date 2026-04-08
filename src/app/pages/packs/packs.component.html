@@ -1,10 +1,10 @@
 <div class="packs-page">
   <section class="packs-hero">
     <div class="hero-content">
-      <span class="hero-badge">Catalogo exclusivo</span>
+      <span class="hero-badge">Catálogo exclusivo</span>
       <h1>Biblioteca</h1>
       <p>
-        Explore sua biblioteca e veja com clareza o que seu plano ja liberou e o que pode ser desbloqueado com upgrade.
+        Explore sua biblioteca e veja com clareza o que seu plano já liberou e o que pode ser desbloqueado com upgrade.
       </p>
 
       <div class="search-box">
@@ -25,7 +25,7 @@
     @if (isLoadingPacks) {
       <p class="section-feedback">Carregando seus packs...</p>
     } @else if (packsError) {
-      <p class="section-feedback">Nao foi possivel carregar sua biblioteca agora.</p>
+      <p class="section-feedback">Não foi possível carregar sua biblioteca agora.</p>
     } @else if (filterPacks(myPacks).length === 0) {
       <p class="section-feedback">Nenhum pack liberado foi encontrado para o seu plano atual.</p>
     } @else {
@@ -54,7 +54,7 @@
             </article>
           }
         </div>
-        <button type="button" class="row-arrow row-arrow-right" (click)="scrollRow('my-packs-row', 1)" aria-label="Avancar packs liberados">
+        <button type="button" class="row-arrow row-arrow-right" (click)="scrollRow('my-packs-row', 1)" aria-label="Avançar packs liberados">
           <span>&rsaquo;</span>
         </button>
       </div>
@@ -69,7 +69,7 @@
     @if (isLoadingPacks) {
       <p class="section-feedback">Carregando packs em destaque...</p>
     } @else if (packsError) {
-      <p class="section-feedback">Nao foi possivel carregar os packs em destaque agora.</p>
+      <p class="section-feedback">Não foi possível carregar os packs em destaque agora.</p>
     } @else if (filterPacks(featuredPacks).length === 0) {
       <p class="section-feedback">Nenhum pack em destaque foi encontrado.</p>
     } @else {
@@ -100,7 +100,7 @@
             </article>
           }
         </div>
-        <button type="button" class="row-arrow row-arrow-right" (click)="scrollRow('featured-packs-row', 1)" aria-label="Avancar packs em destaque">
+        <button type="button" class="row-arrow row-arrow-right" (click)="scrollRow('featured-packs-row', 1)" aria-label="Avançar packs em destaque">
           <span>&rsaquo;</span>
         </button>
       </div>
@@ -115,7 +115,7 @@
     @if (isLoadingPacks) {
       <p class="section-feedback">Carregando novidades...</p>
     } @else if (packsError) {
-      <p class="section-feedback">Nao foi possivel carregar as novidades agora.</p>
+      <p class="section-feedback">Não foi possível carregar as novidades agora.</p>
     } @else if (filterPacks(noveltyPacks).length === 0) {
       <p class="section-feedback">Nenhuma novidade foi encontrada.</p>
     } @else {
@@ -146,7 +146,7 @@
             </article>
           }
         </div>
-        <button type="button" class="row-arrow row-arrow-right" (click)="scrollRow('novelty-packs-row', 1)" aria-label="Avancar novidades">
+        <button type="button" class="row-arrow row-arrow-right" (click)="scrollRow('novelty-packs-row', 1)" aria-label="Avançar novidades">
           <span>&rsaquo;</span>
         </button>
       </div>
@@ -161,7 +161,7 @@
     @if (isLoadingPacks) {
       <p class="section-feedback">Carregando todos os packs...</p>
     } @else if (packsError) {
-      <p class="section-feedback">Nao foi possivel carregar todos os packs agora.</p>
+      <p class="section-feedback">Não foi possível carregar todos os packs agora.</p>
     } @else if (filterPacks(allPacks).length === 0) {
       <p class="section-feedback">Nenhum pack foi encontrado.</p>
     } @else {
@@ -192,7 +192,7 @@
             </article>
           }
         </div>
-        <button type="button" class="row-arrow row-arrow-right" (click)="scrollRow('all-packs-row', 1)" aria-label="Avancar todos os packs">
+        <button type="button" class="row-arrow row-arrow-right" (click)="scrollRow('all-packs-row', 1)" aria-label="Avançar todos os packs">
           <span>&rsaquo;</span>
         </button>
       </div>

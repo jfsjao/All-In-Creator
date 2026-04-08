@@ -18,7 +18,6 @@ interface Logo {
 }
 
 interface PackFeature {
-  number: string;
   title: string;
   description: string;
 }
@@ -48,7 +47,7 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
       image: 'assets/images/carrosel/banner2.gif',
       mobileImage: 'assets/images/packs/PACK_VIRAL.webp',
       alt: 'Pack Edit',
-      title: 'Conteúdos completos para edição e marketing',
+      title: 'Conteúdos completos para edição e design',
       description: 'Packs variados para ajudar na edição de vídeos, fotos e criativos com mais impacto.',
       buttonText: 'Ver packs',
       buttonLink: '/store'
@@ -57,7 +56,7 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
       image: 'assets/images/carrosel/banner3.gif',
       mobileImage: 'assets/images/empresa/nico-coringa.jpg',
       alt: 'Sobre nós',
-      title: 'Conheça a NicolWork de perto',
+      title: 'Conheça a All In de perto',
       description: 'Veja como a empresa funciona e o que entregamos para creators, designers e editores.',
       buttonText: 'Sobre nós',
       buttonLink: '/about'
@@ -66,7 +65,7 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
 
   joaoGuilhermeImage = 'assets/images/depoimentos/joaoguilherme.png';
   gustavoJoseImage = 'assets/images/depoimentos/gustavojose.png';
-
+  packsupremoImage = 'assets/images/empresa/pack_supremo.png';
   partnerLogos: Logo[] = [
     { image: 'assets/images/logos/adobe_illustrator.webp', alt: 'Adobe Illustrator' },
     { image: 'assets/images/logos/after_effects.webp', alt: 'After Effects' },
@@ -81,12 +80,12 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
   repeatedPartnerLogos: Logo[] = [...this.partnerLogos, ...this.partnerLogos];
 
   packFeatures: PackFeature[] = [
-    { number: '44Gb', title: 'Anime (AMV)', description: 'Arquivos para edições de Anime AMV e MMV, incluindo clipes, PNGs e mangas.' },
-    { number: '54Gb', title: 'Mockups', description: 'Mockups diversos para deixar seus projetos muito mais apresentáveis e profissionais.' },
-    { number: '10Gb', title: 'Plugins e Presets', description: 'Scripts, plugins e presets para acelerar seu fluxo no After Effects.' },
-    { number: '104Gb', title: 'Overlays', description: 'Elementos que transformam algo simples em algo muito mais marcante.' },
-    { number: '105Gb', title: 'Pack para Photoshop', description: 'Arquivos PSD, recursos visuais e materiais extras para editores e designers.' },
-    { number: '115Gb', title: 'Templates de After Effects', description: 'Intros, lower thirds, cenas prontas e projetos completos para usar como quiser.' },
+    { title: 'Criação e Edição de Vídeo', description: 'Tudo que você precisa para criar conteúdos dinâmicos e com alto potencial de viralização.' },
+    { title: 'Design Gráfico e Artes', description: 'Tudo que você precisa para criar artes de alto nível e destacar seu conteúdo visual.' },
+    { title: 'Inteligência Artificial e Automação', description: 'Tudo que você precisa para produzir mais rápido, com menos esforço e mais eficiência.' },
+    { title: 'Recursos Prontos e Templates', description: 'Tudo que você precisa para ganhar tempo e criar com rapidez e qualidade.' },
+    { title: 'Marketing e Crescimento Digital', description: 'Tudo que você precisa para crescer, atrair público e gerar resultados com seu conteúdo.' },
+    { title: 'Ferramentas e Produtividade', description: 'Tudo que você precisa para trabalhar de forma mais organizada e produtiva.' },
   ];
 
   currentSlide = 0;

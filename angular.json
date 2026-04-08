@@ -98,6 +98,7 @@
               "extractLicenses": true
             },
             "development": {
+              "outputHashing": "none",
               "optimization": false,
               "extractLicenses": false,
               "sourceMap": true

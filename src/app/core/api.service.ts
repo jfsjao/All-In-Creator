@@ -190,7 +190,7 @@ export class ApiService {
           id: 2,
           slug: 'pack-ia',
           nome: 'Pack IA',
-          descricao: 'Colecao com assets modernos para criadores e conteudos virais.',
+          descricao: 'Coleção com assets modernos para criadores e conteúdos virais.',
           capa_url: null,
           tamanho_gb: '8.9',
           versao_atual: '2.8',
@@ -204,7 +204,7 @@ export class ApiService {
           id: 1,
           slug: 'emojis',
           nome: 'Emojis',
-          descricao: 'Biblioteca leve para enriquecer cortes rapidos, shorts e reels.',
+          descricao: 'Biblioteca leve para enriquecer cortes rápidos, shorts e reels.',
           capa_url: null,
           tamanho_gb: '1.1',
           versao_atual: '1.6',
@@ -220,7 +220,7 @@ export class ApiService {
     return {
       usuario: {
         id: 1,
-        nome: 'JoÃ£o Felipe',
+        nome: 'João Felipe',
         email: 'joao@example.com',
         telefone: '(16) 99999-9999',
         area_atuacao: 'Editor / Creator',
@@ -247,7 +247,7 @@ export class ApiService {
 
   syncAuth(payload: SyncAuthPayload): Observable<SyncAuthResponse> {
     if (!this.hasHttpClient()) {
-      return throwError(() => new Error('HttpClient indisponivel.'));
+      return throwError(() => new Error('HttpClient indisponível.'));
     }
 
     return this.http!.post<SyncAuthResponse>(`${this.backendUrl}/auth/sync`, payload);
@@ -255,7 +255,7 @@ export class ApiService {
 
   registerEmail(payload: RegisterEmailPayload): Observable<{ message: string }> {
     if (!this.hasHttpClient()) {
-      return throwError(() => new Error('HttpClient indisponivel.'));
+      return throwError(() => new Error('HttpClient indisponível.'));
     }
 
     return this.http!.post<{ message: string }>(`${this.backendUrl}/auth/register`, payload);
@@ -263,7 +263,7 @@ export class ApiService {
 
   loginEmail(payload: LoginEmailPayload): Observable<AuthTokenResponse> {
     if (!this.hasHttpClient()) {
-      return throwError(() => new Error('HttpClient indisponivel.'));
+      return throwError(() => new Error('HttpClient indisponível.'));
     }
 
     return this.http!.post<AuthTokenResponse>(`${this.backendUrl}/auth/login`, payload);
@@ -271,7 +271,7 @@ export class ApiService {
 
   verifyEmail(payload: VerifyEmailPayload): Observable<{ message: string }> {
     if (!this.hasHttpClient()) {
-      return throwError(() => new Error('HttpClient indisponivel.'));
+      return throwError(() => new Error('HttpClient indisponível.'));
     }
 
     return this.http!.post<{ message: string }>(`${this.backendUrl}/auth/verify-email`, payload);
@@ -279,7 +279,7 @@ export class ApiService {
 
   resendVerification(payload: ResendEmailPayload): Observable<{ message: string }> {
     if (!this.hasHttpClient()) {
-      return throwError(() => new Error('HttpClient indisponivel.'));
+      return throwError(() => new Error('HttpClient indisponível.'));
     }
 
     return this.http!.post<{ message: string }>(
@@ -290,7 +290,7 @@ export class ApiService {
 
   requestPasswordReset(payload: RequestResetPayload): Observable<{ message: string }> {
     if (!this.hasHttpClient()) {
-      return throwError(() => new Error('HttpClient indisponivel.'));
+      return throwError(() => new Error('HttpClient indisponível.'));
     }
 
     return this.http!.post<{ message: string }>(
@@ -301,7 +301,7 @@ export class ApiService {
 
   resetPassword(payload: ResetPasswordPayload): Observable<{ message: string }> {
     if (!this.hasHttpClient()) {
-      return throwError(() => new Error('HttpClient indisponivel.'));
+      return throwError(() => new Error('HttpClient indisponível.'));
     }
 
     return this.http!.post<{ message: string }>(`${this.backendUrl}/auth/reset-password`, payload);
@@ -309,7 +309,7 @@ export class ApiService {
 
   changePassword(payload: ChangePasswordPayload, token: string): Observable<{ message: string }> {
     if (!this.hasHttpClient()) {
-      return throwError(() => new Error('HttpClient indisponivel.'));
+      return throwError(() => new Error('HttpClient indisponível.'));
     }
 
     return this.http!.post<{ message: string }>(
@@ -325,7 +325,7 @@ export class ApiService {
 
   getPacksDestaque(limite = 10): Observable<PacksDestaqueResponse> {
     if (!this.hasHttpClient()) {
-      return throwError(() => new Error('HttpClient indisponivel.'));
+      return throwError(() => new Error('HttpClient indisponível.'));
     }
 
     return this.http!.get<PacksDestaqueResponse>(`${this.backendUrl}/packs/destaques?limite=${limite}`);
@@ -333,7 +333,7 @@ export class ApiService {
 
   getAllPacks(): Observable<PacksListResponse> {
     if (!this.hasHttpClient()) {
-      return throwError(() => new Error('HttpClient indisponivel.'));
+      return throwError(() => new Error('HttpClient indisponível.'));
     }
 
     return this.http!.get<PacksListResponse>(`${this.backendUrl}/packs`);
@@ -341,7 +341,7 @@ export class ApiService {
 
   getMeusPacks(usuarioId: number): Observable<MeusPacksResponse> {
     if (!this.hasHttpClient()) {
-      return throwError(() => new Error('HttpClient indisponivel.'));
+      return throwError(() => new Error('HttpClient indisponível.'));
     }
 
     const token = localStorage.getItem('nicol_auth_token');

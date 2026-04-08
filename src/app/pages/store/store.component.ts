@@ -24,27 +24,27 @@ export class StoreComponent implements OnInit {
     {
       number: '1',
       title: 'Plugins',
-      description: 'Scripts, presets, plugins e recursos para agilizar seu fluxo e facilitar sua edicao.'
+      description: 'Scripts, presets, plugins e recursos para agilizar seu fluxo e facilitar sua edição.'
     },
     {
       number: '2',
-      title: 'Videos',
-      description: 'Arquivos em MP4, MOV e outros formatos prontos para editar e reutilizar no seu conteudo.'
+      title: 'Vídeos',
+      description: 'Arquivos em MP4, MOV e outros formatos prontos para editar e reutilizar no seu conteúdo.'
     },
     {
       number: '3',
       title: 'Imagens',
-      description: 'Arquivos em PNG, JPG e outros formatos uteis para composicoes, thumbnails e posts.'
+      description: 'Arquivos em PNG, JPG e outros formatos úteis para composições, thumbnails e posts.'
     },
     {
       number: '4',
-      title: 'Photoshop',
-      description: 'Mockups, texturas, templates, actions e materiais em PSD para acelerar sua criacao.'
+      title: 'Links',
+      description: 'Ferramentas online para auxílio na criação de artes de alto nível e em destaque no seu conteúdo visual.'
     },
     {
       number: '5',
       title: 'Outros',
-      description: 'Arquivos complementares, referencias e materiais extras que ampliam ainda mais o pack.'
+      description: 'Arquivos complementares, referências e materiais extras que ampliam ainda mais o pack.'
     }
   ];
 
@@ -54,63 +54,63 @@ export class StoreComponent implements OnInit {
   popularPacksError = false;
 
   premiumFeatures = [
-    'Baixar Reels',
-    'Banco de videos exclusivos',
-    'Coral Pack completo',
-    'Elementos premium',
-    'Emojis exclusivos',
-    'Fundos de video HD',
-    'Illustrator Pack',
-    'Presets Lightroom',
-    'Otimizacao de imagem',
-    'Pack de IA para edicao',
-    'Templates After Effects',
-    'Backgrounds animados',
+    'Biblioteca de Elementos',
+    'Pack de Emojis',
+    'Coleção de Ícones Profissionais',
+    'Efeitos e Trilhas Sonoras',
+    'Kit Inicial de Edição de Vídeo',
+    'Pack Adobe Premiere',
+    'Pack Adobe Photoshop',
+    'Softwares Essenciais do Criador',
+    'Pack de Transições Dinâmicas',
+    'Banco de Vídeos Virais',
+    'Pack CorelDraw',
+    'Sistema Completo de Inteligência Artificial',
+    'Biblioteca de Backgrounds',
     'Templates Canva',
-    'Pacote de icones premium',
-    'Templates de edicao de video',
-    'Modelos Excel para gestao',
-    'Conteudo PLR exclusivo',
-    'Templates Premiere Pro',
-    'Ferramentas de remocao de fundo',
-    'Personagens editaveis',
-    'Actions Photoshop',
-    'Programas bonus',
-    'Transicoes profissionais',
-    'Efeitos VFX premium',
-    'Videos virais prontos'
+    'Pack de Personagens Editáveis',
+    'Pack de Efeitos VFX',
+    'Pack Adobe Illustrator',
+    'Pack Adobe Lightroom',
+    'Pack After Effects',
+    'Ferramenta Profissional de Download de Reels',
+    'Banco Exclusivo de Vídeos Profissionais',
+    'Modelos Profissionais de Gestão em Excel',
+    'Biblioteca de Conteúdos PLR',
+    'Suite de Ferramentas Online Profissionais',
+    'Kit Completo de Marketing Digital'
   ];
 
   goldFeatures = [
-    'Coral Pack completo',
-    'Elementos premium',
-    'Emojis exclusivos',
-    'Fundos de video HD',
-    'Pack de IA para edicao',
-    'Backgrounds animados',
+    'Biblioteca de Elementos',
+    'Pack de Emojis',
+    'Coleção de Ícones Profissionais',
+    'Efeitos e Trilhas Sonoras',
+    'Kit Inicial de Edição de Vídeo',
+    'Pack Adobe Premiere',
+    'Pack Adobe Photoshop',
+    'Softwares Essenciais do Criador',
+    'Pack de Transições Dinâmicas',
+    'Banco de Vídeos Virais',
+    'Pack CorelDraw',
+    'Sistema Completo de Inteligência Artificial',
+    'Biblioteca de Backgrounds',
     'Templates Canva',
-    'Pacote de icones premium',
-    'Templates de edicao de video',
-    'Templates Premiere Pro',
-    'Personagens editaveis',
-    'Actions Photoshop',
-    'Programas bonus',
-    'Transicoes profissionais',
-    'Efeitos VFX premium',
-    'Videos virais prontos'
+    'Pack de Personagens Editáveis',
+    'Pack de Efeitos VFX'
   ];
 
   basicFeatures = [
-    'Coral Pack basico',
-    'Elementos essenciais',
-    'Emojis basicos',
-    'Pacote de icones',
-    'Templates de edicao de video',
-    'Templates Premiere Pro',
-    'Actions Photoshop',
-    'Programas basicos',
-    'Transicoes simples',
-    'Videos virais basicos'
+    'Biblioteca de Elementos',
+    'Pack de Emojis',
+    'Coleção de Ícones Profissionais',
+    'Efeitos e Trilhas Sonoras',
+    'Kit Inicial de Edição de Vídeo',
+    'Pack Adobe Premiere',
+    'Pack Adobe Photoshop',
+    'Softwares Essenciais do Criador',
+    'Pack de Transições Dinâmicas',
+    'Banco de Vídeos Virais'
   ];
 
   ngOnInit(): void {

@@ -12,11 +12,9 @@ import { CountUpModule } from 'ngx-countup';
 })
 export class AboutComponent {
   stats = {
-    years: 1,
-    clients: 45,
-    engagements: 10,
+    years: 3,
+    clients: 500,
+    engagements: 100,
     satisfaction: 100
   };
-
-
 }

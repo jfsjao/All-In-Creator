@@ -3,10 +3,10 @@
     <div class="hero-overlay"></div>
 
     <div class="hero-content">
-      <span class="hero-badge">Area do cliente</span>
+      <span class="hero-badge">Área do cliente</span>
       <h1>Bem-vindo de volta, {{ userName }}</h1>
       <p>
-        Acompanhe novidades, acesse seus packs liberados e descubra os conteudos
+        Acompanhe novidades, acesse seus packs liberados e descubra os conteúdos
         mais populares da plataforma.
       </p>
 
@@ -20,7 +20,7 @@
   <section class="dashboard-carousel-section">
     <div class="section-header">
       <h2>Destaques para você</h2>
-      <p>Atualizacoes, novidades e conteudos em evidencia.</p>
+      <p>Atualizações, novidades e conteúdos em evidência.</p>
     </div>
 
     <div class="carousel-box">
@@ -62,15 +62,15 @@
   <section class="dashboard-section" id="meus-packs">
     <div class="section-header">
       <h2>Packs pra você</h2>
-      <p>Conteudos ja liberados na sua conta.</p>
+      <p>Conteúdos já liberados na sua conta.</p>
     </div>
 
     @if (isLoadingPacks) {
       <p class="section-feedback">Carregando seus packs...</p>
     } @else if (packsError) {
-      <p class="section-feedback">Nao foi possivel carregar seus packs agora.</p>
+      <p class="section-feedback">Não foi possível carregar seus packs agora.</p>
     } @else if (myPacks.length === 0) {
-      <p class="section-feedback">Seu plano atual ainda nao liberou packs para esta conta.</p>
+      <p class="section-feedback">Seu plano atual ainda não liberou packs para esta conta.</p>
     } @else {
       <div class="packs-grid">
         @for (pack of myPacks; track pack.id) {
@@ -115,7 +115,7 @@
   <section class="dashboard-section">
     <div class="section-header">
       <h2>Mais populares</h2>
-      <p>Os packs e conteudos mais procurados pelos clientes.</p>
+      <p>Os packs e conteúdos mais procurados pelos clientes.</p>
     </div>
 
     @if (isLoadingPacks) {
@@ -190,8 +190,8 @@
   @if (upgradeSuggestions.length > 0) {
     <section class="dashboard-section alt-bg">
       <div class="section-header">
-        <h2>Desbloqueie o proximo nivel</h2>
-        <p>Planos acima do seu para liberar ainda mais conteudo.</p>
+        <h2>Desbloqueie para subir seu nível</h2>
+        <p>Planos acima do seu para liberar ainda mais conteúdos.</p>
       </div>
 
       <div class="upgrade-grid">

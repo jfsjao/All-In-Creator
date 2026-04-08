@@ -15,7 +15,7 @@ interface DownloadItem {
   downloadedAt: string;
   size: string;
   version: string;
-  status: 'Disponivel' | 'Atualizacao';
+  status: 'Disponível' | 'Atualização';
 }
 
 interface QuickAction {
@@ -55,7 +55,7 @@ export class DownloadsComponent implements OnInit {
     },
     {
       label: 'Atualizar downloads',
-      detail: 'Confira novas versoes dos arquivos que voce ja baixou.',
+      detail: 'Confira novas versões dos arquivos que você já baixou.',
       action: 'Ver novidades',
       link: '/store'
     }
@@ -87,7 +87,7 @@ export class DownloadsComponent implements OnInit {
       this.totalUpdates = response.total_atualizacoes;
       this.recentDownloads = response.downloads_recentes.map((item) => this.mapDownloadItem(item));
       this.recommendedDownloads = response.sugestoes.map((item) =>
-        this.mapDownloadItem(item, 'Sugestao')
+        this.mapDownloadItem(item, 'Sugestão')
       );
     } catch {
       this.hasError = true;
@@ -132,7 +132,7 @@ export class DownloadsComponent implements OnInit {
       downloadedAt: fallbackDate ?? this.formatDate(item.baixado_em),
       size: item.tamanho_gb ? `${item.tamanho_gb} GB` : '--',
       version: item.versao_atual ? `v${item.versao_atual}` : '--',
-      status: item.possui_atualizacao ? 'Atualizacao' : 'Disponivel'
+      status: item.possui_atualizacao ? 'Atualização' : 'Disponível'
     };
   }
 
@@ -159,24 +159,24 @@ export class DownloadsComponent implements OnInit {
       {
         id: 2,
         title: 'Pack IA',
-        description: 'Colecao com assets modernos para criadores e conteudos virais.',
+        description: 'Coleção com assets modernos para criadores e conteúdos virais.',
         image: 'assets/images/packs/pack-ia.png',
         downloadedAt: '01/04 18:11',
         size: '8.9 GB',
         version: 'v2.8',
-        status: 'Disponivel'
+        status: 'Disponível'
       }
     ];
     this.recommendedDownloads = [
       {
         id: 1,
         title: 'Emojis',
-        description: 'Biblioteca leve para enriquecer cortes rapidos, shorts e reels.',
+        description: 'Biblioteca leve para enriquecer cortes rápidos, shorts e reels.',
         image: 'assets/images/packs/emoji.png',
-        downloadedAt: 'Sugestao',
+        downloadedAt: 'Sugestão',
         size: '1.1 GB',
         version: 'v1.6',
-        status: 'Disponivel'
+        status: 'Disponível'
       }
     ];
     this.hasError = false;

@@ -44,7 +44,9 @@
 
   <section class="logo-section">
     <div class="container">
-      <h2>Principal foco dos nossos produtos</h2>
+      <h2>Principal foco dos nossos produtos
+        <p>Todos os arquivos e ferramentas, em um só lugar.</p>
+      </h2> 
 
       <div class="logos-wrapper" #logosViewport>
         <div class="logos-marquee">
@@ -91,13 +93,12 @@
 
   <section class="pack-showcase-section">
     <div class="showcase-content">
-      <h2>Conheça nosso Pack Supremo</h2>
+      <h2>Conheça nosso pack Creator Pro</h2>
 
       <div class="showcase-wrapper">
         <div class="cards-col cards-left">
           @for (feature of packFeatures.slice(0, 3); track $index) {
             <div class="feature-card">
-              <div class="feature-number">{{ feature.number }}</div>
               <h3>{{ feature.title }}</h3>
               <p>{{ feature.description }}</p>
             </div>
@@ -106,14 +107,13 @@
 
         <div class="showcase-center">
           <div class="product-image">
-            <img [src]="gustavoJoseImage" alt="Pack Supremo" />
+            <img [src]="packsupremoImage" alt="Pack Supremo" />
           </div>
         </div>
 
         <div class="cards-col cards-right">
           @for (feature of packFeatures.slice(3, 6); track $index) {
             <div class="feature-card">
-              <div class="feature-number">{{ feature.number }}</div>
               <h3>{{ feature.title }}</h3>
               <p>{{ feature.description }}</p>
             </div>
@@ -123,7 +123,7 @@
 
       <div class="showcase-footer">
         <p class="showcase-description">
-          Todos na nuvem para acessar e baixar quando quiser e apenas o que quiser, de forma vitalícia.
+          Tudo na nuvem para acessar e baixar quando quiser, de forma vitalícia.
         </p>
         <a routerLink="/store" class="showcase-cta">Pack Supremo</a>
       </div>
@@ -145,26 +145,26 @@
 
             <div class="price">
               <div class="price-top">
-                <span class="old-price">R$249</span>
+                <span class="old-price">R$79,90</span>
               </div>
 
               <div class="price-main">
                 <span class="currency">R$</span>
-                <span class="value">200</span>
+                <span class="value">29,90</span>
                 <span class="period">/Vitalício</span>
               </div>
 
-              <span class="pay-badge">normal</span>
+              <span class="pay-badge">Somente o essencial</span>
             </div>
           </div>
 
           <ul class="pricing-features">
-            <li><i class="bi bi-check2"></i> Pack base + templates</li>
+            <li><i class="bi bi-check2"></i> Pack Básico + templates</li>
             <li><i class="bi bi-check2"></i> Atualizações mensais</li>
-            <li><i class="bi bi-check2"></i> Suporte padrão</li>
+            <li><i class="bi bi-check2"></i> Suporte prioritário</li>
           </ul>
 
-          <a class="pricing-cta" routerLink="/store">Quero esse</a>
+          <a class="pricing-cta" routerLink="/store">Saiba mais</a>
         </article>
 
         <article class="pricing-card">
@@ -174,55 +174,55 @@
 
             <div class="price">
               <div class="price-top">
-                <span class="old-price">R$429</span>
+                <span class="old-price">R$119,90</span>
               </div>
 
               <div class="price-main">
                 <span class="currency">R$</span>
-                <span class="value">350</span>
+                <span class="value">65,90</span>
                 <span class="period">/Vitalício</span>
               </div>
 
-              <span class="pay-badge">mais popular</span>
+              <span class="pay-badge">Custo Benefício</span>
             </div>
           </div>
 
           <ul class="pricing-features">
-            <li><i class="bi bi-check2"></i> Packs + presets premium</li>
-            <li><i class="bi bi-check2"></i> Atualizações mensais</li>
+            <li><i class="bi bi-check2"></i> Tudo do Básico + extras</li>
+            <li><i class="bi bi-check2"></i> Packs + presets essenciais</li>
             <li><i class="bi bi-check2"></i> Suporte prioritário</li>
           </ul>
 
-          <a class="pricing-cta" routerLink="/store">Quero esse</a>
+          <a class="pricing-cta" routerLink="/store">Saiba mais</a>
         </article>
 
         <article class="pricing-card featured">
           <div class="pricing-head">
-            <span class="plan-badge featured-badge">Mais escolhido</span>
+            <span class="plan-badge featured-badge">Premium</span>
             <h3>O completo para crescer rápido</h3>
 
             <div class="price">
               <div class="price-top">
-                <span class="old-price">R$699</span>
+                <span class="old-price">R$199,90</span>
               </div>
 
               <div class="price-main">
                 <span class="currency">R$</span>
-                <span class="value">500</span>
+                <span class="value">97,90</span>
                 <span class="period">/Vitalício</span>
               </div>
 
-              <span class="pay-badge">com pix</span>
+              <span class="pay-badge">Mais escolhido</span>
             </div>
           </div>
 
           <ul class="pricing-features">
             <li><i class="bi bi-check2"></i> Tudo do Gold + extras</li>
-            <li><i class="bi bi-check2"></i> Conteúdos “viralizáveis”</li>
-            <li><i class="bi bi-check2"></i> Prioridade total</li>
+            <li><i class="bi bi-check2"></i> Ideias e projetos em alta</li>
+            <li><i class="bi bi-check2"></i> Suporte com exclusividade</li>
           </ul>
 
-          <a class="pricing-cta" routerLink="/store">Quero esse</a>
+          <a class="pricing-cta" routerLink="/store">Saiba mais</a>
         </article>
       </div>
     </div>

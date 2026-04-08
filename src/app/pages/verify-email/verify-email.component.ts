@@ -18,25 +18,25 @@ export class VerifyEmailComponent implements OnInit {
   private toastr = inject(ToastrService);
   private router = inject(Router);
 
-  status = 'Verificando seu email...';
+  status = 'Verificando seu e-mail...';
   success = false;
 
   async ngOnInit(): Promise<void> {
     const token = this.route.snapshot.queryParamMap.get('token');
 
     if (!token) {
-      this.status = 'Token de verificacao invalido.';
-      this.toastr.error('Token de verificacao invalido.', 'Erro');
+      this.status = 'Token de verificação inválido.';
+      this.toastr.error('Token de verificação inválido.', 'Erro');
       return;
     }
 
     try {
       await firstValueFrom(this.apiService.verifyEmail({ token }));
-      this.status = 'Email confirmado com sucesso.';
+      this.status = 'E-mail confirmado com sucesso.';
       this.success = true;
-      this.toastr.success('Email confirmado com sucesso.', 'Sucesso');
+      this.toastr.success('E-mail confirmado com sucesso.', 'Sucesso');
     } catch (error: any) {
-      const message = error?.error?.message || 'Nao foi possivel verificar o email.';
+      const message = error?.error?.message || 'Não foi possível verificar o e-mail.';
       this.status = message;
       this.toastr.error(message, 'Erro');
     }

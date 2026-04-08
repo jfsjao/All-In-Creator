@@ -60,27 +60,27 @@ export class DashboardComponent implements OnInit, OnDestroy {
     {
       image: 'assets/images/empresa/nico-marketing.jpg',
       alt: 'Novidades da plataforma',
-      tag: 'Atualizacao',
-      title: 'Novos conteudos adicionados ao seu acesso',
-      description: 'Acompanhe as ultimas novidades da plataforma e veja quais materiais foram liberados ou atualizados.',
-      buttonText: 'Ver meus packs',
-      buttonLink: '/dashboard'
+      tag: 'Atualização',
+      title: 'Novos conteúdos adicionados ao seu acesso',
+      description: 'Acompanhe as últimas novidades da plataforma e veja quais materiais foram liberados ou atualizados.',
+      buttonText: 'Ver novidades',
+      buttonLink: '/packs'
     },
     {
       image: 'assets/images/empresa/nico-coringa.jpg',
       alt: 'Packs em destaque',
       tag: 'Destaque',
       title: 'Os packs mais populares da semana',
-      description: 'Veja o que esta em alta entre os clientes e descubra novos conteudos para elevar seu resultado.',
-      buttonText: 'Explorar store',
-      buttonLink: '/store'
+      description: 'Veja o que está em alta entre os clientes e descubra novos conteúdos para elevar seu resultado.',
+      buttonText: 'Explorar os destaques',
+      buttonLink: '/packs'
     },
     {
       image: 'assets/images/depoimentos/gustavojose.png',
       alt: 'Upgrade de acesso',
-      tag: 'Upgrade',
-      title: 'Desbloqueie ainda mais conteudos premium',
-      description: 'Suba de nivel para liberar packs mais completos, atualizacoes exclusivas e materiais avancados.',
+      tag: 'Upgrade do plano',
+      title: 'Atualize seu plano e desbloqueie mais conteúdos',
+      description: 'Veja as vantagens de cada plano e descubra como acessar uma biblioteca mais completa para acelerar seus resultados.',
       buttonText: 'Ver planos',
       buttonLink: '/store'
     }
@@ -207,23 +207,23 @@ export class DashboardComponent implements OnInit, OnDestroy {
     return [
       {
         id: 1,
-        tag: 'Novo conteudo',
+        tag: 'Novo conteúdo',
         title: 'Novos templates adicionados ao acervo',
-        description: 'Atualizamos a biblioteca com novos materiais para videos curtos e criativos mais dinamicos.',
+        description: 'Atualizamos a biblioteca com novos materiais para vídeos curtos e criativos mais dinâmicos.',
         date: '15/03/2026'
       },
       {
         id: 2,
         tag: 'Melhoria',
-        title: 'Organizacao dos packs foi atualizada',
-        description: 'Agora os conteudos estao mais bem separados por tema e categoria para facilitar seu uso.',
+        title: 'Organização dos packs foi atualizada',
+        description: 'Agora os conteúdos estão mais bem separados por tema e categoria para facilitar seu uso.',
         date: '13/03/2026'
       },
       {
         id: 3,
         tag: 'Destaque',
         title: 'Packs em alta seguem liderando o interesse da plataforma',
-        description: 'Os conteudos mais acessados continuam sendo referencia para criadores que querem acelerar resultados.',
+        description: 'Os conteúdos mais acessados continuam sendo referência para criadores que querem acelerar resultados.',
         date: '11/03/2026'
       }
     ];
@@ -244,19 +244,19 @@ export class DashboardComponent implements OnInit, OnDestroy {
           features: [
             'Acesso aos packs essenciais',
             'Biblioteca inicial liberada',
-            'Upgrade rapido para comecar'
+            'Upgrade rápido para começar'
           ],
           link: '/store'
         },
         {
           id: 2,
-          label: 'Suba de nivel',
+          label: 'Suba de nível',
           name: 'Plano Gold',
           description: 'Tenha acesso a mais variedade de packs e uma biblioteca bem mais completa.',
           features: [
             'Mais packs liberados',
-            'Mais variedade de conteudos',
-            'Melhor custo-beneficio para escalar'
+            'Mais variedade de conteúdos',
+            'Melhor custo-benefício para escalar'
           ],
           link: '/store'
         }
@@ -267,24 +267,24 @@ export class DashboardComponent implements OnInit, OnDestroy {
       return [
         {
           id: 3,
-          label: 'Proximo nivel',
+          label: 'Próximo nível',
           name: 'Plano Gold',
-          description: 'Liberte mais packs, materiais extras e uma biblioteca mais robusta para acelerar seu conteudo.',
+          description: 'Liberte mais packs, materiais extras e uma biblioteca mais robusta para acelerar seu conteúdo.',
           features: [
             'Mais packs liberados',
             'Mais variedade de templates',
-            'Atualizacoes recorrentes'
+            'Atualizações recorrentes'
           ],
           link: '/store'
         },
         {
           id: 4,
-          label: 'Acesso maximo',
+          label: 'Acesso máximo',
           name: 'Plano Premium',
-          description: 'A opcao mais completa para quem quer acesso total aos conteudos e materiais mais avancados.',
+          description: 'A opção mais completa para quem quer acesso total aos conteúdos e materiais mais avançados.',
           features: [
             'Tudo do Gold',
-            'Conteudos premium exclusivos',
+            'Conteúdos premium exclusivos',
             'Biblioteca mais completa'
           ],
           link: '/store'
@@ -297,11 +297,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
         id: 5,
         label: 'Upgrade recomendado',
         name: 'Plano Premium',
-        description: 'Desbloqueie o nivel maximo da plataforma com acesso aos conteudos mais completos.',
+        description: 'Desbloqueie o nível máximo da plataforma com acesso aos conteúdos mais completos.',
         features: [
           'Acesso total aos packs',
           'Materiais premium',
-          'Mais recursos e conteudos avancados'
+          'Mais recursos e conteúdos avançados'
         ],
         link: '/store'
       }

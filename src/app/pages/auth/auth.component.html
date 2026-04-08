@@ -2,13 +2,13 @@
   <section class="auth-hero">
     <div class="hero-content">
       <div class="hero-text">
-        <span class="hero-badge">Area do cliente</span>
+        <span class="hero-badge">Área do cliente</span>
         <h1>{{ isLoginMode ? 'Acesse sua conta' : 'Crie sua conta' }}</h1>
         <p>
           {{
             isLoginMode
               ? 'Gerencie seus projetos e acompanhe seus resultados com praticidade.'
-              : 'Comece agora e tenha acesso a sua area para acompanhar tudo de perto.'
+              : 'Comece agora e tenha acesso à sua área para acompanhar tudo de perto.'
           }}
         </p>
       </div>
@@ -20,7 +20,7 @@
       <div class="auth-shell">
         <div class="auth-copy">
           <span class="form-badge">
-            {{ isLoginMode ? 'Login seguro' : 'Cadastro rapido' }}
+            {{ isLoginMode ? 'Login seguro' : 'Cadastro rápido' }}
           </span>
 
           <h2>
@@ -30,8 +30,8 @@
           <p>
             {{
               isLoginMode
-                ? 'Entre com seus dados para acessar sua area, acompanhar projetos e visualizar suas informacoes.'
-                : 'Preencha os dados abaixo para criar sua conta e comecar sua jornada com a NicolWork.'
+                ? 'Entre com seus dados para acessar sua área, acompanhar projetos e visualizar suas informações.'
+                : 'Preencha os dados abaixo para criar sua conta e começar sua jornada com a NicolWork.'
             }}
           </p>
         </div>
@@ -70,7 +70,7 @@
                 [class.is-invalid]="loginEmail?.invalid && loginEmail?.touched"
               />
               <small class="text-danger" *ngIf="loginEmail?.invalid && loginEmail?.touched">
-                Email invalido.
+                E-mail inválido.
               </small>
             </div>
 
@@ -84,7 +84,7 @@
                 [class.is-invalid]="loginPassword?.invalid && loginPassword?.touched"
               />
               <small class="text-danger" *ngIf="loginPassword?.invalid && loginPassword?.touched">
-                Senha deve ter no minimo 8 caracteres.
+                A senha deve ter no mínimo 8 caracteres.
               </small>
 
               <a href="#" class="forgot-password" (click)="onOpenForgotPassword($event)">
@@ -135,7 +135,7 @@
                   [class.is-invalid]="forgotEmail?.invalid && forgotEmail?.touched"
                 />
                 <small class="text-danger" *ngIf="forgotEmail?.invalid && forgotEmail?.touched">
-                  Email invalido.
+                  E-mail inválido.
                 </small>
               </div>
 
@@ -170,7 +170,7 @@
                   [class.is-invalid]="registerName?.invalid && registerName?.touched"
                 />
                 <small class="text-danger" *ngIf="registerName?.invalid && registerName?.touched">
-                  Nome deve ter no minimo 3 caracteres.
+                  O nome deve ter no mínimo 3 caracteres.
                 </small>
               </div>
 
@@ -184,7 +184,7 @@
                   [class.is-invalid]="registerEmail?.invalid && registerEmail?.touched"
                 />
                 <small class="text-danger" *ngIf="registerEmail?.invalid && registerEmail?.touched">
-                  Email invalido.
+                  E-mail inválido.
                 </small>
               </div>
 
@@ -194,21 +194,21 @@
                   type="password"
                   id="register-password"
                   formControlName="password"
-                  placeholder="Minimo 8 caracteres"
+                  placeholder="Mínimo 8 caracteres"
                   [class.is-invalid]="registerPassword?.invalid && registerPassword?.touched"
                 />
                 <small class="text-danger" *ngIf="registerPassword?.invalid && registerPassword?.touched">
-                  Senha deve ter no minimo 8 caracteres.
+                  A senha deve ter no mínimo 8 caracteres.
                 </small>
                 <div class="password-hints" *ngIf="registerPassword?.touched">
                   <span class="hint" *ngIf="registerPasswordErrors && !registerPasswordErrors.hasUppercase">
-                    Precisa de ao menos 1 letra maiuscula.
+                    Precisa de ao menos 1 letra maiúscula.
                   </span>
                   <span class="hint" *ngIf="registerPasswordErrors && !registerPasswordErrors.hasNumber">
-                    Precisa de ao menos 1 numero.
+                    Precisa de ao menos 1 número.
                   </span>
                   <span class="hint" *ngIf="registerPasswordErrors && !registerPasswordErrors.hasSymbol">
-                    Precisa de ao menos 1 simbolo.
+                    Precisa de ao menos 1 símbolo.
                   </span>
                 </div>
               </div>
@@ -226,7 +226,7 @@
                   class="text-danger"
                   *ngIf="registerConfirmPassword?.touched && registerForm.errors?.['passwordMismatch']"
                 >
-                  As senhas nao coincidem.
+                  As senhas não coincidem.
                 </small>
               </div>
 
@@ -240,7 +240,7 @@
               </button>
 
               <p class="register-hint">
-                Ao se cadastrar, voce recebera um email para verificar sua conta.
+                Ao se cadastrar, você receberá um e-mail para verificar sua conta.
               </p>
 
               <div class="divider">
@@ -262,10 +262,10 @@
 
           <div class="auth-switch" *ngIf="!isForgotMode">
             <span>
-              {{ isLoginMode ? 'Nao tem uma conta?' : 'Ja tem uma conta?' }}
+              {{ isLoginMode ? 'Não tem uma conta?' : 'Já tem uma conta?' }}
             </span>
             <a (click)="onSwitchMode()">
-              {{ isLoginMode ? 'Cadastre-se' : 'Faca login' }}
+              {{ isLoginMode ? 'Cadastre-se' : 'Faça login' }}
             </a>
           </div>
         </div>

@@ -2,9 +2,9 @@
   <section class="downloads-hero">
     <div class="hero-content">
       <span class="hero-badge">Central de downloads</span>
-      <h1>Seus ultimos packs baixados</h1>
+      <h1>Meus últimos packs baixados</h1>
       <p>
-        Acompanhe seus downloads recentes, veja atualizacoes disponiveis e volte rapidamente para os materiais que voce mais usa.
+        Acompanhe seus downloads recentes, veja atualizações disponíveis e volte rapidamente para os materiais que você mais usa.
       </p>
 
       <div class="hero-tools">
@@ -24,7 +24,7 @@
           </article>
           <article class="stat-card">
             <strong>{{ totalUpdates }}</strong>
-            <span>Atualizacoes disponiveis</span>
+            <span>Atualizações disponíveis</span>
           </article>
         </div>
       </div>
@@ -34,7 +34,7 @@
   <section class="downloads-section">
     <div class="section-header">
       <div>
-        <h2>Ultimos baixados</h2>
+        <h2>Últimos baixados</h2>
         <p>Retome seus arquivos com um clique.</p>
       </div>
       <a routerLink="/packs" class="section-link">Ver biblioteca completa</a>
@@ -47,7 +47,7 @@
 
           <div class="card-content">
             <div class="card-meta">
-              <span class="status-badge" [class.update]="item.status === 'Atualizacao'">{{ item.status }}</span>
+              <span class="status-badge" [class.update]="item.status === 'Atualização'">{{ item.status }}</span>
               <span class="downloaded-at">{{ item.downloadedAt }}</span>
             </div>
 
@@ -69,7 +69,7 @@
     </div>
     <ng-template #downloadsState>
       <p class="downloads-empty" *ngIf="hasError">
-        Nao foi possivel carregar seus downloads agora.
+        Não foi possível carregar seus downloads agora.
       </p>
       <p class="downloads-empty" *ngIf="!hasError">
         Carregando seus downloads...
@@ -80,8 +80,8 @@
   <section class="downloads-section spotlight">
     <div class="section-header">
       <div>
-        <h2>Talvez voce queira baixar tambem</h2>
-        <p>Sugestoes com base nos seus ultimos acessos.</p>
+        <h2>Talvez você queira baixar também</h2>
+        <p>Sugestões com base nos seus últimos acessos.</p>
       </div>
     </div>
 
@@ -92,7 +92,7 @@
 
           <div class="card-content">
             <div class="card-meta">
-              <span class="status-badge" [class.update]="item.status === 'Atualizacao'">{{ item.status }}</span>
+              <span class="status-badge" [class.update]="item.status === 'Atualização'">{{ item.status }}</span>
             </div>
             <h3>{{ item.title }}</h3>
             <p>{{ item.description }}</p>
@@ -110,8 +110,8 @@
   <section class="downloads-section actions-panel">
     <div class="section-header">
       <div>
-        <h2>Acoes rapidas</h2>
-        <p>Atalhos uteis para organizar seus proximos passos.</p>
+        <h2>Ações rápidas</h2>
+        <p>Atalhos úteis para organizar seus próximos passos.</p>
       </div>
     </div>
 
