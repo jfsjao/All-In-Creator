@@ -75,6 +75,10 @@ export interface RequestResetPayload {
   email: string;
 }
 
+export interface FirebaseVerificationEmailPayload {
+  nome: string | null;
+}
+
 export interface ResetPasswordPayload {
   token: string;
   nova_senha: string;
@@ -245,12 +249,16 @@ export class ApiService {
     );
   }
 
-  syncAuth(payload: SyncAuthPayload): Observable<SyncAuthResponse> {
+  syncAuth(payload: SyncAuthPayload, token?: string): Observable<SyncAuthResponse> {
     if (!this.hasHttpClient()) {
       return throwError(() => new Error('HttpClient indisponível.'));
     }
 
-    return this.http!.post<SyncAuthResponse>(`${this.backendUrl}/auth/sync`, payload);
+    const headers = token
+      ? new HttpHeaders({ Authorization: `Bearer ${token}` })
+      : undefined;
+
+    return this.http!.post<SyncAuthResponse>(`${this.backendUrl}/auth/sync`, payload, { headers });
   }
 
   registerEmail(payload: RegisterEmailPayload): Observable<{ message: string }> {
@@ -296,6 +304,25 @@ export class ApiService {
     return this.http!.post<{ message: string }>(
       `${this.backendUrl}/auth/request-password-reset`,
       payload
+    );
+  }
+
+  sendFirebaseVerificationEmail(
+    payload: FirebaseVerificationEmailPayload,
+    token: string
+  ): Observable<{ message: string }> {
+    if (!this.hasHttpClient()) {
+      return throwError(() => new Error('HttpClient indisponível.'));
+    }
+
+    return this.http!.post<{ message: string }>(
+      `${this.backendUrl}/auth/firebase/send-verification-email`,
+      payload,
+      {
+        headers: new HttpHeaders({
+          Authorization: `Bearer ${token}`
+        })
+      }
     );
   }
 

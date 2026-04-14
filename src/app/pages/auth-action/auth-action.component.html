@@ -1,0 +1,56 @@
+<section class="auth-action-page">
+  <div class="auth-action-card">
+    <div class="auth-action-header">
+      <button type="button" class="back-button" (click)="irParaLogin()" aria-label="Voltar ao login">
+        <i class="bi bi-arrow-left"></i>
+      </button>
+      <div>
+        <span class="eyebrow">Gerenciamento de conta</span>
+        <h1>{{ title }}</h1>
+      </div>
+    </div>
+
+    <div class="feedback" [class.feedback-success]="feedbackType === 'success'" [class.feedback-error]="feedbackType === 'error'">
+      {{ description }}
+    </div>
+
+    <form *ngIf="mode === 'resetPassword' && isValidLink" [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+      <div class="form-group">
+        <label for="password">Nova senha</label>
+        <input
+          id="password"
+          type="password"
+          formControlName="password"
+          placeholder="Minimo 8 caracteres"
+          [class.is-invalid]="form.get('password')?.invalid && form.get('password')?.touched"
+        />
+        <small class="text-danger" *ngIf="form.get('password')?.invalid && form.get('password')?.touched">
+          A senha deve ter no mínimo 8 caracteres.
+        </small>
+      </div>
+
+      <div class="form-group">
+        <label for="confirmPassword">Confirme a senha</label>
+        <input
+          id="confirmPassword"
+          type="password"
+          formControlName="confirmPassword"
+          placeholder="Digite novamente"
+          [class.is-invalid]="form.touched && form.errors?.['passwordMismatch']"
+        />
+        <small class="text-danger" *ngIf="form.touched && form.errors?.['passwordMismatch']">
+          As senhas não coincidem.
+        </small>
+      </div>
+
+      <button class="primary-button" type="submit" [disabled]="isLoading">
+        <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-2"></span>
+        {{ isLoading ? 'Salvando...' : 'Atualizar senha' }}
+      </button>
+    </form>
+
+    <button *ngIf="!isValidLink" type="button" class="secondary-button" (click)="irParaLogin()">
+      Voltar para o login
+    </button>
+  </div>
+</section>

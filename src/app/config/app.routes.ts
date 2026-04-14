@@ -28,14 +28,17 @@ export const routes: Routes = [
     loadComponent: () => import('../pages/auth/auth.component').then(m => m.AuthComponent) 
   },
   {
-    path: 'verificar-email',
+    path: 'auth/action',
     loadComponent: () =>
-      import('../pages/verify-email/verify-email.component').then(m => m.VerifyEmailComponent)
+      import('../pages/auth-action/auth-action.component').then(m => m.AuthActionComponent)
+  },
+  {
+    path: 'verificar-email',
+    redirectTo: 'auth/action'
   },
   {
     path: 'redefinir-senha',
-    loadComponent: () =>
-      import('../pages/reset-password/reset-password.component').then(m => m.ResetPasswordComponent)
+    redirectTo: 'auth/action'
   },
 
   //privadas

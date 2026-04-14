@@ -2,7 +2,11 @@ import { Injectable, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 import {
+  ActionCodeSettings,
   GoogleAuthProvider,
+  applyActionCode,
+  checkActionCode,
+  confirmPasswordReset,
   createUserWithEmailAndPassword,
   updateProfile,
   sendEmailVerification,
@@ -11,11 +15,13 @@ import {
   signInWithPopup,
   signInWithRedirect,
   signOut,
-  User
+  User,
+  verifyPasswordResetCode
 } from 'firebase/auth';
 import { auth } from '../../../../firebase-config';
 import { ToastrService } from 'ngx-toastr';
 import { ApiService } from '../api.service';
+import { environment } from '../../../environments/environment';
 
 export interface UserData {
   backendUserId?: number | null;
@@ -41,6 +47,14 @@ export class AuthService {
   authNotice = signal<string | null>(null);
   authError = signal<string | null>(null);
   private pendingVerificationKey = 'pending_verification_email';
+
+  private debugAuth(step: string, details?: Record<string, unknown>): void {
+    console.info(`[AuthDebug] ${step}`, {
+      timestamp: new Date().toISOString(),
+      currentUrl: typeof window !== 'undefined' ? window.location.href : 'server',
+      ...details
+    });
+  }
 
   constructor() {
     const cachedNotice = sessionStorage.getItem('auth_notice');
@@ -90,13 +104,14 @@ export class AuthService {
 
   private async syncBackendUser(user: User): Promise<void> {
     try {
+      const token = await user.getIdToken();
       const response = await firstValueFrom(this.apiService.syncAuth({
         nome: user.displayName,
         email: user.email,
         provedor_autenticacao: 'firebase',
         id_usuario_provedor: user.uid,
         foto_url: user.photoURL
-      }));
+      }, token));
 
       const current = this.currentUser();
 
@@ -133,13 +148,39 @@ export class AuthService {
    */
   async register(email: string, password: string, name: string): Promise<boolean> {
     try {
+      const actionCodeSettings = this.buildActionCodeSettings();
+      this.debugAuth('register:start', {
+        email,
+        hasName: !!name,
+        actionCodeSettings
+      });
+
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      this.debugAuth('register:user-created', {
+        uid: userCredential.user.uid,
+        emailVerified: userCredential.user.emailVerified
+      });
+
       if (name) {
         await updateProfile(userCredential.user, { displayName: name });
+        this.debugAuth('register:profile-updated', {
+          uid: userCredential.user.uid,
+          displayName: name
+        });
       }
 
-      await sendEmailVerification(userCredential.user);
+      await sendEmailVerification(userCredential.user, actionCodeSettings);
+      this.debugAuth('register:verification-email-request-finished', {
+        uid: userCredential.user.uid,
+        email: userCredential.user.email,
+        actionCodeSettings
+      });
+
       await signOut(auth);
+      this.debugAuth('register:signout-after-verification-email', {
+        uid: userCredential.user.uid
+      });
+
       this.toastr.success('Conta criada! Verifique seu e-mail para confirmar.', 'Bem-vindo!');
       this.setNotice('Verifique o e-mail cadastrado para concluir seu acesso.');
       this.setPendingVerificationEmail(email);
@@ -157,10 +198,27 @@ export class AuthService {
    */
   async login(email: string, password: string): Promise<boolean> {
     try {
+      const actionCodeSettings = this.buildActionCodeSettings();
+      this.debugAuth('login:start', { email });
+
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      this.debugAuth('login:success', {
+        uid: userCredential.user.uid,
+        emailVerified: userCredential.user.emailVerified
+      });
 
       if (!userCredential.user.emailVerified) {
-        await sendEmailVerification(userCredential.user);
+        this.debugAuth('login:email-not-verified', {
+          uid: userCredential.user.uid,
+          actionCodeSettings
+        });
+
+        await sendEmailVerification(userCredential.user, actionCodeSettings);
+        this.debugAuth('login:verification-email-request-finished', {
+          uid: userCredential.user.uid,
+          email: userCredential.user.email
+        });
+
         await signOut(auth);
         this.clearError();
         this.setNotice('Verifique o e-mail cadastrado para concluir seu acesso.');
@@ -260,8 +318,20 @@ export class AuthService {
    */
   async resetPassword(email: string): Promise<boolean> {
     try {
-      await sendPasswordResetEmail(auth, email);
-      this.toastr.success('E-mail de recuperação enviado!', 'Verifique sua caixa de entrada');
+      const actionCodeSettings = this.buildActionCodeSettings();
+      this.debugAuth('reset-password:start', {
+        email,
+        actionCodeSettings
+      });
+
+      await sendPasswordResetEmail(auth, email, actionCodeSettings);
+      this.debugAuth('reset-password:request-finished', {
+        email,
+        actionCodeSettings
+      });
+
+      this.setNotice('Verifique o email para redefinir a senha.');
+      this.toastr.success('Email de recuperacao enviado!', 'Verifique sua caixa de entrada');
       return true;
     } catch (error: any) {
       this.clearError();
@@ -300,6 +370,18 @@ export class AuthService {
    * Tratamento de erros do Firebase
    */
   private handleAuthError(error: any): void {
+    console.error('Firebase/Auth error detail:', {
+      code: error?.code,
+      message: error?.message,
+      customData: error?.customData,
+      raw: error
+    });
+
+    if (error?.status || (error?.message && !error?.code)) {
+      this.handleBackendError(error);
+      return;
+    }
+
     const errorMessages: { [key: string]: string } = {
       'auth/email-already-in-use': 'Este e-mail já está em uso',
       'auth/invalid-email': 'E-mail inválido',
@@ -313,10 +395,13 @@ export class AuthService {
       'auth/network-request-failed': 'Erro de conexão. Verifique sua internet',
       'auth/popup-closed-by-user': 'Login cancelado',
       'auth/popup-blocked': 'Popup bloqueado. Vamos continuar em outra janela.',
-      'auth/unauthorized-domain': 'Domínio não autorizado no Firebase.'
+      'auth/unauthorized-domain': 'Domínio não autorizado no Firebase.',
+      'auth/invalid-continue-uri': 'A URL de retorno configurada no Firebase é inválida.',
+      'auth/missing-continue-uri': 'A URL de retorno do Firebase não foi informada.',
+      'auth/unauthorized-continue-uri': 'A URL de retorno não está autorizada no Firebase.'
     };
 
-    const message = errorMessages[error.code] || 'Erro ao realizar operação';
+    const message = errorMessages[error.code] || error?.message || 'Erro ao realizar operação';
 
     if (error.code === 'auth/user-not-found') {
       this.clearNotice();
@@ -330,6 +415,8 @@ export class AuthService {
     } else if (error.code === 'auth/invalid-email') {
       this.clearNotice();
       this.setError('E-mail inválido.');
+    } else {
+      this.setError(message);
     }
     this.toastr.error(message, 'Erro de Autenticação');
   }
@@ -340,8 +427,11 @@ export class AuthService {
 
     if (status && message) {
       const title = status === 403 ? 'Verificação pendente' : 'Erro de Autenticação';
-      const type = status === 403 ? 'warning' : 'error';
-      this.toastr[type](message, title);
+      if (status === 403) {
+        this.toastr.warning(message, title);
+      } else {
+        this.toastr.error(message, title);
+      }
       return;
     }
 
@@ -356,6 +446,30 @@ export class AuthService {
   clearNotice(): void {
     this.authNotice.set(null);
     sessionStorage.removeItem('auth_notice');
+  }
+
+  setPasswordResetCompletedNotice(): void {
+    this.setNotice('Senha redefinida com sucesso. Agora voce ja pode entrar.');
+  }
+
+  setEmailVerifiedNotice(): void {
+    this.setNotice('Email verificado com sucesso. Agora voce ja pode entrar.');
+  }
+
+  async validateResetPasswordCode(code: string): Promise<void> {
+    await verifyPasswordResetCode(auth, code);
+  }
+
+  async confirmPasswordResetAction(code: string, newPassword: string): Promise<void> {
+    await confirmPasswordReset(auth, code, newPassword);
+  }
+
+  async validateVerifyEmailCode(code: string): Promise<void> {
+    await checkActionCode(auth, code);
+  }
+
+  async applyVerifyEmailCode(code: string): Promise<void> {
+    await applyActionCode(auth, code);
   }
 
   private setPendingVerificationEmail(email: string): void {
@@ -417,5 +531,18 @@ export class AuthService {
   private clearBackendSession(): void {
     localStorage.removeItem('nicol_auth_token');
     localStorage.removeItem('nicol_auth_user');
+  }
+
+  private buildActionCodeSettings(): ActionCodeSettings {
+    const frontendUrl = (environment.frontendUrl || '').trim().replace(/\/+$/, '');
+
+    const settings = {
+      url: `${frontendUrl}/auth/action`,
+      handleCodeInApp: true
+    };
+
+    this.debugAuth('build-action-code-settings', settings);
+
+    return settings;
   }
 }

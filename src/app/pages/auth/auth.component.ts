@@ -51,7 +51,6 @@ export class AuthComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.authService.clearNotice?.();
     this.authService.clearError?.();
   }
 
@@ -64,6 +63,10 @@ export class AuthComponent implements OnInit {
 
   onOpenForgotPassword(event: Event) {
     event.preventDefault();
+    const loginEmail = this.loginForm.get('email')?.value;
+    if (loginEmail) {
+      this.forgotForm.patchValue({ email: loginEmail });
+    }
     this.isForgotMode = true;
     this.authService.clearNotice?.();
     this.authService.clearError?.();

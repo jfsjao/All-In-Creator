@@ -10,7 +10,9 @@
     }
   ],
   "compilerOptions": {
+    "baseUrl": ".",
       "paths": {
+        "@core/api.service": ["./src/app/core/api.service"],
         "@core/*": ["./src/app/core/*"],
         "@shared/*": ["./src/app/shared/*"]
         },
