@@ -236,6 +236,7 @@ jobs:
         with:
           name: angular-build
           path: dist/public/browser
+          include-hidden-files: true
 
   deploy:
     runs-on: ubuntu-latest
@@ -271,3 +272,9 @@ jobs:
             -e "ssh -p ${{ secrets.HOSTINGER_PORT }} -i ~/.ssh/id_rsa" \
             dist/public/browser/ \
             ${{ secrets.HOSTINGER_USER }}@${{ secrets.HOSTINGER_HOST }}:${{ secrets.HOSTINGER_TARGET }}/
+
+      - name: Verify remote files
+        run: |
+          ssh -p ${{ secrets.HOSTINGER_PORT }} -i ~/.ssh/id_rsa \
+            ${{ secrets.HOSTINGER_USER }}@${{ secrets.HOSTINGER_HOST }} \
+            "ls -la '${{ secrets.HOSTINGER_TARGET }}' | head -n 20"
