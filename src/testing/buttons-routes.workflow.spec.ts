@@ -60,7 +60,7 @@ describe('Buttons And Routes Workflow', () => {
       const element = fixture.nativeElement as HTMLElement;
 
       expect(element.querySelector('app-brand-logo')).toBeTruthy();
-      expect(element.textContent).toContain('Packs');
+      expect(element.textContent).toContain('Planos');
       expect(element.textContent).toContain('Contato');
     });
 
