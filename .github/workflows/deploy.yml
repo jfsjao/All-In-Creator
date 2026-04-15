@@ -248,6 +248,12 @@ jobs:
           name: angular-build
           path: dist/public/browser
 
+      - name: Verify deploy artifact
+        run: |
+          echo "Deploy target: ${{ secrets.HOSTINGER_TARGET }}"
+          ls -la dist/public/browser
+          test -f dist/public/browser/index.html
+
       - name: Setup SSH
         run: |
           mkdir -p ~/.ssh
@@ -260,7 +266,7 @@ jobs:
           ssh -p ${{ secrets.HOSTINGER_PORT }} -i ~/.ssh/id_rsa \
             ${{ secrets.HOSTINGER_USER }}@${{ secrets.HOSTINGER_HOST }} \
             "mkdir -p '${{ secrets.HOSTINGER_TARGET }}'"
-          rsync -avz \
+          rsync -avz --delete \
             -e "ssh -p ${{ secrets.HOSTINGER_PORT }} -i ~/.ssh/id_rsa" \
             dist/public/browser/ \
             ${{ secrets.HOSTINGER_USER }}@${{ secrets.HOSTINGER_HOST }}:${{ secrets.HOSTINGER_TARGET }}/
