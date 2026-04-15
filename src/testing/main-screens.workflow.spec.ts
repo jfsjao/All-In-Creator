@@ -1,13 +1,15 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
+import { of } from 'rxjs';
 import { AppComponent } from '../app/app.component';
-import { HomeComponent } from '../app/pages/home/home.component';
-import { StoreComponent } from '../app/pages/store/store.component';
-import { AboutComponent } from '../app/pages/about/about.component';
-import { ContactComponent } from '../app/pages/contact/contact.component';
+import { ApiService } from '../app/core/api.service';
 import { AuthService } from '../app/core/services/auth.service';
 import { ClipboardService } from '../app/core/services/clipboard/clipboard.service';
-import { ToastrService } from 'ngx-toastr';
+import { AboutComponent } from '../app/pages/about/about.component';
+import { ContactComponent } from '../app/pages/contact/contact.component';
+import { HomeComponent } from '../app/pages/home/home.component';
+import { StoreComponent } from '../app/pages/store/store.component';
 
 describe('Main Screens Workflow', () => {
   const authServiceMock = {
@@ -26,6 +28,47 @@ describe('Main Screens Workflow', () => {
     success: jasmine.createSpy('success'),
     warning: jasmine.createSpy('warning'),
     info: jasmine.createSpy('info')
+  };
+
+  const apiServiceMock = {
+    getPacksDestaque: jasmine.createSpy('getPacksDestaque').and.returnValue(of({
+      total: 3,
+      packs: [
+        {
+          id: 1,
+          slug: 'emojis',
+          nome: 'Emojis',
+          descricao: 'Biblioteca de emojis',
+          capa_url: null,
+          arquivo_url: null,
+          tamanho_gb: '1.1',
+          principal: true,
+          ativo: true
+        },
+        {
+          id: 2,
+          slug: 'pack-ia',
+          nome: 'Pack IA',
+          descricao: 'Assets modernos',
+          capa_url: null,
+          arquivo_url: null,
+          tamanho_gb: '8.9',
+          principal: true,
+          ativo: true
+        },
+        {
+          id: 3,
+          slug: 'kit-marketing',
+          nome: 'Kit Marketing',
+          descricao: 'Criativos e templates',
+          capa_url: null,
+          arquivo_url: null,
+          tamanho_gb: '3.2',
+          principal: true,
+          ativo: true
+        }
+      ]
+    }))
   };
 
   beforeAll(() => {
@@ -48,6 +91,7 @@ describe('Main Screens Workflow', () => {
       providers: [
         provideRouter([]),
         { provide: AuthService, useValue: authServiceMock },
+        { provide: ApiService, useValue: apiServiceMock },
         { provide: ClipboardService, useValue: clipboardMock },
         { provide: ToastrService, useValue: toastrMock }
       ]

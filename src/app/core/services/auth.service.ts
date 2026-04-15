@@ -155,28 +155,28 @@ export class AuthService {
         actionCodeSettings
       });
 
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const userCredential = await this.createUserAccount(email, password);
       this.debugAuth('register:user-created', {
         uid: userCredential.user.uid,
         emailVerified: userCredential.user.emailVerified
       });
 
       if (name) {
-        await updateProfile(userCredential.user, { displayName: name });
+        await this.updateUserProfile(userCredential.user, { displayName: name });
         this.debugAuth('register:profile-updated', {
           uid: userCredential.user.uid,
           displayName: name
         });
       }
 
-      await sendEmailVerification(userCredential.user, actionCodeSettings);
+      await this.sendVerificationEmail(userCredential.user, actionCodeSettings);
       this.debugAuth('register:verification-email-request-finished', {
         uid: userCredential.user.uid,
         email: userCredential.user.email,
         actionCodeSettings
       });
 
-      await signOut(auth);
+      await this.signOutCurrentUser();
       this.debugAuth('register:signout-after-verification-email', {
         uid: userCredential.user.uid
       });
@@ -201,7 +201,7 @@ export class AuthService {
       const actionCodeSettings = this.buildActionCodeSettings();
       this.debugAuth('login:start', { email });
 
-      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const userCredential = await this.signInWithEmail(email, password);
       this.debugAuth('login:success', {
         uid: userCredential.user.uid,
         emailVerified: userCredential.user.emailVerified
@@ -213,13 +213,13 @@ export class AuthService {
           actionCodeSettings
         });
 
-        await sendEmailVerification(userCredential.user, actionCodeSettings);
+        await this.sendVerificationEmail(userCredential.user, actionCodeSettings);
         this.debugAuth('login:verification-email-request-finished', {
           uid: userCredential.user.uid,
           email: userCredential.user.email
         });
 
-        await signOut(auth);
+        await this.signOutCurrentUser();
         this.clearError();
         this.setNotice('Verifique o e-mail cadastrado para concluir seu acesso.');
         this.setPendingVerificationEmail(email);
@@ -324,7 +324,7 @@ export class AuthService {
         actionCodeSettings
       });
 
-      await sendPasswordResetEmail(auth, email, actionCodeSettings);
+      await this.sendResetPasswordEmail(email, actionCodeSettings);
       this.debugAuth('reset-password:request-finished', {
         email,
         actionCodeSettings
@@ -531,6 +531,30 @@ export class AuthService {
   private clearBackendSession(): void {
     localStorage.removeItem('nicol_auth_token');
     localStorage.removeItem('nicol_auth_user');
+  }
+
+  private createUserAccount(email: string, password: string) {
+    return createUserWithEmailAndPassword(auth, email, password);
+  }
+
+  private signInWithEmail(email: string, password: string) {
+    return signInWithEmailAndPassword(auth, email, password);
+  }
+
+  private updateUserProfile(user: User, profile: { displayName?: string | null }) {
+    return updateProfile(user, profile);
+  }
+
+  private sendVerificationEmail(user: User, actionCodeSettings: ActionCodeSettings) {
+    return sendEmailVerification(user, actionCodeSettings);
+  }
+
+  private sendResetPasswordEmail(email: string, actionCodeSettings: ActionCodeSettings) {
+    return sendPasswordResetEmail(auth, email, actionCodeSettings);
+  }
+
+  private signOutCurrentUser() {
+    return signOut(auth);
   }
 
   private buildActionCodeSettings(): ActionCodeSettings {
