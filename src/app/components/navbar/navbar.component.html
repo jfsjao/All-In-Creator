@@ -28,14 +28,18 @@
         </li>
 
         <li class="nav-item">
-          <a class="nav-link" routerLink="/store" routerLinkActive="active" (click)="closeMobileMenu()"> Packs </a>
+          <a class="nav-link" routerLink="/plans" routerLinkActive="active" (click)="closeMobileMenu()"> Planos </a>
         </li>
 
         <!-- ÁREA DO CLIENTE (SÓ LOGADO) -->
         <ng-container *ngIf="isAuthenticated">
           <li class="nav-item">
-            <a class="nav-link" routerLink="/dashboard" routerLinkActive="active" (click)="closeMobileMenu()"> Área do Cliente </a>
+            <a class="nav-link" routerLink="/client-area" routerLinkActive="active" (click)="closeMobileMenu()"> Área do Cliente </a>
           </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/library" routerLinkActive="active" (click)="closeMobileMenu()">  Biblioteca </a>
+          </li>
+
         </ng-container>
 
         <li class="nav-item">
@@ -69,9 +73,8 @@
 
             <!-- MENU ACESSAR -->
             <div class="user-dropdown" *ngIf="isUserMenuOpen">
-              <a routerLink="/packs" class="dropdown-item" (click)="handleDropdownNavigation()"> Minha Biblioteca </a>
-              <a routerLink="/downloads" class="dropdown-item" (click)="handleDropdownNavigation()"> Downloads </a>
-              <a routerLink="/account" class="dropdown-item" (click)="handleDropdownNavigation()"> Conta </a>
+              <a routerLink="/my-downloads" class="dropdown-item" (click)="handleDropdownNavigation()"> Meus Downloads </a>
+              <a routerLink="/my-account" class="dropdown-item" (click)="handleDropdownNavigation()"> Minha Conta </a>
               <button type="button" class="dropdown-item logout-item" (click)="onLogout()"> Sair </button>
             </div>
           </div>

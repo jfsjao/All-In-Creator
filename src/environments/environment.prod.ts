@@ -1,3 +1,8 @@
-import { environmentProdLocal } from './environment.prod.local';
+import { firebaseConfig } from './firebase.local';
 
-export const environment = environmentProdLocal;
+export const environment = {
+  production: true,
+  apiUrl: 'https://YOUR_API_URL',
+  frontendUrl: 'https://YOUR_FRONTEND_URL',
+  firebase: firebaseConfig
+};
