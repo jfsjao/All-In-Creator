@@ -1,10 +1,12 @@
 <div class="plans-page">
   <!-- HERO -->
   <section class="plans-hero">
+    <div class="hero-overlay"></div>
+
     <div class="hero-content">
       <div class="hero-text">
         <span class="hero-badge">Creator Pro</span>
-        <h1>Tudo que você precisa para criar, editar e viralizar</h1>
+        <h1>Ferramentas para criar, editar e viralizar</h1>
         <p class="hero-subtitle">
           Agora editar nunca foi tão fácil, tudo que você precisa para criar conteúdo
           profissional e viralizar, de maneira vitalícia.
@@ -41,27 +43,6 @@
       } @else {
         <p class="popular-feedback">Nenhuma ferramenta foi encontrada no momento.</p>
       }
-    </div>
-  </section>
-
-  <!-- CONTEÚDO DOS PACKS -->
-  <section class="pack-contents-section">
-    <div class="section-content">
-      <span class="section-kicker">Creator Pro</span>
-      <h2>Organização inteligente para encontrar tudo em segundos</h2>
-      <p class="section-subtitle">
-        Tudo separado por categorias para facilitar seu fluxo e acelerar sua produção.
-      </p>
-
-      <div class="contents-grid">
-        @for (item of packCategories; track $index) {
-          <article class="content-card">
-            <div class="content-number">{{ item.number }}</div>
-            <h3>{{ item.title }}</h3>
-            <p>{{ item.description }}</p>
-          </article>
-        }
-      </div>
     </div>
   </section>
 
@@ -145,7 +126,28 @@
       </div>
     </div>
   </section>
+  
+  <!-- CONTEÚDO DOS PACKS -->
+  <section class="pack-contents-section">
+    <div class="section-content">
+      <span class="section-kicker">Creator Pro</span>
+      <h2>Organização inteligente para encontrar tudo em segundos</h2>
+      <p class="section-subtitle">
+        Tudo separado por categorias para facilitar seu fluxo e acelerar sua produção.
+      </p>
 
+      <div class="contents-grid">
+        @for (item of packCategories; track $index) {
+          <article class="content-card">
+            <div class="content-number">{{ item.number }}</div>
+            <h3>{{ item.title }}</h3>
+            <p>{{ item.description }}</p>
+          </article>
+        }
+      </div>
+    </div>
+  </section>
+  
   <!-- Entendendo packs -->
   <section class="intro-section">
     <div class="section-content">

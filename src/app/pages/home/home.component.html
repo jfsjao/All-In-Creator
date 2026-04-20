@@ -3,29 +3,40 @@
     <div class="hero-overlay"></div>
 
     <div class="carousel-track">
-      @for (slide of slides; track $index; let i = $index) {
-        <div class="carousel-slide" [class.active]="currentSlide === i">
-          <a class="slide-hit-area" [routerLink]="slide.buttonLink" [attr.aria-label]="'Abrir ' + slide.title"></a>
-          <picture>
-            <source [srcset]="slide.mobileImage || slide.image" media="(max-width: 900px)" />
-            <img
-              [src]="slide.image"
-              [alt]="slide.alt"
-              loading="eager"
-              fetchpriority="high"
-              decoding="sync"
-              draggable="false"
-            />
-          </picture>
-          <div class="slide-overlay"></div>
+      <div class="carousel-slide active">
+        <a class="slide-hit-area" [routerLink]="activeSlide.buttonLink" [attr.aria-label]="'Abrir ' + activeSlide.title"></a>
 
-          <div class="slide-content">
-            <h2 class="slide-title">{{ slide.title }}</h2>
-            <p class="slide-description">{{ slide.description }}</p>
-            <a [routerLink]="slide.buttonLink" class="slide-button">{{ slide.buttonText }}</a>
-          </div>
+        <video
+          #carouselVideo
+          class="slide-media is-active-media"
+          muted
+          playsinline
+          preload="auto"
+          disablePictureInPicture
+          [src]="activeSlide.videoSrc"
+          [attr.aria-label]="activeSlide.alt"
+          (loadeddata)="onCarouselVideoLoadedMetadata()"
+          (ended)="onCarouselVideoEnded()">
+        </video>
+
+        <video
+          class="carousel-preload-video"
+          muted
+          playsinline
+          preload="metadata"
+          aria-hidden="true"
+          tabindex="-1"
+          [src]="nextSlideData.videoSrc">
+        </video>
+
+        <div class="slide-overlay"></div>
+
+        <div class="slide-content">
+          <h2 class="slide-title">{{ activeSlide.title }}</h2>
+          <p class="slide-description">{{ activeSlide.description }}</p>
+          <a [routerLink]="activeSlide.buttonLink" class="slide-button">{{ activeSlide.buttonText }}</a>
         </div>
-      }
+      </div>
     </div>
 
     <div class="carousel-nav">
@@ -49,7 +60,7 @@
     </div>
   </section>
 
-  <section class="logo-section">
+  <section #logosSection class="logo-section" [class.is-marquee-running]="isLogosMarqueeRunning">
     <div class="section-content">
       <h2>No que você irá ter acesso...</h2>
 
@@ -92,7 +103,7 @@
             muted
             controls
             playsinline
-            preload="metadata"
+            preload="auto"
             (play)="onVideoPlay()"
             (pause)="onVideoPause()"
             (volumechange)="onVideoVolumeChange()">
@@ -283,7 +294,7 @@
             <div class="quote-icon">
               <i class="bi bi-quote"></i>
             </div>
-            <p>"Os packs da N1 revolucionaram meu conteúdo. Meu engajamento aumentou 300% em 2 meses!"</p>
+            <p>"Com o uso dos packs acabou revolucionando meu conteúdo, em pouco tempo mudou meu engajamento com o aumento em 300% em apenas 2 meses!"</p>
           </div>
 
           <div class="testimonial-author">
@@ -304,10 +315,43 @@
           </div>
 
           <div class="testimonial-author">
-            <img [src]="gustavoJoseImage" alt="Gustavo Furlan" />
+            <img [src]="gustavoMangaImage" alt="Gustavo Gomes" />
             <div class="author-info">
-              <h4>Gustavo Furlan</h4>
-              <p>&#64;fwrlann</p>
+              <h4>Gustavo Gomes</h4>
+              <p>&#64;gugomes_manga</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="testimonial-card">
+          <div class="testimonial-content">
+            <div class="quote-icon">
+              <i class="bi bi-quote"></i>
+            </div>
+            <p>"Comecei pelo pack básico e já tive que fazer o upgrade para o premium, conteúdo nota 1000."</p>
+          </div>
+
+          <div class="testimonial-author">
+            <img [src]="matheusPassosImage" alt="Matheus Passos" />
+            <div class="author-info">
+              <h4>Matheus Passos</h4>
+              <p>&#64;_passospassitos</p>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card">
+          <div class="testimonial-content">
+            <div class="quote-icon">
+              <i class="bi bi-quote"></i>
+            </div>
+            <p>"Sinceramente me poupou muito tempo, com o conteúdo que existe nos packs, tanto para criação quanto para edição."</p>
+          </div>
+
+          <div class="testimonial-author">
+            <img [src]="giovaneMicossiImage" alt="Giovane Micossi" />
+            <div class="author-info">
+              <h4>Giovane Micossi</h4>
+              <p>&#64;giovanemicossi</p>
             </div>
           </div>
         </div>

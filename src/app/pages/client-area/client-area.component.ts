@@ -60,29 +60,29 @@ export class ClientAreaComponent implements OnInit, OnDestroy {
     {
       image: 'assets/images/carrosel_cliente/novidades.webp',
       alt: 'Novidades da plataforma',
-      tag: 'Atualização',
-      title: 'Novos conteúdos adicionados ao seu acesso',
-      description: 'Acompanhe as últimas novidades da plataforma e veja quais materiais foram liberados ou atualizados.',
+      tag: 'Novidades',
+      title: 'Fique por dentro das ultimas atualizacoes da plataforma',
+      description: 'Acompanhe novos materiais, destaques da semana e melhorias liberadas para os clientes.',
       buttonText: 'Ver novidades',
+      buttonLink: '/library'
+    },
+    {
+      image: 'assets/images/carrosel_cliente/pack.webp',
+      alt: 'Packs liberados na conta',
+      tag: 'Seus packs',
+      title: 'Acesse rapido os packs liberados no seu plano',
+      description: 'Entre nos seus materiais favoritos e encontre com facilidade o que ja esta disponivel para a sua conta.',
+      buttonText: 'Abrir biblioteca',
       buttonLink: '/library'
     },
     {
       image: 'assets/images/carrosel_cliente/slides_packs.webp',
       alt: 'Packs em destaque',
-      tag: 'Destaque',
-      title: 'Os packs mais populares da semana',
-      description: 'Veja o que está em alta entre os clientes e descubra novos conteúdos para elevar seu resultado.',
-      buttonText: 'Explorar os destaques',
+      tag: 'Destaques',
+      title: 'Descubra os conteudos que mais chamam atencao na plataforma',
+      description: 'Veja os packs em evidencia e explore os materiais que ajudam a elevar o nivel das suas entregas.',
+      buttonText: 'Explorar conteudos',
       buttonLink: '/library'
-    },
-    {
-      image: 'assets/images/carrosel_cliente/pack.webp',
-      alt: 'Upgrade de acesso',
-      tag: 'Upgrade do plano',
-      title: 'Atualize seu plano e desbloqueie mais conteúdos',
-      description: 'Veja as vantagens de cada plano e descubra como acessar uma biblioteca mais completa para acelerar seus resultados.',
-      buttonText: 'Ver planos',
-      buttonLink: '/plans'
     }
   ];
 
@@ -109,7 +109,7 @@ export class ClientAreaComponent implements OnInit, OnDestroy {
   }
 
   private applyUserSnapshot(
-    user: { displayName?: string | null; email?: string | null; plano?: UserPlanSlug | null } | null,
+    user: { displayName?: string | null; email?: string | null; plano?: UserPlanSlug | null } | null
   ): void {
     if (user?.displayName) {
       this.userName = user.displayName;
@@ -207,23 +207,23 @@ export class ClientAreaComponent implements OnInit, OnDestroy {
     return [
       {
         id: 1,
-        tag: 'Novo conteúdo',
+        tag: 'Novo conteudo',
         title: 'Novos templates adicionados ao acervo',
-        description: 'Atualizamos a biblioteca com novos materiais para vídeos curtos e criativos mais dinâmicos.',
+        description: 'Atualizamos a biblioteca com novos materiais para videos curtos e criativos mais dinamicos.',
         date: '15/03/2026'
       },
       {
         id: 2,
         tag: 'Melhoria',
-        title: 'Organização dos packs foi atualizada',
-        description: 'Agora os conteúdos estão mais bem separados por tema e categoria para facilitar seu uso.',
+        title: 'Organizacao dos packs foi atualizada',
+        description: 'Agora os conteudos estao mais bem separados por tema e categoria para facilitar seu uso.',
         date: '13/03/2026'
       },
       {
         id: 3,
         tag: 'Destaque',
         title: 'Packs em alta seguem liderando o interesse da plataforma',
-        description: 'Os conteúdos mais acessados continuam sendo referência para criadores que querem acelerar resultados.',
+        description: 'Os conteudos mais acessados continuam sendo referencia para criadores que querem acelerar resultados.',
         date: '11/03/2026'
       }
     ];
@@ -244,19 +244,19 @@ export class ClientAreaComponent implements OnInit, OnDestroy {
           features: [
             'Acesso aos packs essenciais',
             'Biblioteca inicial liberada',
-            'Upgrade rápido para começar'
+            'Upgrade rapido para comecar'
           ],
           link: '/plans'
         },
         {
           id: 2,
-          label: 'Suba de nível',
+          label: 'Suba de nivel',
           name: 'Plano Gold',
           description: 'Tenha acesso a mais variedade de packs e uma biblioteca bem mais completa.',
           features: [
             'Mais packs liberados',
-            'Mais variedade de conteúdos',
-            'Melhor custo-benefício para escalar'
+            'Mais variedade de conteudos',
+            'Melhor custo-beneficio para escalar'
           ],
           link: '/plans'
         }
@@ -267,24 +267,24 @@ export class ClientAreaComponent implements OnInit, OnDestroy {
       return [
         {
           id: 3,
-          label: 'Próximo nível',
+          label: 'Proximo nivel',
           name: 'Plano Gold',
-          description: 'Liberte mais packs, materiais extras e uma biblioteca mais robusta para acelerar seu conteúdo.',
+          description: 'Liberte mais packs, materiais extras e uma biblioteca mais robusta para acelerar seu conteudo.',
           features: [
             'Mais packs liberados',
             'Mais variedade de templates',
-            'Atualizações recorrentes'
+            'Atualizacoes recorrentes'
           ],
           link: '/plans'
         },
         {
           id: 4,
-          label: 'Acesso máximo',
+          label: 'Acesso maximo',
           name: 'Plano Premium',
-          description: 'A opção mais completa para quem quer acesso total aos conteúdos e materiais mais avançados.',
+          description: 'A opcao mais completa para quem quer acesso total aos conteudos e materiais mais avancados.',
           features: [
             'Tudo do Gold',
-            'Conteúdos premium exclusivos',
+            'Conteudos premium exclusivos',
             'Biblioteca mais completa'
           ],
           link: '/plans'
@@ -297,15 +297,14 @@ export class ClientAreaComponent implements OnInit, OnDestroy {
         id: 5,
         label: 'Upgrade recomendado',
         name: 'Plano Premium',
-        description: 'Desbloqueie o nível máximo da plataforma com acesso aos conteúdos mais completos.',
+        description: 'Desbloqueie o nivel maximo da plataforma com acesso aos conteudos mais completos.',
         features: [
           'Acesso total aos packs',
           'Materiais premium',
-          'Mais recursos e conteúdos avançados'
+          'Mais recursos e conteudos avancados'
         ],
         link: '/plans'
       }
     ];
   }
-
 }

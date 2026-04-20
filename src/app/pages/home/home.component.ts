@@ -1,13 +1,23 @@
-import { Component, AfterViewInit, OnDestroy, OnInit, Inject, PLATFORM_ID, ElementRef, ViewChild, inject } from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  OnDestroy,
+  OnInit,
+  PLATFORM_ID,
+  ViewChild,
+  inject
+} from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { ApiService } from '@core/api.service';
-import { mapPacksWithImage } from '@core/pack-image-map';
 import { finalize } from 'rxjs';
+import { ApiService, type PackResponse, type PacksDestaqueResponse } from '@core/api.service';
+import { mapPacksWithImage } from '@core/pack-image-map';
 
 interface Slide {
-  image: string;
-  mobileImage?: string;
+  id: string;
+  videoSrc: string;
   alt: string;
   title: string;
   description: string;
@@ -30,16 +40,22 @@ interface PackFeature {
   standalone: true,
   imports: [CommonModule, RouterModule],
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss']
+  styleUrls: ['./home.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('autoVideo') autoVideo!: ElementRef<HTMLVideoElement>;
-  private apiService = inject(ApiService);
+  @ViewChild('carouselVideo') carouselVideo!: ElementRef<HTMLVideoElement>;
+  @ViewChild('logosSection') logosSection?: ElementRef<HTMLElement>;
+
+  private readonly apiService = inject(ApiService);
+  private readonly platformId = inject(PLATFORM_ID);
+  private readonly isBrowser = isPlatformBrowser(this.platformId);
 
   slides: Slide[] = [
     {
-      image: 'assets/images/carrosel/banner1.gif',
-      mobileImage: 'assets/images/empresa/nico-marketing.jpg',
+      id: 'creator-growth',
+      videoSrc: 'assets/images/carrosel/banner1.mp4',
       alt: 'Imagem destaque 1',
       title: 'Descubra conteúdos que aceleram sua criação',
       description: 'Entre nos banners e navegue direto para as áreas mais importantes da plataforma.',
@@ -47,8 +63,8 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
       buttonLink: '/plans'
     },
     {
-      image: 'assets/images/carrosel/banner2.gif',
-      mobileImage: 'assets/images/packs/PACK_VIRAL.webp',
+      id: 'viral-pack',
+      videoSrc: 'assets/images/carrosel/banner2.mp4',
       alt: 'Pack Edit',
       title: 'Conteúdos completos para edição e design',
       description: 'Packs variados para ajudar na edição de vídeos, fotos e criativos com mais impacto.',
@@ -56,8 +72,8 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
       buttonLink: '/plans'
     },
     {
-      image: 'assets/images/carrosel/banner3.gif',
-      mobileImage: 'assets/images/empresa/nico-coringa.jpg',
+      id: 'about-all-in',
+      videoSrc: 'assets/images/carrosel/banner3.mp4',
       alt: 'Sobre nós',
       title: 'Conheça a All In de perto',
       description: 'Veja como a empresa funciona e o que entregamos para creators, designers e editores.',
@@ -67,7 +83,9 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   ];
 
   joaoGuilhermeImage = 'assets/images/depoimentos/joaoguilherme.png';
-  gustavoJoseImage = 'assets/images/depoimentos/gustavojose.png';
+  gustavoMangaImage = 'assets/images/depoimentos/gustavomanga.png';
+  matheusPassosImage = 'assets/images/depoimentos/matheuspassos.png';
+  giovaneMicossiImage = 'assets/images/depoimentos/giovanemicossi.png';
   packsupremoImage = 'assets/images/empresa/pack_supremo.png';
   popularPackCards: HighlightCard[] = [];
   isLoadingPopularPacks = true;
@@ -79,56 +97,79 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     { title: 'Inteligência Artificial e Automação', description: 'Tudo que você precisa para produzir mais rápido, com menos esforço e mais eficiência.' },
     { title: 'Recursos Prontos e Templates', description: 'Tudo que você precisa para ganhar tempo e criar com rapidez e qualidade.' },
     { title: 'Marketing e Crescimento Digital', description: 'Tudo que você precisa para crescer, atrair público e gerar resultados com seu conteúdo.' },
-    { title: 'Ferramentas e Produtividade', description: 'Tudo que você precisa para trabalhar de forma mais organizada e produtiva.' },
+    { title: 'Ferramentas e Produtividade', description: 'Tudo que você precisa para trabalhar de forma mais organizada e produtiva.' }
   ];
 
   currentSlide = 0;
   isVideoMuted = true;
   isVideoPlaying = false;
+  shouldAnimateActiveSlide = false;
+  isLogosMarqueeRunning = false;
 
   private videoObserver!: IntersectionObserver;
-  private carouselInterval: number | null = null;
+  private logosObserver?: IntersectionObserver;
+  private carouselTimeout: number | null = null;
+  private carouselVideoSyncFrame: number | null = null;
   private readonly CAROUSEL_DELAY = 11000;
-
-  constructor(
-    @Inject(PLATFORM_ID) private platformId: Object
-  ) {}
+  private readonly CAROUSEL_END_BUFFER = 450;
 
   ngOnInit(): void {
     this.loadPopularPacks();
+
+    if (this.isBrowser) {
+      this.updateCarouselMediaMode();
+    }
   }
 
   ngAfterViewInit(): void {
-    if (!isPlatformBrowser(this.platformId)) return;
+    if (!this.isBrowser) return;
 
-    this.initCarousels();
+    this.initCarousel();
     this.initVideoObserver();
+    this.initLogosObserver();
     this.syncVideoState();
   }
 
   ngOnDestroy(): void {
-    this.clearIntervals();
-
-    if (this.videoObserver) {
-      this.videoObserver.disconnect();
-    }
+    this.clearTimers();
+    this.videoObserver?.disconnect();
+    this.logosObserver?.disconnect();
   }
 
   nextSlide(): void {
-    this.currentSlide = (this.currentSlide + 1) % this.slides.length;
-    this.restartCarousel();
+    this.setCurrentSlide((this.currentSlide + 1) % this.slides.length);
   }
 
   prevSlide(): void {
-    this.currentSlide = (this.currentSlide - 1 + this.slides.length) % this.slides.length;
-    this.restartCarousel();
+    this.setCurrentSlide((this.currentSlide - 1 + this.slides.length) % this.slides.length);
   }
 
   goToSlide(index: number): void {
     if (index >= 0 && index < this.slides.length) {
-      this.currentSlide = index;
-      this.restartCarousel();
+      this.setCurrentSlide(index);
     }
+  }
+
+  get activeSlide(): Slide {
+    return this.slides[this.currentSlide];
+  }
+
+  get nextSlideIndex(): number {
+    return (this.currentSlide + 1) % this.slides.length;
+  }
+
+  get nextSlideData(): Slide {
+    return this.slides[this.nextSlideIndex];
+  }
+
+  onCarouselVideoLoadedMetadata(): void {
+    this.scheduleNextSlide();
+    this.playActiveCarouselVideo();
+  }
+
+  onCarouselVideoEnded(): void {
+    this.clearCarouselTimeout();
+    this.nextSlide();
   }
 
   onVideoPlay(): void {
@@ -144,8 +185,9 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     this.isVideoMuted = this.autoVideo.nativeElement.muted;
   }
 
-  private initCarousels(): void {
-    this.startCarousel();
+  private initCarousel(): void {
+    this.queueCarouselVideoSync();
+    this.scheduleNextSlide();
   }
 
   private initVideoObserver(): void {
@@ -154,40 +196,61 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     this.videoObserver = new IntersectionObserver(([entry]) => {
       const video = this.autoVideo.nativeElement;
 
-      if (entry.isIntersecting) {
+      if (entry.intersectionRatio >= 0.45) {
         video.play().then(() => {
           this.isVideoPlaying = true;
         }).catch(() => {});
-      } else {
+      } else if (entry.intersectionRatio <= 0.2) {
         video.pause();
         this.isVideoPlaying = false;
       }
+    }, {
+      threshold: [0.2, 0.45, 0.75]
     });
 
     this.videoObserver.observe(this.autoVideo.nativeElement);
   }
 
-  private clearIntervals(): void {
-    if (this.carouselInterval) {
-      clearInterval(this.carouselInterval);
-      this.carouselInterval = null;
-    }
+  private initLogosObserver(): void {
+    if (!this.logosSection) return;
 
+    this.logosObserver = new IntersectionObserver(([entry]) => {
+      this.isLogosMarqueeRunning = entry.intersectionRatio >= 0.2;
+    }, {
+      threshold: [0, 0.2, 0.6]
+    });
+
+    this.logosObserver.observe(this.logosSection.nativeElement);
   }
 
-  private startCarousel(): void {
-    if (this.carouselInterval) {
-      clearInterval(this.carouselInterval);
-    }
+  private clearTimers(): void {
+    this.clearCarouselTimeout();
 
-    this.carouselInterval = window.setInterval(() => {
-      this.currentSlide = (this.currentSlide + 1) % this.slides.length;
-    }, this.CAROUSEL_DELAY);
+    if (this.carouselVideoSyncFrame !== null) {
+      cancelAnimationFrame(this.carouselVideoSyncFrame);
+      this.carouselVideoSyncFrame = null;
+    }
   }
 
-  private restartCarousel(): void {
-    if (!isPlatformBrowser(this.platformId)) return;
-    this.startCarousel();
+  private clearCarouselTimeout(): void {
+    if (this.carouselTimeout !== null) {
+      clearTimeout(this.carouselTimeout);
+      this.carouselTimeout = null;
+    }
+  }
+
+  private setCurrentSlide(index: number): void {
+    if (!this.isBrowser) {
+      this.currentSlide = index;
+      return;
+    }
+
+    this.currentSlide = index;
+    // Use microtask to ensure layout is not thrashed
+    Promise.resolve().then(() => {
+      this.queueCarouselVideoSync();
+      this.scheduleNextSlide();
+    });
   }
 
   private syncVideoState(): void {
@@ -204,18 +267,107 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
         this.isLoadingPopularPacks = false;
       })
     ).subscribe({
-      next: ({ packs }) => {
+      next: (response: PacksDestaqueResponse) => {
+        const packs: PackResponse[] = response.packs;
+
         this.popularPacksError = false;
         this.popularPackCards = mapPacksWithImage(packs).map((pack) => ({
           image: pack.image,
           alt: pack.nome
         }));
       },
-      error: (error) => {
+      error: (error: unknown) => {
         this.popularPacksError = true;
         this.popularPackCards = [];
         console.error('Erro ao carregar packs populares na home:', error);
       }
+    });
+  }
+
+  private updateCarouselMediaMode(): void {
+    if (!this.isBrowser) {
+      this.shouldAnimateActiveSlide = false;
+      return;
+    }
+
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    this.shouldAnimateActiveSlide = !prefersReducedMotion;
+  }
+
+  private scheduleNextSlide(): void {
+    if (!this.isBrowser) return;
+
+    this.clearCarouselTimeout();
+
+    const activeVideo = this.carouselVideo?.nativeElement;
+    const hasValidDuration =
+      !!activeVideo &&
+      Number.isFinite(activeVideo.duration) &&
+      activeVideo.duration > 0.5;
+
+    // Use video duration if available, with slight buffer for transition
+    const delay = hasValidDuration
+      ? Math.round((activeVideo.duration - 0.3) * 1000) + 300
+      : this.CAROUSEL_DELAY;
+
+    this.carouselTimeout = window.setTimeout(() => {
+      this.nextSlide();
+    }, Math.max(delay, 1000)); // Minimum 1 second delay
+  }
+
+  private queueCarouselVideoSync(): void {
+    if (!this.isBrowser) return;
+
+    if (this.carouselVideoSyncFrame !== null) {
+      cancelAnimationFrame(this.carouselVideoSyncFrame);
+    }
+
+    this.carouselVideoSyncFrame = requestAnimationFrame(() => {
+      this.carouselVideoSyncFrame = null;
+      this.syncCarouselVideo();
+    });
+  }
+
+  private syncCarouselVideo(): void {
+    if (!this.carouselVideo) return;
+
+    const video = this.carouselVideo.nativeElement;
+
+    // Batch DOM updates
+    video.muted = true;
+    video.loop = false;
+    video.playsInline = true;
+
+    if (!this.shouldAnimateActiveSlide) {
+      if (!video.paused) {
+        video.pause();
+      }
+      return;
+    }
+
+    // Reset video and play with optimized timing
+    requestAnimationFrame(() => {
+      if (video.currentTime > 0.01) {
+        video.currentTime = 0;
+      }
+      this.playActiveCarouselVideo();
+    });
+  }
+
+  private playActiveCarouselVideo(): void {
+    if (!this.carouselVideo || !this.shouldAnimateActiveSlide) return;
+
+    const video = this.carouselVideo.nativeElement;
+
+    if (video.readyState < HTMLMediaElement.HAVE_CURRENT_DATA) return;
+
+    if (video.currentTime > 0.1 || video.ended) {
+      video.currentTime = 0;
+    }
+
+    video.play().catch(() => {
+      this.scheduleNextSlide();
     });
   }
 }

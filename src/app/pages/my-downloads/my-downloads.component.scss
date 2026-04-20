@@ -13,9 +13,10 @@
 
 .downloads-hero {
   padding: 7rem 1.5rem 3rem;
+  padding-bottom: 100px;
   background:
-    linear-gradient(180deg, rgba(8, 8, 14, 0.2), rgba(11, 11, 20, 1)),
-    url('/assets/images/empresa/nico-coringa.jpg') center/cover no-repeat;
+    linear-gradient(600deg, rgba(8, 8, 14, 0.2), rgba(11, 11, 20, 1)),
+    url('/assets/images/pages/download.png') center 55%/cover no-repeat;
 
   .hero-content {
     width: min(100%, 1200px);

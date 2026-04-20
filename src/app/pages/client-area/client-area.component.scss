@@ -14,8 +14,13 @@
   padding: 7rem 1.5rem 3rem;
   background:
     linear-gradient(rgba(8, 8, 16, 0.55), rgba(8, 8, 16, 0.75)),
-    url('/assets/images/empresa/nico-marketing.jpg') center/cover no-repeat;
+    url('/assets/images/pages/client.png') center/cover no-repeat;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+
+  .hero-content {
+    width: min(100%, 1200px);
+    margin: 0 auto;
+  }
 
   .hero-overlay {
     position: absolute;
