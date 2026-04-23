@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
@@ -15,7 +15,8 @@ interface DownloadItem {
   downloadedAt: string;
   size: string;
   version: string;
-  status: 'Disponível' | 'Atualização';
+  status: 'available' | 'update';
+  statusLabel: string;
 }
 
 interface QuickAction {
@@ -32,7 +33,7 @@ interface QuickAction {
   templateUrl: './my-downloads.component.html',
   styleUrl: './my-downloads.component.scss',
 })
-export class MyDownloadsComponent implements OnInit {
+export class MyDownloadsComponent implements OnInit, OnDestroy {
   private apiService = inject(ApiService);
   private authService = inject(AuthService);
 
@@ -65,16 +66,21 @@ export class MyDownloadsComponent implements OnInit {
     await this.carregarResumo();
   }
 
+  ngOnDestroy(): void {
+    if (this.searchTimeout) {
+      window.clearTimeout(this.searchTimeout);
+    }
+  }
+
   async carregarResumo(): Promise<void> {
-    const snapshotUser = this.authService.currentUser();
-    const usuarioId = snapshotUser?.backendUserId;
+    await this.authService.waitForAuthInit();
+    const usuarioId = this.authService.currentUser()?.backendUserId;
 
     if (!usuarioId) {
-      this.applyFallbackDownloads();
+      this.resetDownloadsState();
+      this.hasError = true;
       return;
     }
-
-    await this.authService.waitForAuthInit();
 
     this.isLoading = true;
     this.hasError = false;
@@ -90,6 +96,7 @@ export class MyDownloadsComponent implements OnInit {
         this.mapDownloadItem(item, 'Sugestão')
       );
     } catch {
+      this.resetDownloadsState();
       this.hasError = true;
     } finally {
       this.isLoading = false;
@@ -123,6 +130,7 @@ export class MyDownloadsComponent implements OnInit {
     fallbackDate?: string,
   ): DownloadItem {
     const packWithImage = mapPackWithImage({ slug: item.slug, nome: item.nome });
+    const isUpdate = item.possui_atualizacao;
 
     return {
       id: item.id,
@@ -132,7 +140,8 @@ export class MyDownloadsComponent implements OnInit {
       downloadedAt: fallbackDate ?? this.formatDate(item.baixado_em),
       size: item.tamanho_gb ? `${item.tamanho_gb} GB` : '--',
       version: item.versao_atual ? `v${item.versao_atual}` : '--',
-      status: item.possui_atualizacao ? 'Atualização' : 'Disponível'
+      status: isUpdate ? 'update' : 'available',
+      statusLabel: isUpdate ? 'Atualização' : 'Disponível'
     };
   }
 
@@ -152,34 +161,10 @@ export class MyDownloadsComponent implements OnInit {
     return this.recentDownloads;
   }
 
-  private applyFallbackDownloads(): void {
-    this.totalDownloads = 1;
+  private resetDownloadsState(): void {
+    this.totalDownloads = 0;
     this.totalUpdates = 0;
-    this.recentDownloads = [
-      {
-        id: 2,
-        title: 'Pack IA',
-        description: 'Coleção com assets modernos para criadores e conteúdos virais.',
-        image: 'assets/images/packs/pack-ia.png',
-        downloadedAt: '01/04 18:11',
-        size: '8.9 GB',
-        version: 'v2.8',
-        status: 'Disponível'
-      }
-    ];
-    this.recommendedDownloads = [
-      {
-        id: 1,
-        title: 'Emojis',
-        description: 'Biblioteca leve para enriquecer cortes rápidos, shorts e reels.',
-        image: 'assets/images/packs/emoji.png',
-        downloadedAt: 'Sugestão',
-        size: '1.1 GB',
-        version: 'v1.6',
-        status: 'Disponível'
-      }
-    ];
-    this.hasError = false;
-    this.isLoading = false;
+    this.recentDownloads = [];
+    this.recommendedDownloads = [];
   }
 }

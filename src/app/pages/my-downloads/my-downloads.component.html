@@ -47,7 +47,7 @@
 
           <div class="card-content">
             <div class="card-meta">
-              <span class="status-badge" [class.update]="item.status === 'Atualização'">{{ item.status }}</span>
+              <span class="status-badge" [class.update]="item.status === 'update'">{{ item.statusLabel }}</span>
               <span class="downloaded-at">{{ item.downloadedAt }}</span>
             </div>
 
@@ -92,7 +92,7 @@
 
           <div class="card-content">
             <div class="card-meta">
-              <span class="status-badge" [class.update]="item.status === 'Atualização'">{{ item.status }}</span>
+              <span class="status-badge" [class.update]="item.status === 'update'">{{ item.statusLabel }}</span>
             </div>
             <h3>{{ item.title }}</h3>
             <p>{{ item.description }}</p>
