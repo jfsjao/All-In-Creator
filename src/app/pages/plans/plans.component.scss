@@ -34,7 +34,7 @@
       url('/assets/images/pages/plans.png');
     background-repeat: no-repeat, no-repeat;
     background-size: cover, 100% auto;
-    background-position: center, center 42%;
+    background-position: center, center 5%;
   }
 
   .hero-content {
@@ -537,7 +537,7 @@
         color: var(--text-dark);
       }
 
-      &.gold {
+      &.pro {
         background: var(--color-surface);
         border-color: rgba(47, 44, 121, 0.24);
         color: var(--text-light);
@@ -661,23 +661,23 @@
       }
     }
 
-    .gold .plan-badge {
+    .pro .plan-badge {
       background: rgba(244, 246, 251, 0.08);
       border-color: rgba(244, 246, 251, 0.16);
       color: var(--text-light);
     }
 
-    .gold .price-block .price,
-    .gold .plan-features li {
+    .pro .price-block .price,
+    .pro .plan-features li {
       color: var(--text-light);
     }
 
-    .gold .price-block .price span,
-    .gold .price-block .plan-tag {
+    .pro .price-block .price span,
+    .pro .price-block .plan-tag {
       color: rgba(255, 255, 255, 0.68);
     }
 
-    .gold .cta-button {
+    .pro .cta-button {
       background: var(--color-ice);
       border-color: var(--color-ice);
       color: var(--color-surface-2);

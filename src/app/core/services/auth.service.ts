@@ -1,4 +1,5 @@
-import { Injectable, inject, signal } from '@angular/core';
+import { Injectable, inject, signal, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
@@ -30,7 +31,7 @@ export interface UserData {
   email: string | null;
   displayName: string | null;
   photoURL: string | null;
-  plano?: 'gratuito' | 'basic' | 'gold' | 'premium' | null;
+  plano?: 'gratuito' | 'basic' | 'pro' | 'premium' | null;
 }
 
 @Injectable({
@@ -40,6 +41,8 @@ export class AuthService {
   private router = inject(Router);
   private toastr = inject(ToastrService);
   private apiService = inject(ApiService);
+  private platformId = inject(PLATFORM_ID);
+  private readonly isBrowser = isPlatformBrowser(this.platformId);
   private backendSyncPromise: Promise<boolean> | null = null;
   private backendSyncErrorMessage: string | null = null;
 
@@ -64,7 +67,12 @@ export class AuthService {
       this.authNotice.set(cachedNotice);
     }
 
-    this.initAuthListener();
+    if (this.isBrowser) {
+      this.initAuthListener();
+    } else {
+      this.isLoading.set(false);
+      this.authInitialized.set(true);
+    }
   }
 
   private async ensureBackendUserSynced(user: User): Promise<boolean> {

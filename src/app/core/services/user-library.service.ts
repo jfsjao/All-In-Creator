@@ -3,7 +3,7 @@ import { forkJoin, map, Observable } from 'rxjs';
 import { ApiService, MeusPacksResponse, PackResponse } from '../api.service';
 import { mapPacksWithImage } from '../pack-image-map';
 
-export type UserPlanSlug = 'gratuito' | 'basic' | 'gold' | 'premium';
+export type UserPlanSlug = 'gratuito' | 'basic' | 'pro' | 'premium';
 
 export interface UserLibraryPack {
   id: number;

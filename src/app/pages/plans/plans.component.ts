@@ -84,7 +84,7 @@ export class PlansComponent {
     'Kit Completo de Marketing Digital'
   ];
 
-  goldFeatures = [
+  proFeatures = [
     'Biblioteca de Elementos',
     'Pack de Emojis',
     'Coleção de Ícones Profissionais',

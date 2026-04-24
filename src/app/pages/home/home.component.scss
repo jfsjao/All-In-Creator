@@ -639,7 +639,7 @@
   border-color: var(--border-light);
 }
 
-.pricing-gold {
+.pricing-pro {
   background: var(--color-surface);
   border-color: rgba(47, 44, 121, 0.24);
   color: var(--text-light);
@@ -662,7 +662,7 @@
 }
 
 .pricing-basic .pricing-head h3,
-.pricing-gold .pricing-head h3 {
+.pricing-pro .pricing-head h3 {
   color: inherit;
 }
 
@@ -670,11 +670,11 @@
   color: var(--text-light);
 }
 
-.pricing-gold .old-price,
-.pricing-gold .currency,
-.pricing-gold .value,
-.pricing-gold .period,
-.pricing-gold .pricing-features li {
+.pricing-pro .old-price,
+.pricing-pro .currency,
+.pricing-pro .value,
+.pricing-pro .period,
+.pricing-pro .pricing-features li {
   color: var(--text-light);
 }
 
@@ -712,7 +712,7 @@
   text-decoration: line-through;
 }
 
-.pricing-gold .old-price,
+.pricing-pro .old-price,
 .pricing-premium .old-price {
   color: rgba(255, 255, 255, 0.56);
 }
@@ -759,12 +759,12 @@
   }
 }
 
-.pricing-gold,
-.pricing-gold .pay-badge {
+.pricing-pro,
+.pricing-pro .pay-badge {
   color: var(--text-light);
 }
 
-.pricing-gold .pay-badge {
+.pricing-pro .pay-badge {
   background: rgba(244, 246, 251, 0.08);
   border-color: rgba(244, 246, 251, 0.14);
 }
@@ -793,7 +793,7 @@
   box-shadow: 0 10px 24px rgba(255, 255, 255, 0.18);
 }
 
-.pricing-gold .plan-badge {
+.pricing-pro .plan-badge {
   background: rgba(244, 246, 251, 0.08);
   border-color: rgba(244, 246, 251, 0.16);
   color: var(--text-light);
@@ -804,7 +804,7 @@
   color: var(--text-light);
 }
 
-.pricing-gold .pricing-cta {
+.pricing-pro .pricing-cta {
   background: var(--color-ice);
   color: var(--color-surface-2);
 }

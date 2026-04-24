@@ -251,12 +251,12 @@ export class ClientAreaComponent implements OnInit, OnDestroy {
         {
           id: 2,
           label: 'Suba de nivel',
-          name: 'Plano Gold',
-          description: 'Tenha acesso a mais variedade de packs e uma biblioteca bem mais completa.',
+          name: 'Plano Pro',
+          description: 'Tenha acesso a uma curadoria mais robusta de packs e uma biblioteca mais profissional.',
           features: [
             'Mais packs liberados',
             'Mais variedade de conteudos',
-            'Melhor custo-beneficio para escalar'
+            'Melhor estrutura para escalar com consistencia'
           ],
           link: '/plans'
         }
@@ -268,8 +268,8 @@ export class ClientAreaComponent implements OnInit, OnDestroy {
         {
           id: 3,
           label: 'Proximo nivel',
-          name: 'Plano Gold',
-          description: 'Liberte mais packs, materiais extras e uma biblioteca mais robusta para acelerar seu conteudo.',
+          name: 'Plano Pro',
+          description: 'Liberte mais packs, materiais extras e uma biblioteca mais profissional para acelerar seu conteudo.',
           features: [
             'Mais packs liberados',
             'Mais variedade de templates',
@@ -283,7 +283,7 @@ export class ClientAreaComponent implements OnInit, OnDestroy {
           name: 'Plano Premium',
           description: 'A opcao mais completa para quem quer acesso total aos conteudos e materiais mais avancados.',
           features: [
-            'Tudo do Gold',
+            'Tudo do Pro',
             'Conteudos premium exclusivos',
             'Biblioteca mais completa'
           ],

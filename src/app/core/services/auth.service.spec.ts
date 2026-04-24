@@ -167,8 +167,8 @@ describe('AuthService', () => {
       },
       plano_atual: {
         id: '3',
-        slug: 'gold',
-        nome: 'Plano Gold'
+        slug: 'pro',
+        nome: 'Plano Pro'
       }
     }));
 
@@ -177,7 +177,7 @@ describe('AuthService', () => {
     expect(result).toBeTrue();
     expect(apiServiceSpy.syncAuth).toHaveBeenCalled();
     expect(service.currentUser()?.backendUserId).toBe(7);
-    expect(service.currentUser()?.plano).toBe('gold');
+    expect(service.currentUser()?.plano).toBe('pro');
     expect(routerSpy.navigate).toHaveBeenCalledWith(['/client-area']);
   });
 
