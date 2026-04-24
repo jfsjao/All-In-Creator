@@ -288,8 +288,10 @@ export class ApiService {
   }
 
   getMeusPacks(usuarioId: number): Observable<MeusPacksResponse> {
+    void usuarioId;
+
     return this.withAuthHeaders((headers) =>
-      this.http.get<MeusPacksResponse>(`${this.backendUrl}/users/${usuarioId}/library`, { headers })
+      this.http.get<MeusPacksResponse>(`${this.backendUrl}/users/me/library`, { headers })
     );
   }
 

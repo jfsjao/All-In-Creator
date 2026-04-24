@@ -78,6 +78,9 @@
               @for (logo of popularPackCards; track $index) {
                 <div class="logo-item">
                   <img [src]="logo.image" [alt]="logo.alt" />
+                  <div class="logo-item-caption">
+                    <span>{{ logo.title }}</span>
+                  </div>
                 </div>
               }
             </div>
@@ -86,6 +89,9 @@
               @for (logo of popularPackCards; track $index) {
                 <div class="logo-item">
                   <img [src]="logo.image" [alt]="logo.alt" />
+                  <div class="logo-item-caption">
+                    <span>{{ logo.title }}</span>
+                  </div>
                 </div>
               }
             </div>

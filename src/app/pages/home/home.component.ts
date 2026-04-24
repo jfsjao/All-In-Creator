@@ -28,6 +28,7 @@ interface Slide {
 interface HighlightCard {
   image: string;
   alt: string;
+  title: string;
 }
 
 interface PackFeature {
@@ -272,7 +273,8 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
         this.popularPacksError = false;
         this.popularPackCards = mapPacksWithImage(packs).map((pack) => ({
           image: pack.image,
-          alt: pack.nome
+          alt: pack.nome,
+          title: pack.nome
         }));
       },
       error: (error: unknown) => {
