@@ -11,7 +11,6 @@ import {
 } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { finalize } from 'rxjs';
 import { ApiService, type PackResponse, type PacksDestaqueResponse } from '@core/api.service';
 import { mapPacksWithImage } from '@core/pack-image-map';
 
@@ -36,6 +35,11 @@ interface PackFeature {
   description: string;
 }
 
+interface PopularPacksCacheEntry {
+  savedAt: number;
+  response: PacksDestaqueResponse;
+}
+
 @Component({
   selector: 'app-home',
   standalone: true,
@@ -52,6 +56,8 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   private readonly apiService = inject(ApiService);
   private readonly platformId = inject(PLATFORM_ID);
   private readonly isBrowser = isPlatformBrowser(this.platformId);
+  private readonly popularPacksCacheKey = 'home-popular-packs-v1';
+  private readonly popularPacksCacheTtlMs = 15 * 60 * 1000;
 
   slides: Slide[] = [
     {
@@ -114,6 +120,12 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   private readonly CAROUSEL_DELAY = 11000;
 
   ngOnInit(): void {
+    const restoredFromCache = this.restorePopularPacksFromCache();
+
+    if (!restoredFromCache) {
+      this.isLoadingPopularPacks = true;
+    }
+
     this.loadPopularPacks();
 
     if (this.isBrowser) {
@@ -262,27 +274,80 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private loadPopularPacks(): void {
-    this.apiService.getPacksDestaque(10).pipe(
-      finalize(() => {
-        this.isLoadingPopularPacks = false;
-      })
-    ).subscribe({
+    this.apiService.getPacksDestaque(10).subscribe({
       next: (response: PacksDestaqueResponse) => {
-        const packs: PackResponse[] = response.packs;
-
+        this.applyPopularPacks(response);
+        this.cachePopularPacks(response);
         this.popularPacksError = false;
-        this.popularPackCards = mapPacksWithImage(packs).map((pack) => ({
-          image: pack.image,
-          alt: pack.nome,
-          title: pack.nome
-        }));
+        this.isLoadingPopularPacks = false;
       },
       error: (error: unknown) => {
-        this.popularPacksError = true;
-        this.popularPackCards = [];
+        if (!this.popularPackCards.length) {
+          this.popularPacksError = true;
+          this.popularPackCards = [];
+        }
+
+        this.isLoadingPopularPacks = false;
         console.error('Erro ao carregar packs populares na home:', error);
       }
     });
+  }
+
+  private applyPopularPacks(response: PacksDestaqueResponse): void {
+    const packs: PackResponse[] = response.packs;
+
+    this.popularPackCards = mapPacksWithImage(packs).map((pack) => ({
+      image: pack.image,
+      alt: pack.nome,
+      title: pack.nome
+    }));
+  }
+
+  private restorePopularPacksFromCache(): boolean {
+    if (!this.isBrowser) {
+      return false;
+    }
+
+    try {
+      const cachedValue = window.localStorage.getItem(this.popularPacksCacheKey);
+
+      if (!cachedValue) {
+        return false;
+      }
+
+      const cachedEntry = JSON.parse(cachedValue) as PopularPacksCacheEntry;
+      const isFresh = Date.now() - cachedEntry.savedAt < this.popularPacksCacheTtlMs;
+
+      if (!isFresh || !Array.isArray(cachedEntry.response?.packs)) {
+        window.localStorage.removeItem(this.popularPacksCacheKey);
+        return false;
+      }
+
+      this.applyPopularPacks(cachedEntry.response);
+      this.popularPacksError = false;
+      this.isLoadingPopularPacks = false;
+      return true;
+    } catch {
+      window.localStorage.removeItem(this.popularPacksCacheKey);
+      return false;
+    }
+  }
+
+  private cachePopularPacks(response: PacksDestaqueResponse): void {
+    if (!this.isBrowser) {
+      return;
+    }
+
+    try {
+      const payload: PopularPacksCacheEntry = {
+        savedAt: Date.now(),
+        response
+      };
+
+      window.localStorage.setItem(this.popularPacksCacheKey, JSON.stringify(payload));
+    } catch {
+      // Ignore storage failures and keep live response in memory.
+    }
   }
 
   private updateCarouselMediaMode(): void {
