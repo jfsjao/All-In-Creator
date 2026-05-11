@@ -13,6 +13,50 @@
             <h1>Finalizar {{ isUpgrade ? 'upgrade' : 'compra' }} {{ plan.name }}</h1>
             <p>{{ plan.description }}</p>
 
+            @if (selectedPlanSections.length > 0) {
+              <div class="plan-breakdown">
+                <div class="plan-breakdown-head">
+                  <span>Dentro deste plano</span>
+                  <strong>Veja o que entra agora e os packs que voce libera.</strong>
+                </div>
+
+                <div class="plan-breakdown-list">
+                  @for (section of selectedPlanSections; track section.id) {
+                    <article class="plan-breakdown-card" [class.is-open]="expandedPlanSectionId === section.id">
+                      <button
+                        type="button"
+                        class="plan-breakdown-toggle"
+                        (click)="togglePlanSection(section.id)"
+                        [attr.aria-expanded]="expandedPlanSectionId === section.id">
+                        <div class="plan-breakdown-copy">
+                          <span>{{ section.badge }}</span>
+                          <strong>{{ section.title }}</strong>
+                          <p>{{ section.summary }}</p>
+                        </div>
+
+                        <i
+                          class="bi"
+                          [ngClass]="expandedPlanSectionId === section.id ? 'bi-dash-lg' : 'bi-plus-lg'"></i>
+                      </button>
+
+                      @if (expandedPlanSectionId === section.id) {
+                        <div class="plan-breakdown-body">
+                          <ul>
+                            @for (item of section.items; track item) {
+                              <li>
+                                <i class="bi bi-check2-circle"></i>
+                                <span>{{ item }}</span>
+                              </li>
+                            }
+                          </ul>
+                        </div>
+                      }
+                    </article>
+                  }
+                </div>
+              </div>
+            }
+
             <ul>
               @for (feature of plan.features; track feature) {
                 <li>
@@ -67,13 +111,42 @@
                 <strong>Tem plano que libera mais packs por pouca diferença.</strong>
                 <div class="opportunity-actions">
                   @for (option of upsellOptions; track option.slug) {
-                    <a
-                      routerLink="/checkout"
-                      [queryParams]="{ plan: option.slug }"
-                      class="opportunity-link">
-                      Ver {{ option.name }}
-                      <small>+{{ formatCurrency(option.extraAmount) }} no preço cheio</small>
-                    </a>
+                    <article class="opportunity-card" [class.is-featured]="option.slug === 'premium'">
+                      <div class="opportunity-card-head">
+                        <span>{{ option.badge }}</span>
+                        <strong>{{ option.name }}</strong>
+                      </div>
+
+                      <p>{{ option.headline }}</p>
+
+                      <div class="opportunity-price">
+                        <span>Diferença no preço cheio</span>
+                        <strong>+{{ formatCurrency(option.extraAmount) }}</strong>
+                      </div>
+
+                      @if (expandedUpsellSlug === option.slug) {
+                        <div class="opportunity-detail">
+                          <span>{{ option.detail }}</span>
+                          <ul>
+                            @for (feature of option.features; track feature) {
+                              <li>{{ feature }}</li>
+                            }
+                          </ul>
+                        </div>
+                      }
+
+                      <div class="opportunity-card-actions">
+                        <button type="button" class="detail-button" (click)="toggleUpsellDetails(option.slug)">
+                          {{ expandedUpsellSlug === option.slug ? 'Ocultar detalhes' : 'Ver detalhes' }}
+                        </button>
+                        <a
+                          routerLink="/checkout"
+                          [queryParams]="{ plan: option.slug }"
+                          class="opportunity-link">
+                          Escolher {{ option.name }}
+                        </a>
+                      </div>
+                    </article>
                   }
                 </div>
               </div>
@@ -86,11 +159,12 @@
               (click)="startCheckout()"
             >
               <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-2"></span>
-              {{ isLoading ? 'Abrindo Mercado Pago...' : 'Pagar com Mercado Pago' }}
+              {{ isLoading ? 'Abrindo pagamento...' : 'Finalizar Compra' }}
             </button>
 
             <p class="secure-note">
-              Pagamento processado pelo Mercado Pago. A liberação acontece após confirmação.
+              Pagamento seguro por Pix, cartão ou boleto.<br />
+              Processado pelo Mercado Pago. A liberação acontece após confirmação.
             </p>
           </aside>
         </div>

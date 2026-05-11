@@ -187,6 +187,7 @@ export type PaidPlanSlug = 'basic' | 'pro' | 'premium';
 export interface CreateCheckoutResponse {
   paymentId: number;
   preferenceId: string;
+  publicKey: string | null;
   checkoutUrl: string;
   sandboxCheckoutUrl: string | null;
   externalReference: string;
