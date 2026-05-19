@@ -207,6 +207,27 @@ export interface CreateCheckoutResponse {
   } | null;
 }
 
+export interface PaymentStatusResponse {
+  payment: {
+    id: number;
+    providerPaymentId: string | null;
+    preferenceId: string | null;
+    externalReference: string | null;
+    status: string;
+    statusDetail: string | null;
+    amount: string;
+    currency: string;
+    paidAt: string | null;
+    createdAt: string;
+    updatedAt: string;
+  };
+  plan: {
+    id: number;
+    slug: 'gratuito' | PaidPlanSlug;
+    nome: string;
+  };
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -379,6 +400,16 @@ export class ApiService {
       this.http.post<CreateCheckoutResponse>(
         `${this.backendUrl}/payments/checkout`,
         { planSlug },
+        { headers }
+      )
+    );
+  }
+
+  syncMercadoPagoReturn(providerPaymentId: string): Observable<PaymentStatusResponse> {
+    return this.withAuthHeaders((headers) =>
+      this.http.post<PaymentStatusResponse>(
+        `${this.backendUrl}/payments/mercadopago/return-sync`,
+        { providerPaymentId },
         { headers }
       )
     );

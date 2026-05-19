@@ -39,6 +39,21 @@ export const routes: Routes = [
     canActivate: [authGuard]
   },
   {
+    path: 'payment/success',
+    loadComponent: () =>
+      import('../pages/payment-status/payment-status.component').then(m => m.PaymentStatusComponent)
+  },
+  {
+    path: 'payment/pending',
+    loadComponent: () =>
+      import('../pages/payment-status/payment-status.component').then(m => m.PaymentStatusComponent)
+  },
+  {
+    path: 'payment/failure',
+    loadComponent: () =>
+      import('../pages/payment-status/payment-status.component').then(m => m.PaymentStatusComponent)
+  },
+  {
     path: 'verify-email',
     loadComponent: () =>
       import('../pages/verify-email/verify-email.component').then(m => m.VerifyEmailComponent)

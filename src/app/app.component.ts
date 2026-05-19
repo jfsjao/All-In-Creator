@@ -23,6 +23,7 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     this.redirectFirebaseActionLinks();
+    this.redirectMercadoPagoReturnLinks();
   }
 
   private redirectFirebaseActionLinks(): void {
@@ -41,5 +42,30 @@ export class AppComponent implements OnInit {
     };
 
     this.router.navigate(['/auth/action'], navigationExtras);
+  }
+
+  private redirectMercadoPagoReturnLinks(): void {
+    const urlTree = this.router.parseUrl(this.router.url);
+    const paymentId = urlTree.queryParamMap.get('payment_id');
+    const status = urlTree.queryParamMap.get('status') ?? urlTree.queryParamMap.get('collection_status');
+    const currentPath = urlTree.root.children['primary']?.segments.map((segment) => segment.path).join('/') ?? '';
+
+    if (!paymentId || currentPath.startsWith('payment/')) {
+      return;
+    }
+
+    const targetPath =
+      status === 'approved'
+        ? '/client-area'
+        : status === 'pending' || status === 'in_process'
+          ? '/payment/pending'
+          : '/payment/failure';
+
+    const navigationExtras: NavigationExtras = {
+      queryParams: { ...urlTree.queryParams },
+      replaceUrl: true
+    };
+
+    this.router.navigate([targetPath], navigationExtras);
   }
 }
