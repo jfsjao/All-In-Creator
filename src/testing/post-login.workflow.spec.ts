@@ -1,6 +1,7 @@
-import { TestBed } from '@angular/core/testing';
+﻿import { TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 import { of } from 'rxjs';
+import { ToastrService } from 'ngx-toastr';
 import { ApiService } from '../app/core/api.service';
 import { AuthService } from '../app/core/services/auth.service';
 import { UserLibraryService } from '../app/core/services/user-library.service';
@@ -10,12 +11,19 @@ import { MyDownloadsComponent } from '../app/pages/my-downloads/my-downloads.com
 import { LibraryComponent } from '../app/pages/library/library.component';
 
 describe('Post Login Workflow', () => {
+  const toastrMock = jasmine.createSpyObj<ToastrService>('ToastrService', [
+    'success',
+    'error',
+    'info',
+    'warning'
+  ]);
+
   const authServiceMock = {
     currentUser: jasmine.createSpy('currentUser').and.returnValue({
       backendUserId: 7,
       uid: 'user-1',
       email: 'joao@example.com',
-      displayName: 'João Felipe',
+      displayName: 'JoÃ£o Felipe',
       photoURL: null,
       plano: 'basic'
     }),
@@ -82,7 +90,7 @@ describe('Post Login Workflow', () => {
           id: 2,
           slug: 'pack-ia',
           nome: 'Pack IA',
-          descricao: 'Coleção com assets modernos para criadores e conteúdos virais.',
+          descricao: 'ColeÃ§Ã£o com assets modernos para criadores e conteÃºdos virais.',
           capa_url: null,
           tamanho_gb: '8.9',
           versao_atual: '2.8',
@@ -96,7 +104,7 @@ describe('Post Login Workflow', () => {
           id: 1,
           slug: 'emojis',
           nome: 'Emojis',
-          descricao: 'Biblioteca leve para enriquecer cortes rápidos, shorts e reels.',
+          descricao: 'Biblioteca leve para enriquecer cortes rÃ¡pidos, shorts e reels.',
           capa_url: null,
           tamanho_gb: '1.1',
           versao_atual: '1.6',
@@ -109,7 +117,7 @@ describe('Post Login Workflow', () => {
     getMeuPerfil: jasmine.createSpy('getMeuPerfil').and.returnValue(of({
       usuario: {
         id: 7,
-        nome: 'João Felipe',
+        nome: 'JoÃ£o Felipe',
         email: 'joao@example.com',
         telefone: '',
         area_atuacao: '',
@@ -122,7 +130,7 @@ describe('Post Login Workflow', () => {
       message: 'Perfil atualizado com sucesso.',
       usuario: {
         id: 7,
-        nome: 'João Felipe',
+        nome: 'JoÃ£o Felipe',
         email: 'joao@example.com',
         telefone: '',
         area_atuacao: '',
@@ -140,7 +148,8 @@ describe('Post Login Workflow', () => {
         provideRouter([]),
         { provide: AuthService, useValue: authServiceMock },
         { provide: UserLibraryService, useValue: userLibraryServiceMock },
-        { provide: ApiService, useValue: apiServiceMock }
+        { provide: ApiService, useValue: apiServiceMock },
+        { provide: ToastrService, useValue: toastrMock }
       ]
     }).compileComponents();
   }
@@ -150,11 +159,12 @@ describe('Post Login Workflow', () => {
 
     const fixture = TestBed.createComponent(ClientAreaComponent);
     const component = fixture.componentInstance;
+    spyOn<any>(component, 'startAutoSlide').and.stub();
     fixture.detectChanges();
-    await Promise.resolve();
+    await (component as any).handlePaymentReturn();
     fixture.detectChanges();
 
-    expect(component.userName).toBe('João Felipe');
+    expect(component.userName).toBe('JoÃ£o Felipe');
     expect(component.myPacks.length).toBeGreaterThan(0);
     expect((fixture.nativeElement as HTMLElement).textContent).toContain('Bem-vindo de volta');
   });
@@ -183,9 +193,9 @@ describe('Post Login Workflow', () => {
     await fixture.whenStable();
     fixture.detectChanges();
 
-    expect(component.profileForm.name).toBe('João Felipe');
+    expect(component.profileForm.name).toBe('JoÃ£o Felipe');
     expect(component.profileForm.email).toBe('joao@example.com');
-    expect((fixture.nativeElement as HTMLElement).textContent).toContain('João Felipe');
+    expect((fixture.nativeElement as HTMLElement).textContent).toContain('JoÃ£o Felipe');
   });
 
   it('filters packs using the search box logic', async () => {
@@ -203,3 +213,6 @@ describe('Post Login Workflow', () => {
     expect(component.filterPacks(component.myPacks)[0].title).toBe('Emojis');
   });
 });
+
+
+
