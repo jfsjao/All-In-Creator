@@ -1,4 +1,4 @@
-import { Injectable, inject, signal, PLATFORM_ID } from '@angular/core';
+﻿import { Injectable, inject, signal, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
@@ -107,7 +107,7 @@ export class AuthService {
     this.clearNotice();
 
     if (showToast) {
-      this.toastr.error(message, 'Backend indisponível');
+      this.toastr.error(message, 'Backend indisponÃ­vel');
     }
   }
 
@@ -142,7 +142,7 @@ export class AuthService {
       if (user) {
         if (!user.emailVerified) {
           await signOut(auth);
-          this.setNotice('Faltou verificar o e-mail. Para continuar, verifique o e-mail e faça login.');
+          this.setNotice('Faltou verificar o e-mail. Para continuar, verifique o e-mail e faÃ§a login.');
           this.clearBackendSession();
           this.currentUser.set(null);
           this.isLoading.set(false);
@@ -199,13 +199,22 @@ export class AuthService {
       return true;
     } catch (error) {
       this.backendSyncErrorMessage = this.extractBackendSyncMessage(error);
-      console.error('Erro ao sincronizar o usuário:', error);
+      console.error('Erro ao sincronizar o usuÃ¡rio:', error);
       return false;
     }
   }
 
+  async refreshCurrentUser(): Promise<boolean> {
+    const user = auth.currentUser;
+
+    if (!user || !user.emailVerified) {
+      return false;
+    }
+
+    return this.syncBackendUser(user);
+  }
   /**
-   * Espera o Firebase terminar de restaurar a sessão
+   * Espera o Firebase terminar de restaurar a sessÃ£o
    */
   async waitForAuthInit(): Promise<void> {
     if (this.authInitialized()) return;
@@ -300,7 +309,7 @@ export class AuthService {
         this.clearError();
         this.setNotice('Verifique o e-mail cadastrado para concluir seu acesso.');
         this.setPendingVerificationEmail(email);
-        this.toastr.warning('Confirme seu e-mail para entrar. Enviamos um novo link.', 'Verificação');
+        this.toastr.warning('Confirme seu e-mail para entrar. Enviamos um novo link.', 'VerificaÃ§Ã£o');
         return false;
       }
 
@@ -322,7 +331,7 @@ export class AuthService {
       if (pendingEmail && pendingEmail.toLowerCase() === email.toLowerCase()) {
         this.clearError();
         this.setNotice('Verifique o e-mail cadastrado para concluir seu acesso.');
-        this.toastr.warning('Confirme seu e-mail para entrar. Enviamos um novo link.', 'Verificação');
+        this.toastr.warning('Confirme seu e-mail para entrar. Enviamos um novo link.', 'VerificaÃ§Ã£o');
         return false;
       }
 
@@ -406,7 +415,7 @@ export class AuthService {
 
       this.clearBackendSession();
       this.currentUser.set(null);
-      this.toastr.info('Você saiu da conta.', 'Até logo!');
+      this.toastr.info('VocÃª saiu da conta.', 'AtÃ© logo!');
       this.router.navigate(['/home']);
     } catch (error: any) {
       this.toastr.error('Erro ao sair', 'Tente novamente');
@@ -431,7 +440,7 @@ export class AuthService {
       });
 
       this.setNotice('Verifique o email para redefinir a senha.');
-      this.toastr.success('Email de recuperação o enviado!', 'Verifique sua caixa de entrada');
+      this.toastr.success('Email de recuperaÃ§Ã£o o enviado!', 'Verifique sua caixa de entrada');
       return true;
     } catch (error: any) {
       this.clearError();
@@ -442,7 +451,7 @@ export class AuthService {
 
 
   /**
-   * Pegar token JWT do usuário
+   * Pegar token JWT do usuÃ¡rio
    */
   async getToken(): Promise<string | null> {
     if (auth.currentUser) {
@@ -453,7 +462,7 @@ export class AuthService {
   }
 
   /**
-   * Verificar se o usuário está logado
+   * Verificar se o usuÃ¡rio estÃ¡ logado
    */
   isAuthenticated(): boolean {
     const current = this.currentUser();
@@ -479,29 +488,29 @@ export class AuthService {
     }
 
     const errorMessages: { [key: string]: string } = {
-      'auth/email-already-in-use': 'Este e-mail já está em uso',
-      'auth/invalid-email': 'E-mail inválido',
-      'auth/operation-not-allowed': 'Operação não permitida',
-      'auth/weak-password': 'Senha muito fraca (mínimo de 6 caracteres)',
-      'auth/user-disabled': 'Usuário desabilitado',
-      'auth/user-not-found': 'Usuário não encontrado',
+      'auth/email-already-in-use': 'Este e-mail jÃ¡ estÃ¡ em uso',
+      'auth/invalid-email': 'E-mail invÃ¡lido',
+      'auth/operation-not-allowed': 'OperaÃ§Ã£o nÃ£o permitida',
+      'auth/weak-password': 'Senha muito fraca (mÃ­nimo de 6 caracteres)',
+      'auth/user-disabled': 'UsuÃ¡rio desabilitado',
+      'auth/user-not-found': 'UsuÃ¡rio nÃ£o encontrado',
       'auth/wrong-password': 'Senha incorreta',
       'auth/invalid-credential': 'Email ou senha incorretos',
       'auth/too-many-requests': 'Muitas tentativas. Tente mais tarde',
-      'auth/network-request-failed': 'Erro de conexão. Verifique sua internet',
+      'auth/network-request-failed': 'Erro de conexÃ£o. Verifique sua internet',
       'auth/popup-closed-by-user': 'Login cancelado',
       'auth/popup-blocked': 'Popup bloqueado. Vamos continuar em outra janela.',
-      'auth/unauthorized-domain': 'Domínio não autorizado no Firebase.',
-      'auth/invalid-continue-uri': 'A URL de retorno configurada no Firebase é inválida.',
-      'auth/missing-continue-uri': 'A URL de retorno do Firebase não foi informada.',
-      'auth/unauthorized-continue-uri': 'A URL de retorno não está autorizada no Firebase.'
+      'auth/unauthorized-domain': 'DomÃ­nio nÃ£o autorizado no Firebase.',
+      'auth/invalid-continue-uri': 'A URL de retorno configurada no Firebase Ã© invÃ¡lida.',
+      'auth/missing-continue-uri': 'A URL de retorno do Firebase nÃ£o foi informada.',
+      'auth/unauthorized-continue-uri': 'A URL de retorno nÃ£o estÃ¡ autorizada no Firebase.'
     };
 
-    const message = errorMessages[error.code] || error?.message || 'Erro ao realizar operação';
+    const message = errorMessages[error.code] || error?.message || 'Erro ao realizar operaÃ§Ã£o';
 
     if (error.code === 'auth/user-not-found') {
       this.clearNotice();
-      this.setError('E-mail não cadastrado.');
+      this.setError('E-mail nÃ£o cadastrado.');
     } else if (error.code === 'auth/wrong-password') {
       this.clearNotice();
       this.setError('Senha incorreta.');
@@ -510,11 +519,11 @@ export class AuthService {
       this.setError('Email ou senha incorretos.');
     } else if (error.code === 'auth/invalid-email') {
       this.clearNotice();
-      this.setError('E-mail inválido.');
+      this.setError('E-mail invÃ¡lido.');
     } else {
       this.setError(message);
     }
-    this.toastr.error(message, 'Erro de Autenticação');
+    this.toastr.error(message, 'Erro de AutenticaÃ§Ã£o');
   }
 
   private handleBackendError(error: any): void {
@@ -522,7 +531,7 @@ export class AuthService {
     const message = error?.error?.message;
 
     if (status && message) {
-      const title = status === 403 ? 'Verificação pendente' : 'Erro de Autenticação';
+      const title = status === 403 ? 'VerificaÃ§Ã£o pendente' : 'Erro de AutenticaÃ§Ã£o';
       if (status === 403) {
         this.toastr.warning(message, title);
       } else {
@@ -531,7 +540,7 @@ export class AuthService {
       return;
     }
 
-    this.toastr.error(message || 'Erro ao realizar operação', 'Erro de Autenticação');
+    this.toastr.error(message || 'Erro ao realizar operaÃ§Ã£o', 'Erro de AutenticaÃ§Ã£o');
   }
 
   private setNotice(message: string): void {
@@ -545,11 +554,11 @@ export class AuthService {
   }
 
   setPasswordResetCompletedNotice(): void {
-    this.setNotice('Senha redefinida com sucesso. Agora você já pode entrar.');
+    this.setNotice('Senha redefinida com sucesso. Agora vocÃª jÃ¡ pode entrar.');
   }
 
   setEmailVerifiedNotice(): void {
-    this.setNotice('Email verificado com sucesso. Agora você já pode entrar.');
+    this.setNotice('Email verificado com sucesso. Agora vocÃª jÃ¡ pode entrar.');
   }
 
   async validateResetPasswordCode(code: string): Promise<void> {
@@ -670,3 +679,6 @@ export class AuthService {
     return settings;
   }
 }
+
+
+
