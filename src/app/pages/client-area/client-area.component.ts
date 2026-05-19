@@ -1,7 +1,10 @@
 import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { firstValueFrom } from 'rxjs';
+import { ToastrService } from 'ngx-toastr';
 import { AuthService } from '@core/services/auth.service';
+import { ApiService } from '@core/api.service';
 import { UserLibraryPack, UserLibraryService, UserPlanSlug } from '@core/services/user-library.service';
 
 interface ClientAreaSlide {
@@ -45,7 +48,11 @@ interface UpgradePlan {
   styleUrls: ['./client-area.component.scss']
 })
 export class ClientAreaComponent implements OnInit, OnDestroy {
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
   private authService = inject(AuthService);
+  private apiService = inject(ApiService);
+  private toastr = inject(ToastrService);
   private userLibraryService = inject(UserLibraryService);
   private readonly POPULAR_SCROLL_AMOUNT = 960;
 
@@ -95,8 +102,7 @@ export class ClientAreaComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.applyUserSnapshot(this.authService.currentUser());
-    void this.loadUserData();
-    void this.loadDashboardData();
+    void this.handlePaymentReturn();
     this.startAutoSlide();
   }
 
@@ -107,6 +113,38 @@ export class ClientAreaComponent implements OnInit, OnDestroy {
   private async loadUserData(): Promise<void> {
     await this.authService.waitForAuthInit();
     this.applyUserSnapshot(this.authService.currentUser());
+  }
+
+  private async handlePaymentReturn(): Promise<void> {
+    await this.loadUserData();
+
+    const paymentId = this.route.snapshot.queryParamMap.get('payment_id');
+    const paymentStatus =
+      this.route.snapshot.queryParamMap.get('status') ??
+      this.route.snapshot.queryParamMap.get('collection_status');
+
+    if (!paymentId || paymentStatus !== 'approved' || !this.authService.isAuthenticated()) {
+      await this.loadDashboardData();
+      return;
+    }
+
+    try {
+      await firstValueFrom(this.apiService.syncMercadoPagoReturn(paymentId));
+      await this.authService.refreshCurrentUser();
+      this.applyUserSnapshot(this.authService.currentUser());
+      this.toastr.success('Pagamento confirmado e plano liberado.', 'Tudo certo');
+    } catch (error: any) {
+      const message =
+        error?.error?.message || 'Nao foi possivel sincronizar o pagamento agora.';
+      this.toastr.warning(message, 'Pagamento');
+    } finally {
+      await this.loadDashboardData();
+      await this.router.navigate([], {
+        relativeTo: this.route,
+        queryParams: {},
+        replaceUrl: true
+      });
+    }
   }
 
   private applyUserSnapshot(

@@ -1,0 +1,62 @@
+<div class="payment-status-page">
+  <section class="payment-status-hero">
+    <div class="status-shell" [class.is-pending]="copy().tone === 'pending'" [class.is-failure]="copy().tone === 'failure'">
+      <span class="status-badge">{{ copy().badge }}</span>
+      <h1>{{ copy().title }}</h1>
+      <p class="status-copy">{{ copy().description }}</p>
+
+      @if (isSyncingPayment()) {
+        <div class="status-meta">
+          <div class="status-meta-row">
+            <span>Sincronizacao</span>
+            <strong>Atualizando seu plano...</strong>
+          </div>
+        </div>
+      }
+
+      @if (paymentSyncMessage(); as paymentSyncMessage) {
+        <div class="status-meta">
+          <div class="status-meta-row">
+            <span>Atualizacao</span>
+            <strong>{{ paymentSyncMessage }}</strong>
+          </div>
+        </div>
+      }
+
+      <div class="status-meta">
+        @if (paymentInfo().paymentId; as paymentId) {
+          <div class="status-meta-row">
+            <span>Pagamento</span>
+            <strong>{{ paymentId }}</strong>
+          </div>
+        }
+
+        @if (paymentInfo().status; as status) {
+          <div class="status-meta-row">
+            <span>Status</span>
+            <strong>{{ status }}</strong>
+          </div>
+        }
+
+        @if (paymentInfo().externalReference; as externalReference) {
+          <div class="status-meta-row">
+            <span>Referencia</span>
+            <strong>{{ externalReference }}</strong>
+          </div>
+        }
+
+        @if (paymentInfo().merchantOrderId; as merchantOrderId) {
+          <div class="status-meta-row">
+            <span>Pedido Mercado Pago</span>
+            <strong>{{ merchantOrderId }}</strong>
+          </div>
+        }
+      </div>
+
+      <div class="status-actions">
+        <a [routerLink]="copy().primaryLink" class="primary-action">{{ copy().primaryLabel }}</a>
+        <a [routerLink]="copy().secondaryLink" class="secondary-action">{{ copy().secondaryLabel }}</a>
+      </div>
+    </div>
+  </section>
+</div>

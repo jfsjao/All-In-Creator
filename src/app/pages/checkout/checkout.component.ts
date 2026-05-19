@@ -302,7 +302,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
 
     try {
       const checkout = await firstValueFrom(this.apiService.createCheckout(plan.slug));
-      const checkoutUrl = checkout.sandboxCheckoutUrl || checkout.checkoutUrl;
+      const checkoutUrl = checkout.checkoutUrl || checkout.sandboxCheckoutUrl;
 
       if (!checkoutUrl) {
         throw new Error('CHECKOUT_URL_NOT_FOUND');
@@ -313,7 +313,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
       }
     } catch (error: any) {
       const message =
-        error?.error?.message || 'Nao foi possivel iniciar o pagamento. Tente novamente.';
+        error?.error?.message || 'Não foi possivel iniciar o pagamento. Tente novamente.';
       this.errorMessage = message;
       this.toastr.error(message, 'Pagamento');
     } finally {
