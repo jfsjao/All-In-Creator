@@ -2,6 +2,8 @@ import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
+import { firstValueFrom } from 'rxjs';
+import { ApiService } from '@core/api.service';
 import { AuthService } from '@core/services/auth.service';
 import { UserLibraryPack, UserLibraryService } from '@core/services/user-library.service';
 
@@ -13,10 +15,12 @@ import { UserLibraryPack, UserLibraryService } from '@core/services/user-library
   styleUrls: ['./library.component.scss']
 })
 export class LibraryComponent implements OnInit {
+  private apiService = inject(ApiService);
   private authService = inject(AuthService);
   private userLibraryService = inject(UserLibraryService);
   private searchTimeout?: number;
   private requestSequence = 0;
+  private pendingDownloadIds = new Set<number>();
 
   searchTerm = '';
   private readonly ROW_SCROLL_AMOUNT = 960;
@@ -74,6 +78,25 @@ export class LibraryComponent implements OnInit {
     this.selectedPack = null;
   }
 
+  isDownloadPending(packId: number): boolean {
+    return this.pendingDownloadIds.has(packId);
+  }
+
+  downloadPack(pack: UserLibraryPack): void {
+    if (!pack.downloadUrl || this.pendingDownloadIds.has(pack.id)) {
+      return;
+    }
+
+    const downloadWindow = window.open('about:blank', '_blank');
+    if (downloadWindow?.document) {
+      downloadWindow.document.title = 'Preparando download';
+      downloadWindow.document.body.innerHTML =
+        '<div style="font-family: Arial, sans-serif; padding: 24px; color: #111;">Preparando seu download...</div>';
+    }
+    this.pendingDownloadIds.add(pack.id);
+    void this.registerAndOpenDownload(pack, downloadWindow);
+  }
+
   private loadLibrary(): void {
     const user = this.authService.currentUser();
     const requestId = ++this.requestSequence;
@@ -120,5 +143,29 @@ export class LibraryComponent implements OnInit {
         this.isLoadingPacks = false;
       }
     });
+  }
+
+  private async registerAndOpenDownload(
+    pack: UserLibraryPack,
+    downloadWindow: Window | null,
+  ): Promise<void> {
+    try {
+      const usuarioId = this.authService.currentUser()?.backendUserId;
+
+      if (usuarioId) {
+        await firstValueFrom(this.apiService.registrarDownload(usuarioId, pack.id));
+      }
+    } catch (error) {
+      console.error('Erro ao registrar download do pack:', error);
+    } finally {
+      this.pendingDownloadIds.delete(pack.id);
+
+      if (downloadWindow) {
+        downloadWindow.location.href = pack.downloadUrl!;
+        return;
+      }
+
+      window.open(pack.downloadUrl!, '_blank');
+    }
   }
 }

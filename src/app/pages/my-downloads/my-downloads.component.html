@@ -60,8 +60,18 @@
             </div>
 
             <div class="card-actions">
-              <a routerLink="/library" class="card-btn">Baixar novamente</a>
-              <a routerLink="/plans" class="card-btn secondary">Ver pack</a>
+              @if (item.downloadUrl) {
+                <button
+                  type="button"
+                  class="card-btn"
+                  [disabled]="isDownloadPending(item.id)"
+                  (click)="downloadPack(item)">
+                  {{ isDownloadPending(item.id) ? 'Preparando...' : 'Baixar novamente' }}
+                </button>
+              } @else {
+                <a [routerLink]="item.detailsLink" class="card-btn">Abrir biblioteca</a>
+              }
+              <a [routerLink]="item.detailsLink" class="card-btn secondary">Ver pack</a>
             </div>
           </div>
         </article>
@@ -85,7 +95,7 @@
       </div>
     </div>
 
-    <div class="downloads-grid compact" *ngIf="recommendedDownloads.length > 0">
+    <div class="downloads-grid compact" *ngIf="recommendedDownloads.length > 0; else emptySuggestions">
       @for (item of recommendedDownloads; track item.id) {
         <article class="download-card compact-card">
           <img [src]="item.image" [alt]="item.title" />
@@ -100,11 +110,27 @@
               <span>{{ item.size }}</span>
               <span>{{ item.version }}</span>
             </div>
-            <a routerLink="/plans" class="card-btn secondary">Abrir pack</a>
+            <div class="card-actions">
+              @if (item.downloadUrl) {
+                <button
+                  type="button"
+                  class="card-btn"
+                  [disabled]="isDownloadPending(item.id)"
+                  (click)="downloadPack(item)">
+                  {{ isDownloadPending(item.id) ? 'Preparando...' : 'Baixar agora' }}
+                </button>
+              }
+              <a [routerLink]="item.detailsLink" class="card-btn secondary">Abrir pack</a>
+            </div>
           </div>
         </article>
       }
     </div>
+    <ng-template #emptySuggestions>
+      <p class="downloads-empty">
+        Conforme seus downloads crescerem, vamos sugerir packs parecidos por aqui.
+      </p>
+    </ng-template>
   </section>
 
   <section class="downloads-section actions-panel">

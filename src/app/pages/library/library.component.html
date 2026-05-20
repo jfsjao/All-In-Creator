@@ -51,7 +51,13 @@
                         [queryParams]="pack.checkoutPlan ? { plan: pack.checkoutPlan } : null"
                         class="card-btn secondary">Upgrade</a>
                     } @else if (pack.downloadUrl) {
-                      <a [href]="pack.downloadUrl" target="_blank" class="card-btn secondary">Baixar</a>
+                      <button
+                        type="button"
+                        class="card-btn secondary"
+                        [disabled]="isDownloadPending(pack.id)"
+                        (click)="downloadPack(pack)">
+                        {{ isDownloadPending(pack.id) ? 'Preparando...' : 'Baixar' }}
+                      </button>
                     } @else {
                       <a [routerLink]="pack.link" class="card-btn secondary">Abrir</a>
                     }
@@ -95,7 +101,13 @@
                   <h3>{{ pack.title }}</h3>
                   <div class="card-actions">
                     @if (pack.downloadUrl) {
-                      <a [href]="pack.downloadUrl" target="_blank" class="card-btn secondary">Baixar</a>
+                      <button
+                        type="button"
+                        class="card-btn secondary"
+                        [disabled]="isDownloadPending(pack.id)"
+                        (click)="downloadPack(pack)">
+                        {{ isDownloadPending(pack.id) ? 'Preparando...' : 'Baixar' }}
+                      </button>
                     } @else {
                       <a [routerLink]="pack.link" class="card-btn secondary">Abrir</a>
                     }
@@ -144,7 +156,13 @@
                         [queryParams]="pack.checkoutPlan ? { plan: pack.checkoutPlan } : null"
                         class="card-btn secondary">Upgrade</a>
                     } @else if (pack.downloadUrl) {
-                      <a [href]="pack.downloadUrl" target="_blank" class="card-btn secondary">Baixar</a>
+                      <button
+                        type="button"
+                        class="card-btn secondary"
+                        [disabled]="isDownloadPending(pack.id)"
+                        (click)="downloadPack(pack)">
+                        {{ isDownloadPending(pack.id) ? 'Preparando...' : 'Baixar' }}
+                      </button>
                     } @else {
                       <a [routerLink]="pack.link" class="card-btn secondary">Abrir</a>
                     }
@@ -193,7 +211,13 @@
                         [queryParams]="pack.checkoutPlan ? { plan: pack.checkoutPlan } : null"
                         class="card-btn secondary">Upgrade</a>
                     } @else if (pack.downloadUrl) {
-                      <a [href]="pack.downloadUrl" target="_blank" class="card-btn secondary">Baixar</a>
+                      <button
+                        type="button"
+                        class="card-btn secondary"
+                        [disabled]="isDownloadPending(pack.id)"
+                        (click)="downloadPack(pack)">
+                        {{ isDownloadPending(pack.id) ? 'Preparando...' : 'Baixar' }}
+                      </button>
                     } @else {
                       <a [routerLink]="pack.link" class="card-btn secondary">Abrir</a>
                     }
@@ -242,7 +266,13 @@
                         [queryParams]="pack.checkoutPlan ? { plan: pack.checkoutPlan } : null"
                         class="card-btn secondary">Upgrade</a>
                     } @else if (pack.downloadUrl) {
-                      <a [href]="pack.downloadUrl" target="_blank" class="card-btn secondary">Baixar</a>
+                      <button
+                        type="button"
+                        class="card-btn secondary"
+                        [disabled]="isDownloadPending(pack.id)"
+                        (click)="downloadPack(pack)">
+                        {{ isDownloadPending(pack.id) ? 'Preparando...' : 'Baixar' }}
+                      </button>
                     } @else {
                       <a [routerLink]="pack.link" class="card-btn secondary">Abrir</a>
                     }
@@ -288,7 +318,13 @@
               {{ pack.locked ? 'Fazer upgrade' : 'Abrir pack' }}
             </a>
             @if (!pack.locked && pack.downloadUrl) {
-              <a [href]="pack.downloadUrl" target="_blank" class="card-btn secondary">Baixar agora</a>
+              <button
+                type="button"
+                class="card-btn secondary"
+                [disabled]="isDownloadPending(pack.id)"
+                (click)="downloadPack(pack)">
+                {{ isDownloadPending(pack.id) ? 'Preparando...' : 'Baixar agora' }}
+              </button>
             }
           </div>
         </div>

@@ -5,6 +5,7 @@ import { of } from 'rxjs';
 import { MyDownloadsComponent } from './my-downloads.component';
 import { ApiService } from '@core/api.service';
 import { AuthService } from '@core/services/auth.service';
+import { UserLibraryService } from '@core/services/user-library.service';
 
 describe('MyDownloadsComponent', () => {
   let component: MyDownloadsComponent;
@@ -32,6 +33,37 @@ describe('MyDownloadsComponent', () => {
     }))
   };
 
+  const userLibraryServiceMock = {
+    loadUserLibrary: jasmine.createSpy('loadUserLibrary').and.returnValue(of({
+      userId: 7,
+      plan: {
+        slug: 'basic',
+        nome: 'Plano Basic',
+        status: 'ativo'
+      },
+      ownedPacks: [
+        {
+          id: 1,
+          slug: 'pack-ia',
+          title: 'Pack IA',
+          description: 'Assets e conteudos virais.',
+          image: 'assets/images/packs/pack-ia.webp',
+          badge: 'Liberado',
+          locked: false,
+          requiredPlan: 'basic',
+          checkoutPlan: null,
+          link: '/library',
+          downloadUrl: 'https://cdn.example.com/pack-ia.zip'
+        }
+      ],
+      featuredPacks: [],
+      noveltyPacks: [],
+      allPacks: [],
+      upgradePacks: [],
+      popularPacks: []
+    }))
+  };
+
   const authServiceMock = {
     currentUser: jasmine.createSpy('currentUser').and.returnValue({
       backendUserId: 7
@@ -41,6 +73,7 @@ describe('MyDownloadsComponent', () => {
 
   beforeEach(async () => {
     apiServiceMock.getDownloadsResumo.calls.reset();
+    userLibraryServiceMock.loadUserLibrary.calls.reset();
     authServiceMock.currentUser.calls.reset();
     authServiceMock.waitForAuthInit.calls.reset();
     authServiceMock.currentUser.and.returnValue({ backendUserId: 7 });
@@ -50,7 +83,8 @@ describe('MyDownloadsComponent', () => {
       providers: [
         provideRouter([]),
         { provide: ApiService, useValue: apiServiceMock },
-        { provide: AuthService, useValue: authServiceMock }
+        { provide: AuthService, useValue: authServiceMock },
+        { provide: UserLibraryService, useValue: userLibraryServiceMock }
       ]
     }).compileComponents();
 
@@ -64,9 +98,11 @@ describe('MyDownloadsComponent', () => {
     fixture.detectChanges();
 
     expect(apiServiceMock.getDownloadsResumo).toHaveBeenCalledWith(7, '');
+    expect(userLibraryServiceMock.loadUserLibrary).toHaveBeenCalledWith(7);
     expect(component.hasError).toBeFalse();
     expect(component.totalDownloads).toBe(1);
     expect(component.recentDownloads.length).toBe(1);
+    expect(component.recentDownloads[0].downloadUrl).toBe('https://cdn.example.com/pack-ia.zip');
   });
 
   it('shows an error state when the backend user is missing', async () => {
