@@ -37,7 +37,7 @@ export class ResetPasswordComponent implements OnInit {
 
   async onSubmit(): Promise<void> {
     if (!this.token) {
-      this.toastr.error('Token invalido ou expirado.', 'Erro');
+      this.toastr.error('Token inválido ou expirado.', 'Erro');
       return;
     }
 

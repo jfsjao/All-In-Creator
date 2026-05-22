@@ -313,7 +313,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
       }
     } catch (error: any) {
       const message =
-        error?.error?.message || 'Não foi possivel iniciar o pagamento. Tente novamente.';
+        error?.error?.message || 'Não foi possível iniciar o pagamento. Tente novamente.';
       this.errorMessage = message;
       this.toastr.error(message, 'Pagamento');
     } finally {

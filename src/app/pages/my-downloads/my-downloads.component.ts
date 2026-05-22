@@ -63,7 +63,7 @@ export class MyDownloadsComponent implements OnInit, OnDestroy {
     },
     {
       label: 'Atualizar downloads',
-      detail: 'Confira novas versoes dos arquivos que voce ja baixou.',
+      detail: 'Confira novas versões dos arquivos que você já baixou.',
       action: 'Ver biblioteca',
       link: '/library'
     }
@@ -186,7 +186,7 @@ export class MyDownloadsComponent implements OnInit, OnDestroy {
       size: item.tamanho_gb ? `${item.tamanho_gb} GB` : '--',
       version: item.versao_atual ? `v${item.versao_atual}` : '--',
       status: isUpdate ? 'update' : 'available',
-      statusLabel: isUpdate ? 'Atualizacao' : 'Disponivel',
+      statusLabel: isUpdate ? 'Atualização' : 'Disponível',
       downloadUrl,
       detailsLink: '/library'
     };

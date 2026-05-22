@@ -23,12 +23,13 @@ describe('Post Login Workflow', () => {
       backendUserId: 7,
       uid: 'user-1',
       email: 'joao@example.com',
-      displayName: 'JoÃ£o Felipe',
+      displayName: 'João Felipe',
       photoURL: null,
       plano: 'basic'
     }),
     isAuthenticated: jasmine.createSpy('isAuthenticated').and.returnValue(true),
-    waitForAuthInit: jasmine.createSpy('waitForAuthInit').and.resolveTo()
+    waitForAuthInit: jasmine.createSpy('waitForAuthInit').and.resolveTo(),
+    updateCurrentUserProfile: jasmine.createSpy('updateCurrentUserProfile').and.resolveTo()
   };
 
   const userLibraryServiceMock = {
@@ -90,7 +91,7 @@ describe('Post Login Workflow', () => {
           id: 2,
           slug: 'pack-ia',
           nome: 'Pack IA',
-          descricao: 'ColeÃ§Ã£o com assets modernos para criadores e conteÃºdos virais.',
+          descricao: 'Coleção com assets modernos para criadores e conteúdos virais.',
           capa_url: null,
           tamanho_gb: '8.9',
           versao_atual: '2.8',
@@ -104,7 +105,7 @@ describe('Post Login Workflow', () => {
           id: 1,
           slug: 'emojis',
           nome: 'Emojis',
-          descricao: 'Biblioteca leve para enriquecer cortes rÃ¡pidos, shorts e reels.',
+          descricao: 'Biblioteca leve para enriquecer cortes rápidos, shorts e reels.',
           capa_url: null,
           tamanho_gb: '1.1',
           versao_atual: '1.6',
@@ -114,10 +115,23 @@ describe('Post Login Workflow', () => {
         }
       ]
     })),
+    getMyActivities: jasmine.createSpy('getMyActivities').and.returnValue(of({
+      atividades: [
+        {
+          id: 3,
+          usuario_id: 7,
+          tipo: 'download',
+          titulo: 'Download concluído',
+          detalhe: 'Pack IA foi baixado com sucesso.',
+          metadata: {},
+          criado_em: '2026-04-01T18:11:00.000Z'
+        }
+      ]
+    })),
     getMeuPerfil: jasmine.createSpy('getMeuPerfil').and.returnValue(of({
       usuario: {
         id: 7,
-        nome: 'JoÃ£o Felipe',
+        nome: 'João Felipe',
         email: 'joao@example.com',
         telefone: '',
         area_atuacao: '',
@@ -130,7 +144,7 @@ describe('Post Login Workflow', () => {
       message: 'Perfil atualizado com sucesso.',
       usuario: {
         id: 7,
-        nome: 'JoÃ£o Felipe',
+        nome: 'João Felipe',
         email: 'joao@example.com',
         telefone: '',
         area_atuacao: '',
@@ -164,7 +178,7 @@ describe('Post Login Workflow', () => {
     await (component as any).handlePaymentReturn();
     fixture.detectChanges();
 
-    expect(component.userName).toBe('JoÃ£o Felipe');
+    expect(component.userName).toBe('João Felipe');
     expect(component.myPacks.length).toBeGreaterThan(0);
     expect((fixture.nativeElement as HTMLElement).textContent).toContain('Bem-vindo de volta');
   });
@@ -193,9 +207,9 @@ describe('Post Login Workflow', () => {
     await fixture.whenStable();
     fixture.detectChanges();
 
-    expect(component.profileForm.name).toBe('JoÃ£o Felipe');
+    expect(component.profileForm.name).toBe('João Felipe');
     expect(component.profileForm.email).toBe('joao@example.com');
-    expect((fixture.nativeElement as HTMLElement).textContent).toContain('JoÃ£o Felipe');
+    expect((fixture.nativeElement as HTMLElement).textContent).toContain('João Felipe');
   });
 
   it('filters packs using the search box logic', async () => {

@@ -36,7 +36,7 @@
         <div class="panel-header">
           <div>
             <h2>Dados principais</h2>
-            <p>Edite as informações que aparecem na sua conta.</p>
+            <p>Atualize nome, telefone e área de atuação da sua conta.</p>
           </div>
           <button type="button" class="panel-btn" (click)="salvarPerfil()" [disabled]="isSaving">
             {{ isSaving ? 'Salvando...' : 'Salvar alterações' }}
@@ -52,21 +52,25 @@
         <div class="form-grid">
           <label class="field">
             <span>Nome</span>
+            <small class="field-helper">Esse nome aparece na sua conta e nos pontos principais da plataforma.</small>
             <input type="text" [(ngModel)]="profileForm.name" />
           </label>
 
-          <label class="field">
+          <label class="field field-readonly">
             <span>Email</span>
-            <input type="email" [(ngModel)]="profileForm.email" />
+            <small class="field-helper">{{ emailHelperText }}</small>
+            <input type="email" [ngModel]="profileForm.email" disabled readonly />
           </label>
 
           <label class="field">
             <span>Telefone</span>
+            <small class="field-helper">Use um telefone com DDD para contato e futuras métricas da conta.</small>
             <input type="text" [(ngModel)]="profileForm.phone" />
           </label>
 
           <label class="field">
             <span>Área de atuação</span>
+            <small class="field-helper">Esse dado vai nos ajudar a entender melhor o perfil dos criadores depois.</small>
             <input type="text" [(ngModel)]="profileForm.role" />
           </label>
         </div>
@@ -83,7 +87,7 @@
         <div class="toggle-list">
           <label class="toggle-card">
             <div>
-              <strong>Receber notificações</strong>
+              <strong>Receber notificacoes</strong>
               <p>Avisos sobre acesso, conta e movimentações.</p>
             </div>
             <input type="checkbox" [(ngModel)]="preferences.notifications" />
@@ -111,14 +115,23 @@
         </div>
 
         <div class="activity-list">
-          @for (activity of recentActivity; track activity.title + activity.date) {
-            <article class="activity-item">
+          @if (recentActivity.length === 0) {
+            <article class="activity-item empty">
               <div>
-                <h3>{{ activity.title }}</h3>
-                <p>{{ activity.detail }}</p>
+                <h3>Nenhuma atividade recente</h3>
+                <p>Assim que você baixar packs, entrar na conta ou atualizar dados, esse histórico vai aparecer aqui.</p>
               </div>
-              <span>{{ activity.date }}</span>
             </article>
+          } @else {
+            @for (activity of recentActivity; track activity.title + activity.date) {
+              <article class="activity-item">
+                <div>
+                  <h3>{{ activity.title }}</h3>
+                  <p>{{ activity.detail }}</p>
+                </div>
+                <span>{{ activity.date }}</span>
+              </article>
+            }
           }
         </div>
       </section>

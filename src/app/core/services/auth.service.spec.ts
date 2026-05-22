@@ -21,7 +21,19 @@ describe('AuthService', () => {
 
     routerSpy = jasmine.createSpyObj('Router', ['navigate', 'navigateByUrl']);
     toastrSpy = jasmine.createSpyObj('ToastrService', ['success', 'error', 'info', 'warning']);
-    apiServiceSpy = jasmine.createSpyObj('ApiService', ['syncAuth']);
+    apiServiceSpy = jasmine.createSpyObj('ApiService', ['syncAuth', 'registerMyActivity']);
+    apiServiceSpy.registerMyActivity.and.returnValue(of({
+      message: 'ok',
+      atividade: {
+        id: 1,
+        usuario_id: 7,
+        tipo: 'login',
+        titulo: 'Login realizado',
+        detalhe: 'Acesso confirmado.',
+        metadata: {},
+        criado_em: '2026-05-20T00:00:00.000Z'
+      }
+    }));
     spyOn(console, 'info');
     spyOn(console, 'error');
 

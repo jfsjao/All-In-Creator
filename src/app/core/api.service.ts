@@ -228,6 +228,41 @@ export interface PaymentStatusResponse {
   };
 }
 
+export interface UserActivityResponse {
+  id: number;
+  usuario_id: number;
+  tipo:
+    | 'login'
+    | 'logout'
+    | 'download'
+    | 'password_reset_requested'
+    | 'password_changed'
+    | 'profile_updated'
+    | 'plan_changed';
+  titulo: string;
+  detalhe: string;
+  metadata: Record<string, unknown>;
+  criado_em: string;
+}
+
+export interface UserActivitiesListResponse {
+  atividades: UserActivityResponse[];
+}
+
+export interface RegisterUserActivityPayload {
+  tipo:
+    | 'login'
+    | 'logout'
+    | 'download'
+    | 'password_reset_requested'
+    | 'password_changed'
+    | 'profile_updated'
+    | 'plan_changed';
+  titulo: string;
+  detalhe: string;
+  metadata?: Record<string, unknown>;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -367,6 +402,27 @@ export class ApiService {
     return this.withAuthHeaders((headers) =>
       this.http.put<{ message: string; usuario: UsuarioPerfilResponse['usuario'] }>(
         `${this.backendUrl}/users/me/profile`,
+        payload,
+        { headers }
+      )
+    );
+  }
+
+  getMyActivities(limite = 10): Observable<UserActivitiesListResponse> {
+    return this.withAuthHeaders((headers) =>
+      this.http.get<UserActivitiesListResponse>(
+        `${this.backendUrl}/users/me/activity?limite=${limite}`,
+        { headers }
+      )
+    );
+  }
+
+  registerMyActivity(
+    payload: RegisterUserActivityPayload
+  ): Observable<{ message: string; atividade: UserActivityResponse }> {
+    return this.withAuthHeaders((headers) =>
+      this.http.post<{ message: string; atividade: UserActivityResponse }>(
+        `${this.backendUrl}/users/me/activity`,
         payload,
         { headers }
       )

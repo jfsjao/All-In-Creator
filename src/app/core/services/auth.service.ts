@@ -107,7 +107,7 @@ export class AuthService {
     this.clearNotice();
 
     if (showToast) {
-      this.toastr.error(message, 'Backend indisponÃ­vel');
+      this.toastr.error(message, 'Backend indisponível');
     }
   }
 
@@ -142,7 +142,7 @@ export class AuthService {
       if (user) {
         if (!user.emailVerified) {
           await signOut(auth);
-          this.setNotice('Faltou verificar o e-mail. Para continuar, verifique o e-mail e faÃ§a login.');
+          this.setNotice('Faltou verificar o e-mail. Para continuar, verifique o e-mail e faça login.');
           this.clearBackendSession();
           this.currentUser.set(null);
           this.isLoading.set(false);
@@ -199,7 +199,7 @@ export class AuthService {
       return true;
     } catch (error) {
       this.backendSyncErrorMessage = this.extractBackendSyncMessage(error);
-      console.error('Erro ao sincronizar o usuÃ¡rio:', error);
+      console.error('Erro ao sincronizar o usuário:', error);
       return false;
     }
   }
@@ -213,8 +213,24 @@ export class AuthService {
 
     return this.syncBackendUser(user);
   }
+
+  async updateCurrentUserProfile(profile: { displayName?: string | null }): Promise<void> {
+    const user = auth.currentUser;
+    const current = this.currentUser();
+
+    if (!user || !current) {
+      return;
+    }
+
+    await this.updateUserProfile(user, profile);
+
+    this.currentUser.set({
+      ...current,
+      displayName: profile.displayName ?? current.displayName
+    });
+  }
   /**
-   * Espera o Firebase terminar de restaurar a sessÃ£o
+   * Espera o Firebase terminar de restaurar a sessão
    */
   async waitForAuthInit(): Promise<void> {
     if (this.authInitialized()) return;
@@ -309,7 +325,7 @@ export class AuthService {
         this.clearError();
         this.setNotice('Verifique o e-mail cadastrado para concluir seu acesso.');
         this.setPendingVerificationEmail(email);
-        this.toastr.warning('Confirme seu e-mail para entrar. Enviamos um novo link.', 'VerificaÃ§Ã£o');
+        this.toastr.warning('Confirme seu e-mail para entrar. Enviamos um novo link.', 'Verificação');
         return false;
       }
 
@@ -323,6 +339,14 @@ export class AuthService {
       this.clearNotice();
       this.clearError();
       this.clearPendingVerificationEmail();
+      await this.registerUserActivity({
+        tipo: 'login',
+        titulo: 'Login realizado',
+        detalhe: 'Acesso confirmado com email e senha.',
+        metadata: {
+          provider: 'firebase_email',
+        },
+      });
       this.toastr.success('Login realizado com sucesso!', 'Bem-vindo de volta!');
       await this.navigateAfterAuth();
       return true;
@@ -331,7 +355,7 @@ export class AuthService {
       if (pendingEmail && pendingEmail.toLowerCase() === email.toLowerCase()) {
         this.clearError();
         this.setNotice('Verifique o e-mail cadastrado para concluir seu acesso.');
-        this.toastr.warning('Confirme seu e-mail para entrar. Enviamos um novo link.', 'VerificaÃ§Ã£o');
+        this.toastr.warning('Confirme seu e-mail para entrar. Enviamos um novo link.', 'Verificação');
         return false;
       }
 
@@ -373,6 +397,14 @@ export class AuthService {
 
       this.clearNotice();
       this.clearError();
+      await this.registerUserActivity({
+        tipo: 'login',
+        titulo: 'Login realizado',
+        detalhe: 'Acesso confirmado com Google.',
+        metadata: {
+          provider: 'google',
+        },
+      });
       this.toastr.success('Login realizado com sucesso!', 'Bem-vindo!');
       await this.navigateAfterAuth();
       return true;
@@ -409,13 +441,19 @@ export class AuthService {
    */
   async logout(): Promise<void> {
     try {
+      await this.registerUserActivity({
+        tipo: 'logout',
+        titulo: 'Logout realizado',
+        detalhe: 'A sessão foi encerrada neste dispositivo.',
+      });
+
       if (auth.currentUser) {
         await signOut(auth);
       }
 
       this.clearBackendSession();
       this.currentUser.set(null);
-      this.toastr.info('VocÃª saiu da conta.', 'AtÃ© logo!');
+      this.toastr.info('Você saiu da conta.', 'Até logo!');
       this.router.navigate(['/home']);
     } catch (error: any) {
       this.toastr.error('Erro ao sair', 'Tente novamente');
@@ -439,8 +477,16 @@ export class AuthService {
         actionCodeSettings
       });
 
+      await this.registerUserActivity({
+        tipo: 'password_reset_requested',
+        titulo: 'Recuperação de senha iniciada',
+        detalhe: 'Foi enviado um link para redefinir a senha da conta.',
+        metadata: {
+          provider: 'firebase',
+        },
+      });
       this.setNotice('Verifique o email para redefinir a senha.');
-      this.toastr.success('Email de recuperaÃ§Ã£o o enviado!', 'Verifique sua caixa de entrada');
+      this.toastr.success('E-mail de recuperação enviado!', 'Verifique sua caixa de entrada');
       return true;
     } catch (error: any) {
       this.clearError();
@@ -451,7 +497,7 @@ export class AuthService {
 
 
   /**
-   * Pegar token JWT do usuÃ¡rio
+   * Pegar token JWT do usuário
    */
   async getToken(): Promise<string | null> {
     if (auth.currentUser) {
@@ -462,7 +508,7 @@ export class AuthService {
   }
 
   /**
-   * Verificar se o usuÃ¡rio estÃ¡ logado
+   * Verificar se o usuário está logado
    */
   isAuthenticated(): boolean {
     const current = this.currentUser();
@@ -488,29 +534,29 @@ export class AuthService {
     }
 
     const errorMessages: { [key: string]: string } = {
-      'auth/email-already-in-use': 'Este e-mail jÃ¡ estÃ¡ em uso',
-      'auth/invalid-email': 'E-mail invÃ¡lido',
-      'auth/operation-not-allowed': 'OperaÃ§Ã£o nÃ£o permitida',
-      'auth/weak-password': 'Senha muito fraca (mÃ­nimo de 6 caracteres)',
-      'auth/user-disabled': 'UsuÃ¡rio desabilitado',
-      'auth/user-not-found': 'UsuÃ¡rio nÃ£o encontrado',
+      'auth/email-already-in-use': 'Este e-mail já está em uso',
+      'auth/invalid-email': 'E-mail inválido',
+      'auth/operation-not-allowed': 'Operação não permitida',
+      'auth/weak-password': 'Senha muito fraca (mínimo de 6 caracteres)',
+      'auth/user-disabled': 'Usuário desabilitado',
+      'auth/user-not-found': 'Usuário não encontrado',
       'auth/wrong-password': 'Senha incorreta',
       'auth/invalid-credential': 'Email ou senha incorretos',
       'auth/too-many-requests': 'Muitas tentativas. Tente mais tarde',
-      'auth/network-request-failed': 'Erro de conexÃ£o. Verifique sua internet',
+      'auth/network-request-failed': 'Erro de conexão. Verifique sua internet',
       'auth/popup-closed-by-user': 'Login cancelado',
       'auth/popup-blocked': 'Popup bloqueado. Vamos continuar em outra janela.',
-      'auth/unauthorized-domain': 'DomÃ­nio nÃ£o autorizado no Firebase.',
-      'auth/invalid-continue-uri': 'A URL de retorno configurada no Firebase Ã© invÃ¡lida.',
-      'auth/missing-continue-uri': 'A URL de retorno do Firebase nÃ£o foi informada.',
-      'auth/unauthorized-continue-uri': 'A URL de retorno nÃ£o estÃ¡ autorizada no Firebase.'
+      'auth/unauthorized-domain': 'Domínio não autorizado no Firebase.',
+      'auth/invalid-continue-uri': 'A URL de retorno configurada no Firebase é inválida.',
+      'auth/missing-continue-uri': 'A URL de retorno do Firebase não foi informada.',
+      'auth/unauthorized-continue-uri': 'A URL de retorno não está autorizada no Firebase.'
     };
 
-    const message = errorMessages[error.code] || error?.message || 'Erro ao realizar operaÃ§Ã£o';
+    const message = errorMessages[error.code] || error?.message || 'Erro ao realizar operação';
 
     if (error.code === 'auth/user-not-found') {
       this.clearNotice();
-      this.setError('E-mail nÃ£o cadastrado.');
+      this.setError('E-mail não cadastrado.');
     } else if (error.code === 'auth/wrong-password') {
       this.clearNotice();
       this.setError('Senha incorreta.');
@@ -519,11 +565,11 @@ export class AuthService {
       this.setError('Email ou senha incorretos.');
     } else if (error.code === 'auth/invalid-email') {
       this.clearNotice();
-      this.setError('E-mail invÃ¡lido.');
+      this.setError('E-mail inválido.');
     } else {
       this.setError(message);
     }
-    this.toastr.error(message, 'Erro de AutenticaÃ§Ã£o');
+    this.toastr.error(message, 'Erro de Autenticação');
   }
 
   private handleBackendError(error: any): void {
@@ -531,7 +577,7 @@ export class AuthService {
     const message = error?.error?.message;
 
     if (status && message) {
-      const title = status === 403 ? 'VerificaÃ§Ã£o pendente' : 'Erro de AutenticaÃ§Ã£o';
+      const title = status === 403 ? 'Verificação pendente' : 'Erro de Autenticação';
       if (status === 403) {
         this.toastr.warning(message, title);
       } else {
@@ -540,7 +586,7 @@ export class AuthService {
       return;
     }
 
-    this.toastr.error(message || 'Erro ao realizar operaÃ§Ã£o', 'Erro de AutenticaÃ§Ã£o');
+    this.toastr.error(message || 'Erro ao realizar operação', 'Erro de Autenticação');
   }
 
   private setNotice(message: string): void {
@@ -554,11 +600,11 @@ export class AuthService {
   }
 
   setPasswordResetCompletedNotice(): void {
-    this.setNotice('Senha redefinida com sucesso. Agora vocÃª jÃ¡ pode entrar.');
+    this.setNotice('Senha redefinida com sucesso. Agora você já pode entrar.');
   }
 
   setEmailVerifiedNotice(): void {
-    this.setNotice('Email verificado com sucesso. Agora vocÃª jÃ¡ pode entrar.');
+    this.setNotice('E-mail verificado com sucesso. Agora você já pode entrar.');
   }
 
   async validateResetPasswordCode(code: string): Promise<void> {
@@ -640,6 +686,23 @@ export class AuthService {
     if (typeof sessionStorage === 'undefined') return;
 
     sessionStorage.removeItem(key);
+  }
+
+  private async registerUserActivity(payload: {
+    tipo: 'login' | 'logout' | 'password_reset_requested';
+    titulo: string;
+    detalhe: string;
+    metadata?: Record<string, unknown>;
+  }): Promise<void> {
+    if (!this.currentUser()?.backendUserId) {
+      return;
+    }
+
+    try {
+      await firstValueFrom(this.apiService.registerMyActivity(payload));
+    } catch (error) {
+      console.error('Erro ao registrar atividade do usuário:', error);
+    }
   }
 
   private createUserAccount(email: string, password: string) {

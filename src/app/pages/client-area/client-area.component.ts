@@ -135,7 +135,7 @@ export class ClientAreaComponent implements OnInit, OnDestroy {
       this.toastr.success('Pagamento confirmado e plano liberado.', 'Tudo certo');
     } catch (error: any) {
       const message =
-        error?.error?.message || 'Nao foi possivel sincronizar o pagamento agora.';
+        error?.error?.message || 'Não foi possível sincronizar o pagamento agora.';
       this.toastr.warning(message, 'Pagamento');
     } finally {
       await this.loadDashboardData();

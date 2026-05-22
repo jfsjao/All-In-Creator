@@ -67,7 +67,7 @@ export class PaymentStatusComponent {
           badge: 'Pagamento pendente',
           title: 'Estamos aguardando a confirmacao do pagamento',
           description:
-            'Se voce escolheu Pix, boleto ou outro meio com confirmacao posterior, a liberacao acontece assim que o Mercado Pago confirmar a operacao.',
+            'Se você escolheu Pix, boleto ou outro meio com confirmação posterior, a liberação acontece assim que o Mercado Pago confirmar a operação.',
           tone: 'pending',
           primaryLabel: 'Ir para area do cliente',
           primaryLink: '/client-area',
@@ -76,10 +76,10 @@ export class PaymentStatusComponent {
         };
       case 'failure':
         return {
-          badge: 'Pagamento nao concluido',
-          title: 'Nao conseguimos confirmar essa compra',
+          badge: 'Pagamento não concluído',
+          title: 'Não conseguimos confirmar essa compra',
           description:
-            'Voce pode tentar novamente com outro meio de pagamento ou voltar para o checkout do plano escolhido.',
+            'Você pode tentar novamente com outro meio de pagamento ou voltar para o checkout do plano escolhido.',
           tone: 'failure',
           primaryLabel: 'Voltar aos planos',
           primaryLink: '/plans',
@@ -128,7 +128,7 @@ export class PaymentStatusComponent {
       }
     } catch (error: any) {
       const message =
-        error?.error?.message || 'Nao foi possivel sincronizar seu pagamento agora.';
+        error?.error?.message || 'Não foi possível sincronizar seu pagamento agora.';
       this.paymentSyncMessage.set(message);
       this.toastr.warning(message, 'Pagamento');
     } finally {
