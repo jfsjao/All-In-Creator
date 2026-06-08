@@ -37,10 +37,18 @@ export class MyAccountComponent implements OnInit {
     role: ''
   };
 
-  preferences = {
-    notifications: true,
-    launches: true
-  };
+  readonly roleOptions = [
+    'Criador de conteudo',
+    'Editor de video',
+    'Designer grafico',
+    'Social media',
+    'Gestor de trafego',
+    'Agencia de marketing',
+    'Infoprodutor',
+    'Streamer ou gamer',
+    'Educacao e treinamentos',
+    'Empreendedor'
+  ];
 
   shortcuts: AccountShortcut[] = [
     {
@@ -48,12 +56,8 @@ export class MyAccountComponent implements OnInit {
       description: 'Mantenha seus dados principais e forma de contato organizados.'
     },
     {
-      title: 'Ajustar preferências',
-      description: 'Controle os avisos da plataforma e as novidades da sua conta.'
-    },
-    {
-      title: 'Reforçar segurança',
-      description: 'Revise a senha, o acesso recente e a proteção da sua conta.'
+      title: 'Reforcar seguranca',
+      description: 'Revise a senha, o acesso recente e a protecao da sua conta.'
     }
   ];
 

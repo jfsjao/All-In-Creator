@@ -6,7 +6,7 @@
       <span class="hero-badge">Minha conta</span>
       <h1>Organize sua conta do seu jeito</h1>
       <p>
-        Atualize seus dados, ajuste preferências e acompanhe a atividade recente para manter tudo sob controle.
+        Atualize seus dados e acompanhe a atividade recente para manter tudo sob controle.
       </p>
     </div>
   </section>
@@ -70,35 +70,16 @@
 
           <label class="field">
             <span>Área de atuação</span>
-            <small class="field-helper">Esse dado vai nos ajudar a entender melhor o perfil dos criadores depois.</small>
-            <input type="text" [(ngModel)]="profileForm.role" />
-          </label>
-        </div>
-      </section>
-
-      <section class="panel">
-        <div class="panel-header">
-          <div>
-            <h2>Preferências</h2>
-            <p>Reorganize como a plataforma conversa com você.</p>
-          </div>
-        </div>
-
-        <div class="toggle-list">
-          <label class="toggle-card">
-            <div>
-              <strong>Receber notificacoes</strong>
-              <p>Avisos sobre acesso, conta e movimentações.</p>
-            </div>
-            <input type="checkbox" [(ngModel)]="preferences.notifications" />
-          </label>
-
-          <label class="toggle-card">
-            <div>
-              <strong>Novos lançamentos</strong>
-              <p>Seja avisado quando novos packs forem liberados.</p>
-            </div>
-            <input type="checkbox" [(ngModel)]="preferences.launches" />
+            <small class="field-helper">Escolha uma categoria para melhorar as metricas da plataforma.</small>
+            <select [(ngModel)]="profileForm.role">
+              <option value="">Selecione uma area</option>
+              @if (profileForm.role && !roleOptions.includes(profileForm.role)) {
+                <option [value]="profileForm.role">{{ profileForm.role }}</option>
+              }
+              @for (role of roleOptions; track role) {
+                <option [value]="role">{{ role }}</option>
+              }
+            </select>
           </label>
         </div>
       </section>

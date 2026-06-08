@@ -13,10 +13,14 @@
       <div class="hero-actions">
         <a routerLink="/library" class="btn btn-primary">Explorar Biblioteca</a>
         <a href="/my-downloads" class="btn btn-secondary">Meus Downloads</a>
+        @if (isAdminUser()) {
+          <a routerLink="/admin" class="btn btn-admin">Modo admin</a>
+        }
       </div>
     </div>
   </section>
 
+  @if (slides.length > 0) {
   <section class="dashboard-carousel-section">
     <div class="section-header">
       <h2>Destaques para você</h2>
@@ -58,6 +62,7 @@
       </div>
     </div>
   </section>
+  }
 
   <section class="dashboard-section" id="meus-packs">
     <div class="section-header">
@@ -94,6 +99,7 @@
     }
   </section>
 
+  @if (news.length > 0) {
   <section class="dashboard-section alt-bg">
     <div class="section-header">
       <h2>Novidades</h2>
@@ -111,6 +117,7 @@
       }
     </div>
   </section>
+  }
 
   <section class="dashboard-section">
     <div class="section-header">

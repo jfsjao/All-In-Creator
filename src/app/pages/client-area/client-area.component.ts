@@ -4,7 +4,7 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import { AuthService } from '@core/services/auth.service';
-import { ApiService } from '@core/api.service';
+import { ApiService, SiteContentResponseItem } from '@core/api.service';
 import { UserLibraryPack, UserLibraryService, UserPlanSlug } from '@core/services/user-library.service';
 
 interface ClientAreaSlide {
@@ -163,7 +163,7 @@ export class ClientAreaComponent implements OnInit, OnDestroy {
 
   private async loadDashboardData(): Promise<void> {
     await this.authService.waitForAuthInit();
-    this.news = this.getNewsItems();
+    await this.loadClientAreaContent();
     this.upgradeSuggestions = this.getUpgradeSuggestions(this.userPlan);
 
     const user = this.authService.currentUser();
@@ -200,14 +200,26 @@ export class ClientAreaComponent implements OnInit, OnDestroy {
   }
 
   nextSlide(): void {
+    if (this.slides.length === 0) {
+      return;
+    }
+
     this.currentSlide = (this.currentSlide + 1) % this.slides.length;
   }
 
   prevSlide(): void {
+    if (this.slides.length === 0) {
+      return;
+    }
+
     this.currentSlide = (this.currentSlide - 1 + this.slides.length) % this.slides.length;
   }
 
   goToSlide(index: number): void {
+    if (index < 0 || index >= this.slides.length) {
+      return;
+    }
+
     this.currentSlide = index;
   }
 
@@ -219,6 +231,10 @@ export class ClientAreaComponent implements OnInit, OnDestroy {
     this.selectedPopularPack = null;
   }
 
+  isAdminUser(): boolean {
+    return this.authService.isAdmin();
+  }
+
   scrollPopularRow(direction: number): void {
     const row = document.getElementById('popular-packs-row');
 
@@ -228,6 +244,60 @@ export class ClientAreaComponent implements OnInit, OnDestroy {
       left: this.POPULAR_SCROLL_AMOUNT * direction,
       behavior: 'smooth'
     });
+  }
+
+  private async loadClientAreaContent(): Promise<void> {
+    try {
+      const response = await firstValueFrom(this.apiService.getClientAreaContent());
+      const hasExplicitContent =
+        response.has_configured_content === true || response.slides.length > 0 || response.news.length > 0;
+
+      if (hasExplicitContent) {
+        this.slides = response.slides.map((item) => this.mapSlideContent(item));
+        this.currentSlide = this.slides.length
+          ? Math.min(this.currentSlide, this.slides.length - 1)
+          : 0;
+        this.news = response.news.map((item, index) => this.mapNewsContent(item, index));
+        return;
+      }
+
+      this.news = this.getNewsItems();
+    } catch (error) {
+      console.error('Erro ao carregar conteudos da area do cliente:', error);
+      this.news = this.getNewsItems();
+    }
+  }
+
+  private mapSlideContent(item: SiteContentResponseItem): ClientAreaSlide {
+    return {
+      image: this.getContentString(item, 'image', 'assets/images/carrosel_cliente/novidades.webp'),
+      alt: this.getContentString(item, 'alt', item.titulo),
+      tag: this.getContentString(item, 'tag', 'Destaque'),
+      title: item.titulo,
+      description: item.subtitulo ?? '',
+      buttonText: this.getContentString(item, 'buttonText', 'Abrir'),
+      buttonLink: this.getContentString(item, 'buttonLink', '/library')
+    };
+  }
+
+  private mapNewsContent(item: SiteContentResponseItem, index: number): NewsItem {
+    return {
+      id: item.id ?? index + 1,
+      tag: this.getContentString(item, 'tag', 'Novidade'),
+      title: item.titulo,
+      description: item.subtitulo ?? '',
+      date: this.getContentString(item, 'date', '')
+    };
+  }
+
+  private getContentString(
+    item: SiteContentResponseItem,
+    key: string,
+    fallback: string
+  ): string {
+    const value = item.conteudo?.[key];
+
+    return typeof value === 'string' && value.trim() ? value : fallback;
   }
 
   private startAutoSlide(): void {

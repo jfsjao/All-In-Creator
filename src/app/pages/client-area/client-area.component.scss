@@ -108,6 +108,19 @@
   }
 }
 
+.btn-admin {
+  background: #111827;
+  color: #d9f99d;
+  border-color: rgba(217, 249, 157, 0.48);
+  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.28);
+
+  &:hover {
+    transform: translateY(-2px);
+    background: #0b1220;
+    border-color: rgba(217, 249, 157, 0.72);
+  }
+}
+
 /* SECTIONS */
 .dashboard-section,
 .dashboard-carousel-section {
