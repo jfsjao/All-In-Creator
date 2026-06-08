@@ -1,0 +1,479 @@
+<main class="admin-page">
+  <header class="admin-header">
+    <div>
+      <span class="admin-kicker">Modo admin</span>
+      <h1>Operacao da plataforma</h1>
+      <p>Packs, planos e destaques prontos para manutencao rapida.</p>
+    </div>
+
+    <div class="header-actions">
+      <a routerLink="/client-area" class="ghost-button">
+        <i class="bi bi-arrow-left"></i>
+        Cliente
+      </a>
+      <button type="button" class="primary-button" (click)="startNewPack()">
+        <i class="bi bi-plus-lg"></i>
+        Novo pack
+      </button>
+    </div>
+  </header>
+
+  <nav class="admin-tabs" aria-label="Areas do admin">
+    <button type="button" [class.active]="activeTab === 'packs'" (click)="setActiveTab('packs')">
+      <i class="bi bi-box-seam"></i>
+      Packs
+    </button>
+    <button type="button" [class.active]="activeTab === 'emails'" (click)="setActiveTab('emails')">
+      <i class="bi bi-envelope-paper"></i>
+      Emails
+    </button>
+    <button type="button" [class.active]="activeTab === 'metrics'" (click)="setActiveTab('metrics')">
+      <i class="bi bi-bar-chart-line"></i>
+      Metricas
+    </button>
+    <button type="button" [class.active]="activeTab === 'site'" (click)="setActiveTab('site')">
+      <i class="bi bi-window-sidebar"></i>
+      Conteudos do site
+    </button>
+  </nav>
+
+  @if (isLoading) {
+    <section class="admin-feedback">Carregando painel...</section>
+  } @else if (errorMessage) {
+    <section class="admin-feedback error">{{ errorMessage }}</section>
+  } @else if (activeTab === 'packs') {
+    <section class="metrics-grid">
+      <article>
+        <span>Packs ativos</span>
+        <strong>{{ totalActivePacks }}</strong>
+      </article>
+      <article>
+        <span>Em destaque</span>
+        <strong>{{ featuredPacksCount }}</strong>
+      </article>
+      <article>
+        <span>Planos</span>
+        <strong>{{ planos.length }}</strong>
+      </article>
+      @for (plan of planos; track plan.id) {
+        <article>
+          <span>{{ plan.nome }}</span>
+          <strong>{{ plan.total_packs }}</strong>
+          <small>packs associados</small>
+        </article>
+      }
+    </section>
+
+    <section class="admin-shell">
+      <aside class="packs-panel">
+        <div class="panel-title">
+          <h2>Packs</h2>
+          <span>{{ packs.length }} cadastrados</span>
+        </div>
+
+        <div class="packs-list">
+          @for (pack of packs; track pack.id) {
+            <button
+              type="button"
+              class="pack-row"
+              [class.active]="selectedPack?.id === pack.id"
+              (click)="editPack(pack)">
+              <span class="pack-row-main">
+                <strong>{{ pack.nome }}</strong>
+                <small>{{ pack.slug }}</small>
+              </span>
+              <span class="pack-row-meta">
+                @if (pack.principal) {
+                  <i class="bi bi-star-fill"></i>
+                }
+                <span [class.off]="!pack.ativo">{{ pack.ativo ? 'Ativo' : 'Inativo' }}</span>
+              </span>
+            </button>
+          }
+        </div>
+      </aside>
+
+      <section class="editor-panel">
+        <div class="panel-title">
+          <div>
+            <h2>{{ selectedPack ? 'Editar pack' : 'Novo pack' }}</h2>
+            <span>{{ selectedPack ? selectedPack.slug : 'Crie e associe aos planos' }}</span>
+          </div>
+        </div>
+
+        <form [formGroup]="packForm" (ngSubmit)="submitPack()" class="pack-form">
+          <div class="form-grid">
+            <label>
+              Nome
+              <input type="text" formControlName="nome" placeholder="Pack Adobe Premiere" />
+            </label>
+
+            <label>
+              Slug
+              <input type="text" formControlName="slug" placeholder="pack-adobe-premiere" />
+            </label>
+          </div>
+
+          <label>
+            Descricao
+            <textarea formControlName="descricao" rows="4" placeholder="Explique o que entra nesse pack."></textarea>
+          </label>
+
+          <div class="asset-card">
+            <div class="asset-preview">
+              <img [src]="packImagePreview" alt="Preview da imagem do pack" />
+              <strong>{{ packImageSourceLabel }}</strong>
+            </div>
+
+            <div class="asset-fields">
+              <span>Imagem do pack</span>
+              <p>Para usar capa local, deixe a URL vazia e mantenha o slug mapeado no deploy do front.</p>
+
+              <label>
+                URL externa opcional
+                <input type="url" formControlName="capa_url" placeholder="Deixe vazio para usar a imagem local pelo slug" />
+              </label>
+
+              <div class="asset-meta">
+                <small>Slug: {{ packForm.getRawValue().slug || 'novo-pack' }}</small>
+                @if (packForm.getRawValue().capa_url) {
+                  <button type="button" (click)="clearPackImage()">Remover</button>
+                }
+              </div>
+            </div>
+          </div>
+
+          <label>
+            Link do arquivo
+            <input type="url" formControlName="arquivo_url" placeholder="https://drive.google.com/..." />
+          </label>
+
+          <div class="form-grid compact">
+            <label>
+              Tamanho GB
+              <input type="number" step="0.01" min="0" formControlName="tamanho_gb" placeholder="2.50" />
+            </label>
+
+            <label>
+              Versao
+              <input type="text" formControlName="versao" placeholder="1.0.0" />
+            </label>
+          </div>
+
+          <label>
+            Palavras-chave
+            <input type="text" formControlName="palavras_chave" placeholder="premiere, edicao de video, reels" />
+          </label>
+
+          <div class="plans-box">
+            <span>Planos com acesso</span>
+            <div class="plans-options">
+              @for (plan of planOptions; track plan.slug) {
+                <button
+                  type="button"
+                  class="plan-chip"
+                  [class.selected]="hasPlan(plan.slug)"
+                  (click)="togglePlan(plan.slug)">
+                  {{ plan.label }}
+                </button>
+              }
+            </div>
+          </div>
+
+          <div class="switch-row">
+            <label>
+              <input type="checkbox" formControlName="principal" />
+              Destaque/carrossel de packs
+            </label>
+
+            <label>
+              <input type="checkbox" formControlName="ativo" />
+              Pack ativo
+            </label>
+          </div>
+
+          <button type="submit" class="save-button" [disabled]="isSaving">
+            <i class="bi bi-check2-circle"></i>
+            {{ isSaving ? 'Salvando...' : 'Salvar pack' }}
+          </button>
+        </form>
+      </section>
+    </section>
+
+  } @else if (activeTab === 'emails') {
+    <section class="email-panel">
+      <div class="panel-title">
+        <div>
+          <h2>Emails de noticias e atualizacoes</h2>
+          <span>Campanhas segmentadas por plano</span>
+        </div>
+      </div>
+
+      <div class="email-shell">
+        <form class="email-form" [formGroup]="emailForm" novalidate>
+          <div class="form-grid">
+            <label>
+              Segmento
+              <select formControlName="segment" (change)="loadEmailRecipientsPreview()">
+                @for (segment of emailSegmentOptions; track segment.slug) {
+                  <option [value]="segment.slug">{{ segment.label }}</option>
+                }
+              </select>
+            </label>
+
+            <label>
+              Email de teste
+              <input type="email" formControlName="test_email" placeholder="voce@email.com" />
+            </label>
+          </div>
+
+          <section class="email-audience">
+            <div>
+              <span>Destinatarios da campanha</span>
+              @if (isLoadingEmailRecipients) {
+                <strong>Carregando...</strong>
+              } @else {
+                <strong>{{ emailRecipientsPreview?.total ?? 0 }}</strong>
+              }
+              <small>{{ selectedEmailSegmentLabel }} com email cadastrado</small>
+            </div>
+
+            @if (emailRecipientsPreview?.daily_limit) {
+              <div [class.warning]="emailRecipientsPreview?.exceeds_daily_limit">
+                <span>Limite diario SMTP</span>
+                <strong>{{ emailRecipientsPreview?.daily_limit }}</strong>
+                <small>
+                  {{ emailRecipientsPreview?.exceeds_daily_limit ? 'Segmento acima do limite' : 'Dentro do limite configurado' }}
+                </small>
+              </div>
+            }
+
+            <div class="audience-breakdown">
+              @for (item of emailRecipientsPreview?.by_plan ?? []; track item.plano_slug) {
+                <span>{{ item.plano_slug }}: {{ item.total }}</span>
+              }
+            </div>
+          </section>
+
+          <label>
+            Assunto
+            <input type="text" formControlName="subject" placeholder="Novidades da All In Creator" />
+          </label>
+
+          <label>
+            Titulo do email
+            <input type="text" formControlName="title" placeholder="Novos conteudos chegaram na plataforma" />
+          </label>
+
+          <label>
+            Mensagem
+            <textarea formControlName="body" rows="8" placeholder="Escreva a atualizacao que os clientes vao receber."></textarea>
+          </label>
+
+          <div class="form-grid">
+            <label>
+              Texto do botao
+              <input type="text" formControlName="cta_label" placeholder="Ver novidades" />
+            </label>
+
+            <label>
+              Link do botao
+              <input type="url" formControlName="cta_url" placeholder="https://allincreator.com/client-area" />
+            </label>
+          </div>
+
+          <div class="email-actions">
+            <button type="button" class="ghost-button" (click)="sendEmailTest()" [disabled]="isSendingEmail">
+              <i class="bi bi-send-check"></i>
+              Enviar teste
+            </button>
+            <button type="button" class="save-button" (click)="sendEmailCampaignToSegment()" [disabled]="isSendingEmail">
+              <i class="bi bi-megaphone"></i>
+              {{ isSendingEmail ? 'Enviando...' : 'Enviar campanha' }}
+            </button>
+          </div>
+        </form>
+
+        <aside class="email-preview">
+          <span>Preview</span>
+          <strong>{{ emailForm.getRawValue().subject || 'Assunto do email' }}</strong>
+          <div class="email-preview-card">
+            <small>All In Creator • {{ selectedEmailSegmentLabel }}</small>
+            <h3>{{ emailForm.getRawValue().title || 'Titulo do email' }}</h3>
+            <p>{{ emailPreviewBody }}</p>
+            @if (emailForm.getRawValue().cta_label && emailForm.getRawValue().cta_url) {
+              <a [href]="emailForm.getRawValue().cta_url || '#'" target="_blank">
+                {{ emailForm.getRawValue().cta_label }}
+              </a>
+            }
+          </div>
+        </aside>
+      </div>
+    </section>
+  } @else if (activeTab === 'metrics') {
+    <section class="metrics-panel">
+      <div class="panel-title">
+        <div>
+          <h2>Metricas da plataforma</h2>
+          <span>Areas de atuacao, downloads e interesse por perfil</span>
+        </div>
+        <button type="button" class="ghost-button" (click)="loadMetrics()">
+          <i class="bi bi-arrow-clockwise"></i>
+          Atualizar
+        </button>
+      </div>
+
+      @if (!metrics) {
+        <p class="section-feedback">Nao foi possivel carregar as metricas agora.</p>
+      } @else {
+        <div class="metrics-admin-grid">
+          <article>
+            <h3>Usuarios por area</h3>
+            <div class="metric-list">
+              @for (item of metrics.usuarios_por_area; track item.area_atuacao) {
+                <div class="metric-row">
+                  <span>{{ item.area_atuacao }}</span>
+                  <strong>{{ item.total_usuarios }}</strong>
+                </div>
+              }
+            </div>
+          </article>
+
+          <article>
+            <h3>Packs mais baixados</h3>
+            <div class="metric-list">
+              @for (pack of metrics.packs_mais_baixados; track pack.pack_id) {
+                <div class="metric-row">
+                  <span>{{ pack.nome }}</span>
+                  <strong>{{ pack.total_downloads }}</strong>
+                  <small>{{ pack.usuarios_unicos }} usuarios</small>
+                </div>
+              }
+            </div>
+          </article>
+        </div>
+
+        <article class="metrics-by-area">
+          <h3>Packs mais baixados por area de atuacao</h3>
+          <div class="area-download-grid">
+            @for (pack of metrics.packs_mais_baixados_por_area; track pack.area_atuacao + '-' + pack.pack_id) {
+              <div>
+                <span>{{ pack.area_atuacao }}</span>
+                <strong>{{ pack.nome }}</strong>
+                <small>{{ pack.total_downloads }} downloads • {{ pack.usuarios_unicos }} usuarios</small>
+              </div>
+            }
+          </div>
+        </article>
+      }
+    </section>
+  } @else {
+    <section class="content-panel">
+      <div class="panel-title">
+        <div>
+          <h2>Conteudos do site</h2>
+          <span>Carrossel e noticias da area do cliente</span>
+        </div>
+        <button type="button" class="save-button slim" (click)="saveClientAreaContent()" [disabled]="isSavingContent">
+          <i class="bi bi-check2-circle"></i>
+          {{ isSavingContent ? 'Salvando...' : 'Salvar conteudos' }}
+        </button>
+      </div>
+
+      <div class="content-editor-grid">
+        <section>
+          <div class="subpanel-title">
+            <div>
+              <h3>Slides do carrossel</h3>
+              <span>{{ contentSlides.length }} itens</span>
+            </div>
+            <div class="subpanel-actions">
+              <button type="button" class="ghost-button utility" (click)="restoreDefaultSlides()">
+                <i class="bi bi-arrow-counterclockwise"></i>
+                Restaurar padrao
+              </button>
+              <button type="button" class="ghost-button danger" (click)="deactivateAllSlides()">
+                <i class="bi bi-pause-circle"></i>
+                Desativar todos
+              </button>
+              <button type="button" class="ghost-button" (click)="addSlideContent()">
+                <i class="bi bi-plus-lg"></i>
+                Slide
+              </button>
+            </div>
+          </div>
+
+          <div class="content-items">
+            @for (slide of contentSlides; track slide.chave; let i = $index) {
+              <article class="content-item">
+                <div class="content-item-head">
+                  <label>
+                    <input type="checkbox" [(ngModel)]="slide.ativo" />
+                    Ativo
+                  </label>
+                  <button type="button" (click)="removeSlideContent(i)">Remover</button>
+                </div>
+
+                <img [src]="slide.image" [alt]="slide.alt" />
+                <input [(ngModel)]="slide.titulo" placeholder="Titulo" />
+                <textarea [(ngModel)]="slide.subtitulo" rows="3" placeholder="Descricao"></textarea>
+                <div class="form-grid">
+                  <input [(ngModel)]="slide.tag" placeholder="Tag" />
+                  <input [(ngModel)]="slide.image" placeholder="Imagem local" />
+                </div>
+                <div class="form-grid">
+                  <input [(ngModel)]="slide.buttonText" placeholder="Texto do botao" />
+                  <input [(ngModel)]="slide.buttonLink" placeholder="/library" />
+                </div>
+              </article>
+            }
+          </div>
+        </section>
+
+        <section>
+          <div class="subpanel-title">
+            <div>
+              <h3>Noticias e atualizacoes</h3>
+              <span>{{ contentNews.length }} itens</span>
+            </div>
+            <div class="subpanel-actions">
+              <button type="button" class="ghost-button utility" (click)="restoreDefaultNews()">
+                <i class="bi bi-arrow-counterclockwise"></i>
+                Restaurar padrao
+              </button>
+              <button type="button" class="ghost-button danger" (click)="deactivateAllNews()">
+                <i class="bi bi-pause-circle"></i>
+                Desativar todos
+              </button>
+              <button type="button" class="ghost-button" (click)="addNewsContent()">
+                <i class="bi bi-plus-lg"></i>
+                Noticia
+              </button>
+            </div>
+          </div>
+
+          <div class="content-items">
+            @for (item of contentNews; track item.chave; let i = $index) {
+              <article class="content-item compact-content">
+                <div class="content-item-head">
+                  <label>
+                    <input type="checkbox" [(ngModel)]="item.ativo" />
+                    Ativo
+                  </label>
+                  <button type="button" (click)="removeNewsContent(i)">Remover</button>
+                </div>
+
+                <div class="form-grid">
+                  <input [(ngModel)]="item.tag" placeholder="Tag" />
+                  <input [(ngModel)]="item.date" placeholder="Data" />
+                </div>
+                <input [(ngModel)]="item.titulo" placeholder="Titulo" />
+                <textarea [(ngModel)]="item.subtitulo" rows="4" placeholder="Descricao"></textarea>
+              </article>
+            }
+          </div>
+        </section>
+      </div>
+    </section>
+  }
+</main>
