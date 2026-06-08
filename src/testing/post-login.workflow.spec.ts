@@ -28,6 +28,7 @@ describe('Post Login Workflow', () => {
       plano: 'basic'
     }),
     isAuthenticated: jasmine.createSpy('isAuthenticated').and.returnValue(true),
+    isAdmin: jasmine.createSpy('isAdmin').and.returnValue(false),
     waitForAuthInit: jasmine.createSpy('waitForAuthInit').and.resolveTo(),
     updateCurrentUserProfile: jasmine.createSpy('updateCurrentUserProfile').and.resolveTo()
   };
@@ -152,6 +153,11 @@ describe('Post Login Workflow', () => {
         criado_em: '2026-03-01T00:00:00.000Z',
         atualizado_em: '2026-04-01T00:00:00.000Z'
       }
+    })),
+    getClientAreaContent: jasmine.createSpy('getClientAreaContent').and.returnValue(of({
+      slides: [],
+      news: [],
+      has_configured_content: false
     }))
   };
 
