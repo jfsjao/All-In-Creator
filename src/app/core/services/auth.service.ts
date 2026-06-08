@@ -32,6 +32,7 @@ export interface UserData {
   displayName: string | null;
   photoURL: string | null;
   plano?: 'gratuito' | 'basic' | 'pro' | 'premium' | null;
+  role?: 'cliente' | 'admin';
 }
 
 @Injectable({
@@ -156,7 +157,8 @@ export class AuthService {
           email: user.email,
           displayName: user.displayName,
           photoURL: user.photoURL,
-          plano: 'gratuito'
+          plano: 'gratuito',
+          role: 'cliente'
         });
 
         const synced = await this.ensureBackendUserSynced(user);
@@ -192,7 +194,8 @@ export class AuthService {
       this.currentUser.set({
         ...current,
         backendUserId: Number(response.usuario.id),
-        plano: response.plano_atual?.slug ?? 'gratuito'
+        plano: response.plano_atual?.slug ?? 'gratuito',
+        role: response.usuario.role ?? 'cliente'
       });
       this.backendSyncErrorMessage = null;
       this.clearError();
@@ -515,6 +518,10 @@ export class AuthService {
     if (!current) return false;
 
     return auth.currentUser?.emailVerified === true && !!current.backendUserId;
+  }
+
+  isAdmin(): boolean {
+    return this.isAuthenticated() && this.currentUser()?.role === 'admin';
   }
 
   /**

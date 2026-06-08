@@ -30,6 +30,7 @@ export interface SyncAuthResponse {
     id: string;
     nome: string | null;
     email: string;
+    role?: 'cliente' | 'admin';
     provedor_autenticacao: string;
     id_usuario_provedor: string | null;
     foto_url: string | null;
@@ -56,6 +57,7 @@ export interface AuthTokenResponse {
     id: string;
     nome: string | null;
     email: string;
+    role?: 'cliente' | 'admin';
     provedor_autenticacao: string;
     id_usuario_provedor: string | null;
     foto_url: string | null;
@@ -100,6 +102,109 @@ export interface PackResponse {
   tamanho_gb: string | null;
   principal: boolean;
   ativo: boolean;
+}
+
+export interface AdminPlanoResponse {
+  id: number;
+  slug: 'gratuito' | 'basic' | 'pro' | 'premium';
+  nome: string;
+  descricao: string | null;
+  preco: string;
+  ativo: boolean;
+  total_packs: number;
+}
+
+export interface AdminPackResponse extends PackResponse {
+  versao: string | null;
+  planos: Array<'gratuito' | 'basic' | 'pro' | 'premium'>;
+  palavras_chave: string[];
+  criado_em: string;
+  atualizado_em: string;
+}
+
+export interface AdminPackPayload {
+  slug: string;
+  nome: string;
+  descricao: string;
+  capa_url: string | null;
+  arquivo_url: string | null;
+  tamanho_gb: string | number | null;
+  principal: boolean;
+  ativo: boolean;
+  versao: string | null;
+  planos: Array<'gratuito' | 'basic' | 'pro' | 'premium'>;
+  palavras_chave: string[];
+}
+
+export type AdminEmailSegment = 'all' | 'gratuito' | 'basic' | 'pro' | 'premium';
+
+export interface AdminEmailCampaignPayload {
+  segment: AdminEmailSegment;
+  subject: string;
+  title: string;
+  body: string;
+  cta_label: string | null;
+  cta_url: string | null;
+  test_email?: string | null;
+}
+
+export interface AdminEmailCampaignResponse {
+  message: string;
+  sent: number;
+  total: number;
+  segment: AdminEmailSegment;
+  test: boolean;
+}
+
+export interface AdminEmailRecipientsPreviewResponse {
+  segment: AdminEmailSegment;
+  total: number;
+  daily_limit: number | null;
+  exceeds_daily_limit: boolean;
+  by_plan: Array<{
+    plano_slug: AdminEmailSegment;
+    total: number;
+  }>;
+}
+
+export interface AdminUsersByAreaMetric {
+  area_atuacao: string;
+  total_usuarios: number;
+}
+
+export interface AdminTopDownloadedPackMetric {
+  pack_id: number;
+  slug: string;
+  nome: string;
+  total_downloads: number;
+  usuarios_unicos: number;
+}
+
+export interface AdminTopPackByAreaMetric extends AdminTopDownloadedPackMetric {
+  area_atuacao: string;
+}
+
+export interface AdminMetricsResponse {
+  usuarios_por_area: AdminUsersByAreaMetric[];
+  packs_mais_baixados: AdminTopDownloadedPackMetric[];
+  packs_mais_baixados_por_area: AdminTopPackByAreaMetric[];
+}
+
+export interface SiteContentResponseItem {
+  id?: number;
+  chave: string;
+  tipo: 'client_area_slide' | 'client_area_news';
+  titulo: string;
+  subtitulo: string | null;
+  conteudo: Record<string, unknown>;
+  ativo: boolean;
+  ordem: number;
+}
+
+export interface ClientAreaContentResponse {
+  slides: SiteContentResponseItem[];
+  news: SiteContentResponseItem[];
+  has_configured_content?: boolean;
 }
 
 export interface PacksDestaqueResponse {
@@ -473,5 +578,102 @@ export class ApiService {
 
   sendContact(payload: ContactPayload): Observable<{ message: string }> {
     return this.http.post<{ message: string }>(`${this.backendUrl}/contact`, payload);
+  }
+
+  getAdminSession(): Observable<{ usuario_id: number; role: 'admin' }> {
+    return this.withAuthHeaders((headers) =>
+      this.http.get<{ usuario_id: number; role: 'admin' }>(`${this.backendUrl}/admin/me`, { headers })
+    );
+  }
+
+  getAdminPlans(): Observable<{ planos: AdminPlanoResponse[] }> {
+    return this.withAuthHeaders((headers) =>
+      this.http.get<{ planos: AdminPlanoResponse[] }>(`${this.backendUrl}/admin/plans`, { headers })
+    );
+  }
+
+  getAdminPacks(): Observable<{ packs: AdminPackResponse[] }> {
+    return this.withAuthHeaders((headers) =>
+      this.http.get<{ packs: AdminPackResponse[] }>(`${this.backendUrl}/admin/packs`, { headers })
+    );
+  }
+
+  getAdminMetrics(): Observable<AdminMetricsResponse> {
+    return this.withAuthHeaders((headers) =>
+      this.http.get<AdminMetricsResponse>(`${this.backendUrl}/admin/metrics`, { headers })
+    );
+  }
+
+  getAdminClientAreaContent(): Observable<ClientAreaContentResponse> {
+    return this.withAuthHeaders((headers) =>
+      this.http.get<ClientAreaContentResponse>(
+        `${this.backendUrl}/admin/site-content/client-area`,
+        { headers }
+      )
+    );
+  }
+
+  updateAdminClientAreaContent(
+    payload: ClientAreaContentResponse
+  ): Observable<ClientAreaContentResponse & { message: string }> {
+    return this.withAuthHeaders((headers) =>
+      this.http.put<ClientAreaContentResponse & { message: string }>(
+        `${this.backendUrl}/admin/site-content/client-area`,
+        payload,
+        { headers }
+      )
+    );
+  }
+
+  createAdminPack(payload: AdminPackPayload): Observable<{ message: string; pack: AdminPackResponse }> {
+    return this.withAuthHeaders((headers) =>
+      this.http.post<{ message: string; pack: AdminPackResponse }>(
+        `${this.backendUrl}/admin/packs`,
+        payload,
+        { headers }
+      )
+    );
+  }
+
+  updateAdminPack(
+    packId: number,
+    payload: AdminPackPayload
+  ): Observable<{ message: string; pack: AdminPackResponse }> {
+    return this.withAuthHeaders((headers) =>
+      this.http.put<{ message: string; pack: AdminPackResponse }>(
+        `${this.backendUrl}/admin/packs/${packId}`,
+        payload,
+        { headers }
+      )
+    );
+  }
+
+  sendAdminEmailCampaign(
+    payload: AdminEmailCampaignPayload
+  ): Observable<AdminEmailCampaignResponse> {
+    return this.withAuthHeaders((headers) =>
+      this.http.post<AdminEmailCampaignResponse>(
+        `${this.backendUrl}/admin/emails/campaigns`,
+        payload,
+        { headers }
+      )
+    );
+  }
+
+  getAdminEmailRecipientsPreview(
+    segment: AdminEmailSegment
+  ): Observable<AdminEmailRecipientsPreviewResponse> {
+    const params = new URLSearchParams({ segment });
+
+    return this.withAuthHeaders((headers) =>
+      this.http.get<AdminEmailRecipientsPreviewResponse>(
+        `${this.backendUrl}/admin/emails/recipients?${params.toString()}`,
+        { headers }
+      )
+    );
+  }
+
+  getClientAreaContent(): Observable<ClientAreaContentResponse> {
+    return this.http.get<ClientAreaContentResponse>(`${this.backendUrl}/content/client-area`);
   }
 }

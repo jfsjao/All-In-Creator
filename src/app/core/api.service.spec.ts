@@ -143,6 +143,36 @@ describe('ApiService', () => {
     expect(response.total_downloads).toBe(0);
   });
 
+  it('loads admin email recipients preview with auth headers', async () => {
+    Object.defineProperty(auth, 'currentUser', {
+      configurable: true,
+      value: {
+        getIdToken: jasmine.createSpy('getIdToken').and.resolveTo('firebase-access-token')
+      }
+    });
+
+    const responsePromise = firstValueFrom(service.getAdminEmailRecipientsPreview('pro'));
+    await new Promise((resolve) => setTimeout(resolve, 0));
+    const requests = httpMock.match('http://localhost:3333/admin/emails/recipients?segment=pro');
+    expect(requests.length).toBe(1);
+    const req = requests[0];
+
+    expect(req.request.method).toBe('GET');
+    expect(req.request.headers.get('Authorization')).toBe('Bearer firebase-access-token');
+
+    req.flush({
+      segment: 'pro',
+      total: 7,
+      daily_limit: 100,
+      exceeds_daily_limit: false,
+      by_plan: [{ plano_slug: 'pro', total: 7 }]
+    });
+
+    const response = await responsePromise;
+    expect(response.total).toBe(7);
+    expect(response.by_plan[0].plano_slug).toBe('pro');
+  });
+
   it('posts contact messages without auth headers', async () => {
     const responsePromise = firstValueFrom(service.sendContact({
       nome: 'Joao',
