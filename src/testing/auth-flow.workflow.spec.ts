@@ -11,6 +11,7 @@ describe('Auth Flow Workflow', () => {
     login: jasmine.createSpy('login').and.resolveTo(true),
     register: jasmine.createSpy('register').and.resolveTo(true),
     loginWithGoogle: jasmine.createSpy('loginWithGoogle').and.resolveTo(true),
+    rememberTermsAcceptanceForSignup: jasmine.createSpy('rememberTermsAcceptanceForSignup'),
     setPendingCheckout: jasmine.createSpy('setPendingCheckout'),
     waitForAuthInit: jasmine.createSpy('waitForAuthInit').and.resolveTo(),
     isAuthenticated: jasmine.createSpy('isAuthenticated').and.returnValue(false),
@@ -48,6 +49,7 @@ describe('Auth Flow Workflow', () => {
     authServiceMock.login.calls.reset();
     authServiceMock.register.calls.reset();
     authServiceMock.loginWithGoogle.calls.reset();
+    authServiceMock.rememberTermsAcceptanceForSignup.calls.reset();
     authServiceMock.setPendingCheckout.calls.reset();
     authServiceMock.clearError.calls.reset();
     authServiceMock.clearNotice.calls.reset();
@@ -94,7 +96,8 @@ describe('Auth Flow Workflow', () => {
       name: 'Joao Felipe',
       email: 'joao@example.com',
       password: '12345678',
-      confirmPassword: '12345678'
+      confirmPassword: '12345678',
+      termsAccepted: true
     });
 
     await component.onRegister();

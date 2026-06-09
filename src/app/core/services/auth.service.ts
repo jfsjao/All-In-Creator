@@ -24,6 +24,7 @@ import { auth } from '../firebase';
 import { ToastrService } from 'ngx-toastr';
 import { ApiService } from '../api.service';
 import { environment } from '../../../environments/environment';
+import { LEGAL_TERMS_VERSION } from '../legal-terms';
 
 export interface UserData {
   backendUserId?: number | null;
@@ -48,6 +49,7 @@ export class AuthService {
   private backendSyncErrorMessage: string | null = null;
   private pendingCheckoutPlanKey = 'pending_checkout_plan';
   private pendingAuthRedirectKey = 'pending_auth_redirect';
+  private pendingTermsAcceptanceKey = 'pending_terms_acceptance';
 
   currentUser = signal<UserData | null>(null);
   isLoading = signal<boolean>(true);
@@ -179,12 +181,19 @@ export class AuthService {
   private async syncBackendUser(user: User): Promise<boolean> {
     try {
       const token = await user.getIdToken(true);
+      const pendingTermsAcceptance = this.getPendingTermsAcceptance();
       const response = await firstValueFrom(this.apiService.syncAuth({
         nome: user.displayName,
         email: user.email,
         provedor_autenticacao: 'firebase',
         id_usuario_provedor: user.uid,
-        foto_url: user.photoURL
+        foto_url: user.photoURL,
+        ...(pendingTermsAcceptance
+          ? {
+              termos_aceitos: true,
+              termos_versao: pendingTermsAcceptance.version
+            }
+          : {})
       }, token));
 
       const current = this.currentUser();
@@ -198,6 +207,7 @@ export class AuthService {
         role: response.usuario.role ?? 'cliente'
       });
       this.backendSyncErrorMessage = null;
+      this.clearPendingTermsAcceptance();
       this.clearError();
       return true;
     } catch (error) {
@@ -261,6 +271,7 @@ export class AuthService {
       });
 
       const userCredential = await this.createUserAccount(email, password);
+      this.rememberTermsAcceptanceForSignup();
       this.debugAuth('register:user-created', {
         uid: userCredential.user.uid,
         emailVerified: userCredential.user.emailVerified
@@ -653,6 +664,43 @@ export class AuthService {
   setPendingCheckout(planSlug: 'basic' | 'pro' | 'premium', redirectUrl?: string): void {
     this.writeSessionItem(this.pendingCheckoutPlanKey, planSlug);
     this.writeSessionItem(this.pendingAuthRedirectKey, redirectUrl || `/checkout?plan=${planSlug}`);
+  }
+
+  rememberTermsAcceptanceForSignup(): void {
+    this.writeSessionItem(
+      this.pendingTermsAcceptanceKey,
+      JSON.stringify({
+        version: LEGAL_TERMS_VERSION,
+        acceptedAt: new Date().toISOString(),
+      }),
+    );
+  }
+
+  private getPendingTermsAcceptance(): { version: string; acceptedAt: string } | null {
+    const raw = this.readSessionItem(this.pendingTermsAcceptanceKey);
+
+    if (!raw) {
+      return null;
+    }
+
+    try {
+      const parsed = JSON.parse(raw) as { version?: string; acceptedAt?: string };
+
+      if (parsed.version === LEGAL_TERMS_VERSION && parsed.acceptedAt) {
+        return {
+          version: parsed.version,
+          acceptedAt: parsed.acceptedAt,
+        };
+      }
+    } catch {
+      return null;
+    }
+
+    return null;
+  }
+
+  private clearPendingTermsAcceptance(): void {
+    this.removeSessionItem(this.pendingTermsAcceptanceKey);
   }
 
   private async navigateAfterAuth(): Promise<void> {

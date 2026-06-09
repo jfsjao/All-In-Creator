@@ -10,6 +10,8 @@ export interface SyncAuthPayload {
   provedor_autenticacao: string;
   id_usuario_provedor: string;
   foto_url: string | null;
+  termos_aceitos?: boolean;
+  termos_versao?: string;
 }
 
 export interface PlanoAtualResponse {
@@ -44,6 +46,8 @@ export interface RegisterEmailPayload {
   nome: string | null;
   email: string;
   senha: string;
+  termos_aceitos?: boolean;
+  termos_versao?: string;
 }
 
 export interface LoginEmailPayload {
@@ -61,6 +65,8 @@ export interface AuthTokenResponse {
     provedor_autenticacao: string;
     id_usuario_provedor: string | null;
     foto_url: string | null;
+    termos_versao?: string | null;
+    termos_aceitos_em?: string | null;
     criado_em: string;
     atualizado_em: string;
   };
@@ -238,6 +244,8 @@ export interface UsuarioPerfilResponse {
     telefone: string | null;
     area_atuacao: string | null;
     foto_url: string | null;
+    termos_versao?: string | null;
+    termos_aceitos_em?: string | null;
     criado_em: string;
     atualizado_em: string;
   };
@@ -556,11 +564,14 @@ export class ApiService {
     );
   }
 
-  createCheckout(planSlug: PaidPlanSlug): Observable<CreateCheckoutResponse> {
+  createCheckout(
+    planSlug: PaidPlanSlug,
+    terms: { termsAccepted: boolean; termsVersion: string }
+  ): Observable<CreateCheckoutResponse> {
     return this.withAuthHeaders((headers) =>
       this.http.post<CreateCheckoutResponse>(
         `${this.backendUrl}/payments/checkout`,
-        { planSlug },
+        { planSlug, ...terms },
         { headers }
       )
     );
