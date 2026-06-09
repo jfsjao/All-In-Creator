@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule, RouterLink } from '@angular/router';
 import { AuthService } from '@core/services/auth.service';
+import { TERMS_ACCEPTANCE_LABEL } from '@core/legal-terms';
 
 interface PlansHighlight {
   image: string;
@@ -27,6 +28,7 @@ export class PlansComponent implements OnInit {
   authPromptPlan: PaidPlanSlug | null = null;
   authPromptMode: 'login' | 'register' = 'login';
   isAuthPromptLoading = false;
+  readonly termsAcceptanceLabel = TERMS_ACCEPTANCE_LABEL;
 
   promptLoginForm: FormGroup = this.fb.group({
     email: ['', [Validators.required, Validators.email]],
@@ -37,7 +39,8 @@ export class PlansComponent implements OnInit {
     name: ['', [Validators.required, Validators.minLength(3)]],
     email: ['', [Validators.required, Validators.email]],
     password: ['', [Validators.required, Validators.minLength(8), this.passwordStrengthValidator]],
-    confirmPassword: ['', Validators.required]
+    confirmPassword: ['', Validators.required],
+    termsAccepted: [false, Validators.requiredTrue]
   }, { validators: this.passwordMatchValidator });
 
   packCategories = [
@@ -191,6 +194,7 @@ export class PlansComponent implements OnInit {
     }
 
     this.authService.setPendingCheckout(this.authPromptPlan, `/checkout?plan=${this.authPromptPlan}`);
+    this.authService.rememberTermsAcceptanceForSignup();
     this.isAuthPromptLoading = true;
 
     try {
@@ -227,6 +231,17 @@ export class PlansComponent implements OnInit {
   async submitPromptGoogle(): Promise<void> {
     if (!this.authPromptPlan) {
       return;
+    }
+
+    if (this.authPromptMode === 'register') {
+      const termsControl = this.promptRegisterForm.get('termsAccepted');
+
+      if (!termsControl?.value) {
+        termsControl?.markAsTouched();
+        return;
+      }
+
+      this.authService.rememberTermsAcceptanceForSignup();
     }
 
     this.authService.setPendingCheckout(this.authPromptPlan, `/checkout?plan=${this.authPromptPlan}`);
