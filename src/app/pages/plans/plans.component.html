@@ -281,6 +281,17 @@
               <input type="password" formControlName="confirmPassword" placeholder="Digite novamente" />
             </label>
 
+            <label class="auth-panel-terms" [class.is-invalid]="promptRegisterForm.get('termsAccepted')?.invalid && promptRegisterForm.get('termsAccepted')?.touched">
+              <input type="checkbox" formControlName="termsAccepted" />
+              <span>
+                {{ termsAcceptanceLabel }}
+                <a routerLink="/terms" target="_blank" rel="noopener">Ver termos completos</a>
+              </span>
+            </label>
+            @if (promptRegisterForm.get('termsAccepted')?.invalid && promptRegisterForm.get('termsAccepted')?.touched) {
+              <small class="auth-panel-field-error">Aceite os termos para criar a conta.</small>
+            }
+
             <button type="submit" class="auth-panel-submit" [disabled]="isAuthPromptLoading">
               <span *ngIf="isAuthPromptLoading" class="spinner-border spinner-border-sm me-2"></span>
               {{ isAuthPromptLoading ? 'Criando conta...' : 'Criar conta' }}

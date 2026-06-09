@@ -152,10 +152,18 @@
               </div>
             }
 
+            <label class="checkout-terms" [class.is-invalid]="!termsAccepted && errorMessage">
+              <input type="checkbox" [(ngModel)]="termsAccepted" />
+              <span>
+                {{ termsAcceptanceLabel }}
+                <a routerLink="/terms" target="_blank" rel="noopener">Ver termos completos</a>
+              </span>
+            </label>
+
             <button
               type="button"
               class="pay-button"
-              [disabled]="isLoading || !canCheckout"
+              [disabled]="isLoading || !canStartPayment"
               (click)="startCheckout()"
             >
               <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-2"></span>

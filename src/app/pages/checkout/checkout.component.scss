@@ -297,6 +297,42 @@
   color: #ffd1d1;
 }
 
+.checkout-terms {
+  display: grid;
+  grid-template-columns: 20px 1fr;
+  gap: 0.75rem;
+  align-items: start;
+  margin-top: 1rem;
+  padding: 0.9rem;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.055);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: rgba(255, 255, 255, 0.76);
+  font-size: 0.88rem;
+  line-height: 1.45;
+}
+
+.checkout-terms input {
+  width: 18px;
+  height: 18px;
+  margin-top: 0.15rem;
+  accent-color: #83cd00;
+}
+
+.checkout-terms a {
+  color: #d6ff8d;
+  font-weight: 900;
+  text-decoration: none;
+}
+
+.checkout-terms a:hover {
+  text-decoration: underline;
+}
+
+.checkout-terms.is-invalid {
+  border-color: rgba(255, 107, 107, 0.72);
+}
+
 .opportunity-box {
   display: grid;
   gap: 0.6rem;

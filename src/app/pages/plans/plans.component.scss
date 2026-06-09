@@ -926,6 +926,48 @@
   color: var(--text-light);
 }
 
+.auth-panel-form .auth-panel-terms {
+  grid-template-columns: 20px 1fr;
+  align-items: start;
+  gap: 0.7rem;
+  padding: 0.8rem;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.055);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: rgba(255, 255, 255, 0.76);
+  font-size: 0.86rem;
+  line-height: 1.45;
+}
+
+.auth-panel-form .auth-panel-terms input {
+  min-height: auto;
+  width: 18px;
+  height: 18px;
+  margin-top: 0.15rem;
+  padding: 0;
+  accent-color: #83cd00;
+}
+
+.auth-panel-form .auth-panel-terms a {
+  color: #d6ff8d;
+  font-weight: 900;
+  text-decoration: none;
+}
+
+.auth-panel-form .auth-panel-terms a:hover {
+  text-decoration: underline;
+}
+
+.auth-panel-form .auth-panel-terms.is-invalid {
+  border-color: rgba(255, 107, 107, 0.72);
+}
+
+.auth-panel-field-error {
+  color: #ffb0b0;
+  font-size: 0.82rem;
+  line-height: 1.4;
+}
+
 .forgot-link {
   width: fit-content;
   color: rgba(255, 255, 255, 0.72);

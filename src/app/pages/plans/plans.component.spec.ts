@@ -16,7 +16,16 @@ describe('PlansComponent', () => {
     }))
   };
   const authServiceMock = {
-    isAuthenticated: jasmine.createSpy('isAuthenticated').and.returnValue(false)
+    isAuthenticated: jasmine.createSpy('isAuthenticated').and.returnValue(false),
+    setPendingCheckout: jasmine.createSpy('setPendingCheckout'),
+    register: jasmine.createSpy('register').and.resolveTo(true),
+    login: jasmine.createSpy('login').and.resolveTo(true),
+    loginWithGoogle: jasmine.createSpy('loginWithGoogle').and.resolveTo(true),
+    rememberTermsAcceptanceForSignup: jasmine.createSpy('rememberTermsAcceptanceForSignup'),
+    clearError: jasmine.createSpy('clearError'),
+    clearNotice: jasmine.createSpy('clearNotice'),
+    authNotice: jasmine.createSpy('authNotice').and.returnValue(null),
+    authError: jasmine.createSpy('authError').and.returnValue(null)
   };
 
   beforeEach(async () => {

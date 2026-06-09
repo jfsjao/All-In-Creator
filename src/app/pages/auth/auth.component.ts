@@ -1,13 +1,14 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { AuthService } from '@core/services/auth.service';
+import { TERMS_ACCEPTANCE_LABEL } from '@core/legal-terms';
 
 @Component({
   selector: 'app-auth',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, RouterModule],
   templateUrl: './auth.component.html',
   styleUrls: ['./auth.component.scss']
 })
@@ -20,6 +21,7 @@ export class AuthComponent implements OnInit {
   isLoginMode = true;
   isForgotMode = false;
   isLoading = false;
+  readonly termsAcceptanceLabel = TERMS_ACCEPTANCE_LABEL;
 
   loginForm: FormGroup;
   registerForm: FormGroup;
@@ -43,7 +45,8 @@ export class AuthComponent implements OnInit {
           this.passwordStrengthValidator
         ]
       ],
-      confirmPassword: ['', Validators.required]
+      confirmPassword: ['', Validators.required],
+      termsAccepted: [false, Validators.requiredTrue]
     }, { 
       validators: this.passwordMatchValidator
     });
@@ -137,13 +140,14 @@ export class AuthComponent implements OnInit {
 
     try {
       const { name, email, password } = this.registerForm.value;
+      this.authService.rememberTermsAcceptanceForSignup();
       const ok = await this.authService.register(email, password, name);
 
       if (ok) {
         this.isLoginMode = true;
         this.isForgotMode = false;
         this.loginForm.patchValue({ email, password: '' });
-        this.registerForm.patchValue({ password: '', confirmPassword: '' });
+        this.registerForm.patchValue({ password: '', confirmPassword: '', termsAccepted: false });
         this.registerForm.reset();
       }
     } finally {
@@ -173,6 +177,15 @@ export class AuthComponent implements OnInit {
   }
 
   async onGoogleLogin() {
+    if (!this.isLoginMode && !this.registerTermsAccepted?.value) {
+      this.registerTermsAccepted?.markAsTouched();
+      return;
+    }
+
+    if (!this.isLoginMode) {
+      this.authService.rememberTermsAcceptanceForSignup();
+    }
+
     this.isLoading = true;
 
     try {
@@ -231,6 +244,7 @@ export class AuthComponent implements OnInit {
   get registerEmail() { return this.registerForm.get('email'); }
   get registerPassword() { return this.registerForm.get('password'); }
   get registerConfirmPassword() { return this.registerForm.get('confirmPassword'); }
+  get registerTermsAccepted() { return this.registerForm.get('termsAccepted'); }
   get forgotEmail() { return this.forgotForm.get('email'); }
 
   get registerPasswordErrors() {

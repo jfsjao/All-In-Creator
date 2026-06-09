@@ -244,6 +244,17 @@
                 </small>
               </div>
 
+              <label class="terms-check" [class.is-invalid]="registerTermsAccepted?.invalid && registerTermsAccepted?.touched">
+                <input type="checkbox" formControlName="termsAccepted" />
+                <span>
+                  {{ termsAcceptanceLabel }}
+                  <a routerLink="/terms" target="_blank" rel="noopener">Ver termos completos</a>
+                </span>
+              </label>
+              <small class="text-danger" *ngIf="registerTermsAccepted?.invalid && registerTermsAccepted?.touched">
+                Para criar a conta, aceite os termos da plataforma.
+              </small>
+
               <button
                 type="submit"
                 class="auth-button"

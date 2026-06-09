@@ -13,6 +13,7 @@ describe('AuthComponent', () => {
     login: jasmine.createSpy('login').and.resolveTo(true),
     register: jasmine.createSpy('register').and.resolveTo(true),
     loginWithGoogle: jasmine.createSpy('loginWithGoogle').and.resolveTo(true),
+    rememberTermsAcceptanceForSignup: jasmine.createSpy('rememberTermsAcceptanceForSignup'),
     resetPassword: jasmine.createSpy('resetPassword').and.resolveTo(true),
     setPendingCheckout: jasmine.createSpy('setPendingCheckout'),
     waitForAuthInit: jasmine.createSpy('waitForAuthInit').and.resolveTo(),

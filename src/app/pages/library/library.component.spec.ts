@@ -4,6 +4,7 @@ import { of } from 'rxjs';
 import { LibraryComponent } from './library.component';
 import { AuthService } from '@core/services/auth.service';
 import { UserLibraryService } from '@core/services/user-library.service';
+import { ApiService } from '@core/api.service';
 
 describe('LibraryComponent', () => {
   let component: LibraryComponent;
@@ -30,12 +31,16 @@ describe('LibraryComponent', () => {
       popularPacks: []
     }))
   };
+  const apiServiceMock = {
+    registrarDownload: jasmine.createSpy('registrarDownload')
+  };
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [LibraryComponent],
       providers: [
         { provide: AuthService, useValue: authServiceMock },
+        { provide: ApiService, useValue: apiServiceMock },
         { provide: UserLibraryService, useValue: userLibraryServiceMock }
       ]
     })

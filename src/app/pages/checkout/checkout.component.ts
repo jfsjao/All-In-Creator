@@ -1,10 +1,12 @@
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { Component, OnDestroy, OnInit, PLATFORM_ID, inject } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { Subscription, firstValueFrom } from 'rxjs';
 import { ApiService, PaidPlanSlug } from '@core/api.service';
 import { AuthService } from '@core/services/auth.service';
 import { ToastrService } from 'ngx-toastr';
+import { LEGAL_TERMS_VERSION, TERMS_ACCEPTANCE_LABEL } from '@core/legal-terms';
 
 interface CheckoutPlanView {
   slug: PaidPlanSlug;
@@ -85,7 +87,7 @@ const PREMIUM_EXCLUSIVE_PACK_ITEMS = [
 @Component({
   selector: 'app-checkout',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, FormsModule],
   templateUrl: './checkout.component.html',
   styleUrls: ['./checkout.component.scss']
 })
@@ -101,6 +103,8 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   errorMessage: string | null = null;
   expandedUpsellSlug: PaidPlanSlug | null = null;
   expandedPlanSectionId: string | null = null;
+  termsAccepted = false;
+  readonly termsAcceptanceLabel = TERMS_ACCEPTANCE_LABEL;
   private queryParamsSubscription?: Subscription;
 
   readonly plans: Record<PaidPlanSlug, CheckoutPlanView> = {
@@ -181,6 +185,10 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     }
 
     return (PLAN_RANK[this.currentPlanSlug] ?? 0) < PLAN_RANK[plan.slug];
+  }
+
+  get canStartPayment(): boolean {
+    return this.canCheckout && this.termsAccepted;
   }
 
   get upsellOptions(): CheckoutUpsellOption[] {
@@ -297,11 +305,19 @@ export class CheckoutComponent implements OnInit, OnDestroy {
       return;
     }
 
+    if (!this.termsAccepted) {
+      this.errorMessage = 'Aceite os Termos de Uso e regras da compra para continuar.';
+      return;
+    }
+
     this.isLoading = true;
     this.errorMessage = null;
 
     try {
-      const checkout = await firstValueFrom(this.apiService.createCheckout(plan.slug));
+      const checkout = await firstValueFrom(this.apiService.createCheckout(plan.slug, {
+        termsAccepted: true,
+        termsVersion: LEGAL_TERMS_VERSION
+      }));
       const checkoutUrl = checkout.checkoutUrl || checkout.sandboxCheckoutUrl;
 
       if (!checkoutUrl) {
@@ -324,6 +340,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   private resetCheckoutState(): void {
     this.errorMessage = null;
     this.expandedPlanSectionId = null;
+    this.termsAccepted = false;
   }
 
   formatCurrency(value: number): string {
