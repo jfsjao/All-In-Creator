@@ -135,15 +135,15 @@
 
     .info-cards {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 1.2rem;
-
-      @media (max-width: 1100px) {
-        grid-template-columns: repeat(2, 1fr);
-      }
+      grid-template-columns: repeat(2, minmax(240px, 284px));
+      justify-content: center;
+      gap: 1.25rem;
+      width: min(100%, 620px);
+      margin: 0 auto;
 
       @media (max-width: 640px) {
         grid-template-columns: 1fr;
+        width: min(100%, 360px);
       }
     }
 
@@ -158,7 +158,8 @@
       background: var(--color-white);
       border: 1px solid var(--border-light);
       border-radius: var(--radius);
-      padding: 1.6rem 1.4rem;
+      min-height: 218px;
+      padding: 1.55rem 1.35rem;
       box-shadow: 0 16px 30px rgba(0, 0, 0, 0.06);
 
       display: flex;

@@ -154,7 +154,7 @@ describe('Main Screens Workflow', () => {
 
     const element = fixture.nativeElement as HTMLElement;
     expect(element.querySelector('.contact-hero')).toBeTruthy();
-    expect(element.querySelectorAll('.info-card').length).toBe(4);
+    expect(element.querySelectorAll('.info-card').length).toBe(2);
     expect(element.querySelector('form.contact-form')).toBeTruthy();
   });
 });
