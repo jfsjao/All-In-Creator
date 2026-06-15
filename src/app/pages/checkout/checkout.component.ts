@@ -283,12 +283,15 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    sessionStorage.removeItem('mpPreferenceId');
+
     this.queryParamsSubscription = this.route.queryParamMap.subscribe(() => {
       this.resetCheckoutState();
     });
   }
 
   ngOnDestroy(): void {
+    sessionStorage.removeItem('mpPreferenceId');
     this.queryParamsSubscription?.unsubscribe();
   }
 
@@ -309,7 +312,6 @@ export class CheckoutComponent implements OnInit, OnDestroy {
       this.errorMessage = 'Aceite os Termos de Uso e regras da compra para continuar.';
       return;
     }
-
     this.isLoading = true;
     this.errorMessage = null;
 
@@ -318,11 +320,15 @@ export class CheckoutComponent implements OnInit, OnDestroy {
         termsAccepted: true,
         termsVersion: LEGAL_TERMS_VERSION
       }));
-      const checkoutUrl = checkout.checkoutUrl || checkout.sandboxCheckoutUrl;
+    console.log('[CHECKOUT RESPONSE]', {
+      preferenceId: checkout.preferenceId,
+      checkoutUrl: checkout.checkoutUrl
+    });
+    const checkoutUrl = checkout.checkoutUrl;
 
-      if (!checkoutUrl) {
-        throw new Error('CHECKOUT_URL_NOT_FOUND');
-      }
+    if (!checkoutUrl) {
+      throw new Error('PRODUCTION_CHECKOUT_URL_NOT_FOUND');
+    }
 
       if (isPlatformBrowser(this.platformId)) {
         window.location.href = checkoutUrl;

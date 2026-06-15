@@ -137,6 +137,13 @@ export class AuthService {
     return null;
   }
 
+  private isTermsNotAcceptedError(error: unknown): boolean {
+    return error instanceof HttpErrorResponse &&
+      error.status === 400 &&
+      typeof error.error?.message === 'string' &&
+      error.error.message.toLowerCase().includes('termos');
+  }
+
   /**
    * Listener do Firebase Auth
    */
@@ -178,7 +185,7 @@ export class AuthService {
     });
   }
 
-  private async syncBackendUser(user: User): Promise<boolean> {
+  private async syncBackendUser(user: User, allowTermsRetry = true): Promise<boolean> {
     try {
       const token = await user.getIdToken(true);
       const pendingTermsAcceptance = this.getPendingTermsAcceptance();
@@ -211,6 +218,11 @@ export class AuthService {
       this.clearError();
       return true;
     } catch (error) {
+      if (allowTermsRetry && this.isTermsNotAcceptedError(error)) {
+        this.rememberTermsAcceptanceForSignup();
+        return this.syncBackendUser(user, false);
+      }
+
       this.backendSyncErrorMessage = this.extractBackendSyncMessage(error);
       console.error('Erro ao sincronizar o usuário:', error);
       return false;
