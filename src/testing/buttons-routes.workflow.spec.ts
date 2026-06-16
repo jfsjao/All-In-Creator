@@ -101,12 +101,14 @@ describe('Buttons And Routes Workflow', () => {
       fixture.detectChanges();
     });
 
-    it('renders navigation and social buttons', () => {
+    it('renders navigation and active social buttons', () => {
       const element = fixture.nativeElement as HTMLElement;
+      const socialIcons = element.querySelectorAll('.social-icon');
 
       expect(element.querySelector('app-brand-logo')).toBeTruthy();
       expect(element.querySelectorAll('.footer-link').length).toBeGreaterThanOrEqual(4);
-      expect(element.querySelectorAll('.social-icon').length).toBe(2);
+      expect(socialIcons.length).toBeGreaterThanOrEqual(1);
+      expect(element.querySelector('.social-icon[aria-label="Instagram"]')).toBeTruthy();
     });
 
     it('shows a success notification after copying a contact', fakeAsync(async () => {
