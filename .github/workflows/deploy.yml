@@ -425,6 +425,12 @@ jobs:
           chmod 600 ~/.ssh/id_rsa
           ssh-keygen -y -f ~/.ssh/id_rsa > /dev/null
 
+          echo "Checking SSH TCP connectivity..."
+          if ! nc -zvw10 "$HOSTINGER_HOST" "$HOSTINGER_PORT"; then
+            echo "::error title=SSH port unreachable::GitHub Actions could not connect to HOSTINGER_HOST:HOSTINGER_PORT. Check Hostinger SSH is enabled, HOSTINGER_HOST is only the domain/IP, and HOSTINGER_PORT is the SSH port shown in Hostinger."
+            exit 1
+          fi
+
           if ! ssh-keyscan -T 20 -p "$HOSTINGER_PORT" "$HOSTINGER_HOST" >> ~/.ssh/known_hosts; then
             echo "::error title=SSH host unreachable::Could not read SSH host key from HOSTINGER_HOST:HOSTINGER_PORT. Check if the host is only the domain/IP, the port is correct, and SSH is enabled in Hostinger."
             exit 1
