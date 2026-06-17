@@ -46,7 +46,8 @@ export class AppComponent implements OnInit {
 
   private redirectMercadoPagoReturnLinks(): void {
     const urlTree = this.router.parseUrl(this.router.url);
-    const paymentId = urlTree.queryParamMap.get('payment_id');
+    const paymentId =
+      urlTree.queryParamMap.get('payment_id') ?? urlTree.queryParamMap.get('collection_id');
     const status = urlTree.queryParamMap.get('status') ?? urlTree.queryParamMap.get('collection_status');
     const currentPath = urlTree.root.children['primary']?.segments.map((segment) => segment.path).join('/') ?? '';
 

@@ -577,11 +577,14 @@ export class ApiService {
     );
   }
 
-  syncMercadoPagoReturn(providerPaymentId: string): Observable<PaymentStatusResponse> {
+  syncMercadoPagoReturn(
+    providerPaymentId: string,
+    externalReference?: string | null
+  ): Observable<PaymentStatusResponse> {
     return this.withAuthHeaders((headers) =>
       this.http.post<PaymentStatusResponse>(
         `${this.backendUrl}/payments/mercadopago/return-sync`,
-        { providerPaymentId },
+        { providerPaymentId, externalReference },
         { headers }
       )
     );

@@ -53,7 +53,7 @@ export class PaymentStatusComponent {
     const query = this.route.snapshot.queryParamMap;
 
     return {
-      paymentId: query.get('payment_id'),
+      paymentId: query.get('payment_id') ?? query.get('collection_id'),
       status: query.get('status'),
       externalReference: query.get('external_reference'),
       merchantOrderId: query.get('merchant_order_id')
@@ -118,7 +118,9 @@ export class PaymentStatusComponent {
     this.paymentSyncMessage.set(null);
 
     try {
-      const status = await firstValueFrom(this.apiService.syncMercadoPagoReturn(paymentId));
+      const status = await firstValueFrom(
+        this.apiService.syncMercadoPagoReturn(paymentId, this.paymentInfo().externalReference)
+      );
       await this.authService.refreshCurrentUser();
 
       if (status.payment.status === 'aprovado') {

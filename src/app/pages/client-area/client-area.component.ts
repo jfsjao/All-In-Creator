@@ -118,10 +118,13 @@ export class ClientAreaComponent implements OnInit, OnDestroy {
   private async handlePaymentReturn(): Promise<void> {
     await this.loadUserData();
 
-    const paymentId = this.route.snapshot.queryParamMap.get('payment_id');
+    const paymentId =
+      this.route.snapshot.queryParamMap.get('payment_id') ??
+      this.route.snapshot.queryParamMap.get('collection_id');
     const paymentStatus =
       this.route.snapshot.queryParamMap.get('status') ??
       this.route.snapshot.queryParamMap.get('collection_status');
+    const externalReference = this.route.snapshot.queryParamMap.get('external_reference');
 
     if (!paymentId || paymentStatus !== 'approved' || !this.authService.isAuthenticated()) {
       await this.loadDashboardData();
@@ -129,7 +132,7 @@ export class ClientAreaComponent implements OnInit, OnDestroy {
     }
 
     try {
-      await firstValueFrom(this.apiService.syncMercadoPagoReturn(paymentId));
+      await firstValueFrom(this.apiService.syncMercadoPagoReturn(paymentId, externalReference));
       await this.authService.refreshCurrentUser();
       this.applyUserSnapshot(this.authService.currentUser());
       this.toastr.success('Pagamento confirmado e plano liberado.', 'Tudo certo');
