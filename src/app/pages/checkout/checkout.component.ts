@@ -321,6 +321,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
         termsVersion: LEGAL_TERMS_VERSION
       }));
     console.log('[CHECKOUT RESPONSE]', {
+      paymentId: checkout.paymentId,
       preferenceId: checkout.preferenceId,
       checkoutUrl: checkout.checkoutUrl
     });
@@ -331,6 +332,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     }
 
       if (isPlatformBrowser(this.platformId)) {
+        sessionStorage.setItem('pending_payment_id', String(checkout.paymentId));
         window.location.href = checkoutUrl;
       }
     } catch (error: any) {

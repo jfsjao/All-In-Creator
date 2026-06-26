@@ -115,6 +115,35 @@ export class ClientAreaComponent implements OnInit, OnDestroy {
     this.applyUserSnapshot(this.authService.currentUser());
   }
 
+  private async checkPendingPaymentFromSession(): Promise<void> {
+    const sessionPaymentIdStr = sessionStorage.getItem('pending_payment_id');
+    if (!sessionPaymentIdStr || !this.authService.isAuthenticated()) {
+      return;
+    }
+
+    const sessionPaymentId = Number(sessionPaymentIdStr);
+    if (isNaN(sessionPaymentId) || sessionPaymentId <= 0) {
+      sessionStorage.removeItem('pending_payment_id');
+      return;
+    }
+
+    try {
+      const status = await firstValueFrom(this.apiService.getPaymentStatus(sessionPaymentId));
+      
+      if (status.payment.status === 'aprovado') {
+        sessionStorage.removeItem('pending_payment_id');
+        await this.authService.refreshCurrentUser();
+        this.applyUserSnapshot(this.authService.currentUser());
+        this.toastr.success(`Seu plano ${status.plan.nome} foi ativado com sucesso!`, 'Pagamento Aprovado');
+      } else if (status.payment.status === 'falhou' || status.payment.status === 'rejeitado' || status.payment.status === 'cancelado') {
+        sessionStorage.removeItem('pending_payment_id');
+        this.toastr.error('A transação de pagamento não foi concluída.', 'Pagamento');
+      }
+    } catch (error) {
+      console.error('[SESSION SYNC ERROR] Falha ao verificar pagamento na sessao:', error);
+    }
+  }
+
   private async handlePaymentReturn(): Promise<void> {
     await this.loadUserData();
 
@@ -127,12 +156,14 @@ export class ClientAreaComponent implements OnInit, OnDestroy {
     const externalReference = this.route.snapshot.queryParamMap.get('external_reference');
 
     if (!paymentId || paymentStatus !== 'approved' || !this.authService.isAuthenticated()) {
+      await this.checkPendingPaymentFromSession();
       await this.loadDashboardData();
       return;
     }
 
     try {
       await firstValueFrom(this.apiService.syncMercadoPagoReturn(paymentId, externalReference));
+      sessionStorage.removeItem('pending_payment_id');
       await this.authService.refreshCurrentUser();
       this.applyUserSnapshot(this.authService.currentUser());
       this.toastr.success('Pagamento confirmado e plano liberado.', 'Tudo certo');

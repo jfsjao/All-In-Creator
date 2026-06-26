@@ -590,6 +590,15 @@ export class ApiService {
     );
   }
 
+  getPaymentStatus(paymentId: number): Observable<PaymentStatusResponse> {
+    return this.withAuthHeaders((headers) =>
+      this.http.get<PaymentStatusResponse>(
+        `${this.backendUrl}/payments/me/${paymentId}`,
+        { headers }
+      )
+    );
+  }
+
   sendContact(payload: ContactPayload): Observable<{ message: string }> {
     return this.http.post<{ message: string }>(`${this.backendUrl}/contact`, payload);
   }
