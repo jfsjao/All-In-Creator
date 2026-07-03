@@ -31,7 +31,14 @@
       <div class="carousel-track">
         @for (slide of slides; track $index; let i = $index) {
           <div class="carousel-slide" [class.active]="currentSlide === i">
-            <img [src]="slide.image" [alt]="slide.alt" />
+            <img
+              [src]="slide.image"
+              [alt]="slide.alt"
+              width="1200"
+              height="420"
+              [attr.loading]="currentSlide === i ? 'eager' : 'lazy'"
+              [attr.fetchpriority]="currentSlide === i ? 'high' : 'low'"
+              decoding="async" />
             <div class="slide-gradient"></div>
 
             <div class="slide-content">
@@ -131,7 +138,7 @@
       <div class="popular-grid">
         @for (pack of popularPacks; track pack.id) {
           <article class="popular-card">
-            <img class="popular-image" [src]="pack.image" [alt]="pack.title" />
+            <img class="popular-image" [src]="pack.image" [alt]="pack.title" width="360" height="460" loading="lazy" decoding="async" />
             <div class="popular-overlay"></div>
 
             <div class="popular-top">
@@ -172,7 +179,7 @@
         </button>
 
         <div class="popular-modal-media">
-          <img [src]="pack.image" [alt]="pack.title" />
+          <img [src]="pack.image" [alt]="pack.title" width="360" height="460" loading="eager" decoding="async" />
         </div>
 
         <div class="popular-modal-content">

@@ -121,7 +121,7 @@
 
           <div class="asset-card">
             <div class="asset-preview">
-              <img [src]="packImagePreview" alt="Preview da imagem do pack" />
+              <img [src]="packImagePreview" alt="Preview da imagem do pack" width="230" height="160" loading="eager" decoding="async" />
               <strong>{{ packImageSourceLabel }}</strong>
             </div>
 
@@ -414,7 +414,7 @@
                   <button type="button" (click)="removeSlideContent(i)">Remover</button>
                 </div>
 
-                <img [src]="slide.image" [alt]="slide.alt" />
+                <img [src]="slide.image" [alt]="slide.alt" width="640" height="280" loading="lazy" decoding="async" />
                 <input [(ngModel)]="slide.titulo" placeholder="Titulo" />
                 <textarea [(ngModel)]="slide.subtitulo" rows="3" placeholder="Descricao"></textarea>
                 <div class="form-grid">

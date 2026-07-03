@@ -43,7 +43,7 @@
     <div class="downloads-grid" *ngIf="!isLoading && !hasError; else downloadsState">
       @for (item of filteredRecentDownloads; track item.id) {
         <article class="download-card">
-          <img [src]="item.image" [alt]="item.title" />
+          <img [src]="item.image" [alt]="item.title" width="320" height="210" loading="lazy" decoding="async" />
 
           <div class="card-content">
             <div class="card-meta">
@@ -98,7 +98,7 @@
     <div class="downloads-grid compact" *ngIf="recommendedDownloads.length > 0; else emptySuggestions">
       @for (item of recommendedDownloads; track item.id) {
         <article class="download-card compact-card">
-          <img [src]="item.image" [alt]="item.title" />
+          <img [src]="item.image" [alt]="item.title" width="180" height="210" loading="lazy" decoding="async" />
 
           <div class="card-content">
             <div class="card-meta">

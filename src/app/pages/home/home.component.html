@@ -12,7 +12,7 @@
           muted
           autoplay
           playsinline
-          preload="auto"
+          preload="metadata"
           disablePictureInPicture
           [attr.poster]="null"
           [src]="activeSlide.videoSrc"
@@ -77,7 +77,7 @@
             <div class="logos-container">
               @for (logo of popularPackCards; track $index) {
                 <div class="logo-item">
-                  <img [src]="logo.image" [alt]="logo.alt" decoding="async" />
+                  <img [src]="logo.image" [alt]="logo.alt" width="220" height="360" loading="lazy" decoding="async" />
                   <div class="logo-item-caption">
                     <span>{{ logo.title }}</span>
                   </div>
@@ -88,7 +88,7 @@
             <div class="logos-container" aria-hidden="true">
               @for (logo of popularPackCards; track $index) {
                 <div class="logo-item">
-                  <img [src]="logo.image" [alt]="logo.alt" loading="lazy" decoding="async" />
+                  <img [src]="logo.image" [alt]="logo.alt" width="220" height="360" loading="lazy" decoding="async" />
                   <div class="logo-item-caption">
                     <span>{{ logo.title }}</span>
                   </div>
@@ -112,7 +112,10 @@
             muted
             controls
             playsinline
-            preload="auto"
+            preload="metadata"
+            controlsList="nodownload"
+            disablePictureInPicture
+            disableRemotePlayback
             (play)="onVideoPlay()"
             (pause)="onVideoPause()"
             (volumechange)="onVideoVolumeChange()">
@@ -140,7 +143,7 @@
 
         <div class="showcase-center">
           <div class="product-image">
-            <img [src]="packsupremoImage" alt="Pack Supremo" />
+            <img [src]="packsupremoImage" alt="Pack Supremo" width="400" height="460" loading="lazy" decoding="async" />
           </div>
         </div>
 
@@ -334,7 +337,7 @@
           </div>
 
           <div class="testimonial-author">
-            <img [src]="joaoGuilhermeImage" alt="João Guilherme" />
+            <img [src]="joaoGuilhermeImage" alt="João Guilherme" width="52" height="52" loading="lazy" decoding="async" />
             <div class="author-info">
               <h4>João Guilherme</h4>
               <p>&#64;joao.guisc</p>
@@ -351,7 +354,7 @@
           </div>
 
           <div class="testimonial-author">
-            <img [src]="gustavoMangaImage" alt="Gustavo Gomes" />
+            <img [src]="gustavoMangaImage" alt="Gustavo Gomes" width="52" height="52" loading="lazy" decoding="async" />
             <div class="author-info">
               <h4>Gustavo Gomes</h4>
               <p>&#64;gugomes_manga</p>
@@ -368,7 +371,7 @@
           </div>
 
           <div class="testimonial-author">
-            <img [src]="matheusPassosImage" alt="Matheus Passos" />
+            <img [src]="matheusPassosImage" alt="Matheus Passos" width="52" height="52" loading="lazy" decoding="async" />
             <div class="author-info">
               <h4>Matheus Passos</h4>
               <p>&#64;_passospassitos</p>
@@ -384,7 +387,7 @@
           </div>
 
           <div class="testimonial-author">
-            <img [src]="giovaneMicossiImage" alt="Giovane Micossi" />
+            <img [src]="giovaneMicossiImage" alt="Giovane Micossi" width="52" height="52" loading="lazy" decoding="async" />
             <div class="author-info">
               <h4>Giovane Micossi</h4>
               <p>&#64;giovanemicossi</p>

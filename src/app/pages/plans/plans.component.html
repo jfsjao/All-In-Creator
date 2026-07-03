@@ -26,7 +26,7 @@
             <div class="logos-container">
               @for (logo of repeatedPartnerLogos; track $index) {
                 <div class="logo-item">
-                  <img [src]="logo.image" [alt]="logo.alt" />
+                  <img [src]="logo.image" [alt]="logo.alt" width="108" height="64" loading="lazy" decoding="async" />
                 </div>
               }
             </div>
@@ -34,7 +34,7 @@
             <div class="logos-container" aria-hidden="true">
               @for (logo of repeatedPartnerLogos; track $index) {
                 <div class="logo-item">
-                  <img [src]="logo.image" [alt]="logo.alt" />
+                  <img [src]="logo.image" [alt]="logo.alt" width="108" height="64" loading="lazy" decoding="async" />
                 </div>
               }
             </div>
