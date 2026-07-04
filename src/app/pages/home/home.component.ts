@@ -206,22 +206,38 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   private initVideoObserver(): void {
     if (!this.autoVideo) return;
 
-    this.videoObserver = new IntersectionObserver(([entry]) => {
-      const video = this.autoVideo.nativeElement;
+    const video = this.autoVideo.nativeElement;
+    video.muted = true;
+    video.playsInline = true;
+    video.preload = 'auto';
+    video.load();
 
-      if (entry.intersectionRatio >= 0.45) {
-        video.play().then(() => {
-          this.isVideoPlaying = true;
-        }).catch(() => {});
-      } else if (entry.intersectionRatio <= 0.2) {
+    this.videoObserver = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting || entry.intersectionRatio >= 0.01) {
+        this.playAutoVideo(video);
+      } else {
         video.pause();
         this.isVideoPlaying = false;
       }
     }, {
-      threshold: [0.2, 0.45, 0.75]
+      threshold: [0, 0.01, 0.1, 0.25],
+      rootMargin: '180px 0px 180px 0px'
     });
 
-    this.videoObserver.observe(this.autoVideo.nativeElement);
+    this.videoObserver.observe(video);
+  }
+
+  private playAutoVideo(video: HTMLVideoElement): void {
+    if (!video.paused) {
+      this.isVideoPlaying = true;
+      return;
+    }
+
+    video.play().then(() => {
+      this.isVideoPlaying = true;
+    }).catch(() => {
+      this.isVideoPlaying = false;
+    });
   }
 
   private initLogosObserver(): void {
