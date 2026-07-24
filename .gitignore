@@ -8,6 +8,13 @@ env/
 .env
 .python-version
 
+# === Agents e Skills ===
+.agents/**
+.skills/**
+
+# === documentações temporarias ===
+docs/
+
 # === FRONTEND (Angular/Node) ===
 # Dependências
 node_modules/
