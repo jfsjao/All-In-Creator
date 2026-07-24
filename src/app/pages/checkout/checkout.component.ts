@@ -7,6 +7,7 @@ import { ApiService, PaidPlanSlug } from '@core/api.service';
 import { AuthService } from '@core/services/auth.service';
 import { ToastrService } from 'ngx-toastr';
 import { LEGAL_TERMS_VERSION, TERMS_ACCEPTANCE_LABEL } from '@core/legal-terms';
+import { PLAN_CATALOG } from '@core/plan-catalog';
 
 interface CheckoutPlanView {
   slug: PaidPlanSlug;
@@ -44,10 +45,10 @@ const PLAN_RANK: Record<string, number> = {
 };
 
 const PLAN_PRICES: Record<string, number> = {
-  gratuito: 0,
-  basic: 29.9,
-  pro: 65.9,
-  premium: 97.9
+  gratuito: PLAN_CATALOG.gratuito.price,
+  basic: PLAN_CATALOG.basic.price,
+  pro: PLAN_CATALOG.pro.price,
+  premium: PLAN_CATALOG.premium.price
 };
 
 const BASIC_PACK_ITEMS = [
@@ -111,7 +112,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     basic: {
       slug: 'basic',
       name: 'Basic',
-      price: 29.9,
+      price: PLAN_CATALOG.basic.price,
       eyebrow: 'Entrada paga',
       description: 'Primeira camada paga para desbloquear os packs essenciais.',
       features: ['Packs essenciais', 'Atualizacoes mensais', 'Acesso vitalicio']
@@ -119,7 +120,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     pro: {
       slug: 'pro',
       name: 'Pro',
-      price: 65.9,
+      price: PLAN_CATALOG.pro.price,
       eyebrow: 'Mais escolhido',
       description: 'Mais packs, presets e materiais para produzir com mais ritmo.',
       features: ['Tudo do Basic', 'Biblioteca maior', 'Suporte prioritario']
@@ -127,7 +128,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     premium: {
       slug: 'premium',
       name: 'Premium',
-      price: 97.9,
+      price: PLAN_CATALOG.premium.price,
       eyebrow: 'Completo',
       description: 'Acesso completo para usar todos os packs e extras disponiveis.',
       features: ['Tudo do Pro', 'Todos os packs', 'Conteudos premium']

@@ -16,6 +16,11 @@ export const routes: Routes = [
     path: 'plans', 
     loadComponent: () => import('../pages/plans/plans.component').then(m => m.PlansComponent) 
   },
+  {
+    path: 'oferta',
+    loadComponent: () => import('../pages/offer/offer.component').then(m => m.OfferComponent),
+    data: { minimalLayout: true }
+  },
   { 
     path: 'about', 
     loadComponent: () => import('../pages/about/about.component').then(m => m.AboutComponent) 

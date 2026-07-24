@@ -1,0 +1,183 @@
+<div class="offer-page">
+  <header class="offer-nav">
+    <a routerLink="/oferta" [queryParams]="campaignParams()" class="wordmark" aria-label="All In Creator">
+      <span>ALL IN</span><strong>CREATOR</strong>
+    </a>
+    <button type="button" class="nav-cta" data-cta="nav-premium" (click)="selectPlan('premium', 'nav')">
+      Quero acesso Premium
+    </button>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero-copy">
+        <span class="eyebrow">Biblioteca criativa • acesso vitalício</span>
+        <h1>Menos tempo procurando.<br><em>Mais tempo criando.</em></h1>
+        <p>Templates, elementos, presets, efeitos, vídeos, imagens e ferramentas reunidos para quem cria, edita e entrega conteúdo.</p>
+        <div class="hero-actions">
+          <button type="button" class="button primary" data-cta="hero-premium" (click)="selectPlan('premium', 'hero')">
+            Quero acesso Premium — R$ {{ formatPrice(catalog.premium.price) }}
+          </button>
+          <a href="#biblioteca" class="text-link">Ver o que vem na biblioteca</a>
+        </div>
+        <small>Pagamento único. Acesso vitalício ao conteúdo do plano.</small>
+      </div>
+
+      <div class="asset-stack" aria-label="Exemplos reais de packs da biblioteca">
+        <span class="stack-label">Pasta / Premium / Destaques</span>
+        @for (cover of packCovers.slice(0, 4); track cover.src; let i = $index) {
+          <figure [style.--order]="i">
+            <img [src]="cover.src" [alt]="cover.alt" width="1545" height="1999"
+                 [attr.fetchpriority]="i === 0 ? 'high' : null" decoding="async">
+            <figcaption>{{ cover.label }}</figcaption>
+          </figure>
+        }
+      </div>
+    </section>
+
+    <section class="editing-rail" aria-label="Do trabalho repetitivo à biblioteca organizada">
+      <div><span class="rail-dot"></span><strong>Procurar</strong><small>pastas e links soltos</small></div>
+      <div><span class="rail-dot"></span><strong>Organizar</strong><small>formatos e referências</small></div>
+      <div class="rail-result"><span class="rail-dot"></span><strong>Criar</strong><small>com recursos prontos</small></div>
+    </section>
+
+    <section id="biblioteca" class="library">
+      <div class="section-intro">
+        <span class="eyebrow">Conteúdo antes da promessa</span>
+        <h2>Uma biblioteca que parece biblioteca.</h2>
+        <p>Capas identificadas, materiais separados por assunto e packs voltados ao trabalho real de criação.</p>
+      </div>
+      <div class="cover-shelf">
+        @for (cover of packCovers; track cover.src) {
+          <article>
+            <img [src]="cover.src" [alt]="cover.alt" width="1545" height="1999" loading="lazy" decoding="async">
+            <h3>{{ cover.label }}</h3>
+          </article>
+        }
+      </div>
+      <div class="benefit-strip">
+        <p><strong>Você deixa de:</strong> começar cada peça do zero, reabrir buscas e espalhar referências em várias pastas.</p>
+        <p><strong>Você passa a:</strong> escolher um material, adaptar ao projeto e manter ritmo de produção.</p>
+      </div>
+    </section>
+
+    <section class="compatibility">
+      <div>
+        <span class="eyebrow">Ferramentas presentes no acervo</span>
+        <h2>Do design à edição, sem limitar seu repertório.</h2>
+      </div>
+      <ul>
+        @for (tool of tools; track tool.src) {
+          <li>
+            <span class="tool-icon">
+              <img [src]="tool.src" [alt]="tool.alt" width="2000" height="2000" loading="lazy" decoding="async">
+            </span>
+            <strong>{{ tool.alt }}</strong>
+          </li>
+        }
+      </ul>
+      <p>Compatibilidade depende do formato do pack e da versão do programa.</p>
+    </section>
+
+    <section class="process">
+      <div class="section-intro">
+        <span class="eyebrow">Da escolha ao acesso</span>
+        <h2>Quatro passos. Mesmo plano do começo ao checkout.</h2>
+      </div>
+      <ol>
+        <li><span>1</span><strong>Escolha seu plano</strong><p>Compare o conjunto liberado.</p></li>
+        <li><span>2</span><strong>Entre ou crie conta</strong><p>Seu plano fica preservado.</p></li>
+        <li><span>3</span><strong>Conclua o pagamento</strong><p>Checkout protegido pelo fluxo atual.</p></li>
+        <li><span>4</span><strong>Acesse a biblioteca</strong><p>Liberação após confirmação.</p></li>
+      </ol>
+    </section>
+
+    <section id="planos" class="pricing">
+      <div class="section-intro">
+        <span class="eyebrow">Pagamento único</span>
+        <h2>Escolha quanto da biblioteca quer liberar.</h2>
+      </div>
+      <div class="plan-grid">
+        @for (slug of paidPlans; track slug) {
+          <article class="plan" [class.featured]="slug === 'premium'">
+            @if (slug === 'premium') { <span class="recommendation">Biblioteca mais ampla</span> }
+            <h3>{{ catalog[slug].name }}</h3>
+            <p>{{ catalog[slug].summary }}</p>
+            <div class="price"><small>R$</small>{{ formatPrice(catalog[slug].price) }}</div>
+            <span class="lifetime">pagamento único • acesso vitalício</span>
+            <ul>
+              @for (feature of catalog[slug].features; track feature) { <li>{{ feature }}</li> }
+            </ul>
+            <button type="button" class="button" [class.primary]="slug === 'premium'"
+                    [attr.data-cta]="'plan-' + slug" (click)="selectPlan(slug, 'pricing')">
+              Comprar {{ catalog[slug].name }}
+            </button>
+          </article>
+        }
+        <article class="free-plan">
+          <div><span>Quer conhecer primeiro?</span><strong>4 kits gratuitos</strong></div>
+          <a routerLink="/auth" [queryParams]="freeSignupParams()" data-cta="free-signup">Testar packs grátis</a>
+        </article>
+      </div>
+    </section>
+
+    <section class="proof">
+      <div class="section-intro">
+        <span class="eyebrow">Relatos publicados pela All In Creator</span>
+        <h2>O ganho aparece no fluxo de trabalho.</h2>
+      </div>
+      <div class="quotes">
+        @for (testimonial of testimonials; track testimonial.handle) {
+          <figure>
+            <blockquote>“{{ testimonial.quote }}”</blockquote>
+            <figcaption>
+              <img [src]="testimonial.image" [alt]="'Foto de ' + testimonial.name" width="64" height="64" loading="lazy" decoding="async">
+              <span><strong>{{ testimonial.name }}</strong><small>{{ testimonial.handle }}</small></span>
+            </figcaption>
+          </figure>
+        }
+      </div>
+    </section>
+
+    <section class="faq">
+      <div class="section-intro">
+        <span class="eyebrow">Antes de escolher</span>
+        <h2>Dúvidas sem letra miúda.</h2>
+      </div>
+      <div class="faq-list">
+        @for (item of faq; track item.question) {
+          <details>
+            <summary>{{ item.question }}</summary>
+            <p>{{ item.answer }}</p>
+          </details>
+        }
+      </div>
+    </section>
+
+    <section class="final-cta">
+      <img src="assets/images/empresa/pack_supremo.webp" alt="Composição do Pack Supremo All In Creator" width="1545" height="1999" loading="lazy" decoding="async">
+      <div>
+        <span class="eyebrow">Sua próxima pasta pode estar pronta</span>
+        <h2>Abra a biblioteca. Escolha o recurso. Continue criando.</h2>
+        <button type="button" class="button primary" data-cta="final-premium" (click)="selectPlan('premium', 'final')">
+          Quero acesso Premium — R$ {{ formatPrice(catalog.premium.price) }}
+        </button>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <span>All In Creator</span>
+    <nav aria-label="Links essenciais">
+      <a routerLink="/terms" target="_blank">Termos e privacidade</a>
+      <a routerLink="/contact" [queryParams]="campaignParams()">Contato</a>
+    </nav>
+  </footer>
+
+  <app-purchase-auth-dialog
+    [plan]="selectedPlan"
+    [redirectUrl]="selectedPlan ? checkoutUrl(selectedPlan) : null"
+    (dismissed)="selectedPlan = null"
+    (authStarted)="onAuthStarted($event)">
+  </app-purchase-auth-dialog>
+</div>

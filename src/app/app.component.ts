@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, inject } from '@angular/core';
-import { NavigationExtras, Router, RouterOutlet } from '@angular/router';
+import { NavigationEnd, NavigationExtras, Router, RouterOutlet } from '@angular/router';
+import { filter } from 'rxjs';
 import { FooterComponent } from './components/footer/footer.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 
@@ -20,10 +21,18 @@ export class AppComponent implements OnInit {
   private router = inject(Router);
 
   title = 'All In - Creator';
+  minimalLayout = false;
 
   ngOnInit(): void {
+    this.updateLayout();
+    this.router.events.pipe(filter((event): event is NavigationEnd => event instanceof NavigationEnd))
+      .subscribe(() => this.updateLayout());
     this.redirectFirebaseActionLinks();
     this.redirectMercadoPagoReturnLinks();
+  }
+
+  private updateLayout(): void {
+    this.minimalLayout = this.router.url.split('?')[0] === '/oferta';
   }
 
   private redirectFirebaseActionLinks(): void {
