@@ -3,9 +3,13 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
+    "start": "npm run dev",
+    "predev": "node scripts/configure-environment.mjs",
     "dev": "ng serve --poll=1000",
+    "prebuild": "node scripts/configure-environment.mjs",
     "build": "ng build --configuration=production --output-path=dist/public",
-    "clean": "rd /s /q dist",
+    "build:prod": "npm run build",
+    "clean": "node scripts/clean.mjs",
     "watch": "ng build --watch --configuration development",
     "test": "ng run frontend:test",
     "test:ci": "ng run frontend:test --watch=false --browsers=ChromeHeadlessCI --progress=false",
@@ -13,8 +17,10 @@
     "test:buttons-routes": "ng run frontend:test --watch=false --browsers=ChromeHeadlessCI --progress=false --include src/testing/buttons-routes.workflow.spec.ts",
     "test:auth-flow": "ng run frontend:test --watch=false --browsers=ChromeHeadlessCI --progress=false --include src/testing/auth-flow.workflow.spec.ts --include src/app/core/services/auth.service.spec.ts",
     "test:post-login": "ng run frontend:test --watch=false --browsers=ChromeHeadlessCI --progress=false --include src/testing/post-login.workflow.spec.ts",
-    "serve:frontend:prod": "ng run frontend:serve:production",
-    "serve:ssr:frontend": "npm run serve:frontend:prod"
+    "serve:prod": "ng serve --configuration=production"
+  },
+  "engines": {
+    "node": ">=20.19 <21 || >=22.12"
   },
   "private": true,
   "dependencies": {

@@ -38,16 +38,6 @@
                 "output": "assets/"
               },
               {
-                "glob": "**/*.@(jpg|png|svg|webp|ico|gif|mp4|json)",
-                "input": "src/assets/images",
-                "output": "assets/images/"
-              },
-              {
-                "glob": "**/*.@(jpg|png|svg|webp|ico|gif|mp4|json)",
-                "input": "src/assets/videos",
-                "output": "assets/videos/"
-              },
-              {
                 "glob": "**/*.@(woff2|ttf|eot|otf)",
                 "input": "src/assets/fonts",
                 "output": "assets/fonts/"
