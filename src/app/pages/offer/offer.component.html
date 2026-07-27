@@ -84,17 +84,19 @@
         <span class="eyebrow">Ferramentas presentes no acervo</span>
         <h2>Do design à edição, sem limitar seu repertório.</h2>
       </div>
-      <ul>
-        @for (tool of tools; track tool.src) {
-          <li>
-            <span class="tool-icon">
-              <img [src]="tool.src" [alt]="tool.alt" width="2000" height="2000" loading="lazy" decoding="async">
-            </span>
-            <strong>{{ tool.alt }}</strong>
-          </li>
-        }
-      </ul>
-      <p>Compatibilidade depende do formato do pack e da versão do programa.</p>
+      <div class="tool-panel">
+        <ul>
+          @for (tool of tools; track tool.src) {
+            <li>
+              <span class="tool-icon">
+                <img [src]="tool.src" [alt]="tool.alt" width="2000" height="2000" loading="lazy" decoding="async">
+              </span>
+              <strong>{{ tool.alt }}</strong>
+            </li>
+          }
+        </ul>
+        <p>Compatibilidade depende do formato do pack e da versão do programa.</p>
+      </div>
     </section>
 
     <section class="process">
@@ -133,8 +135,20 @@
           </article>
         }
         <article class="free-plan">
-          <div><span>Experimente nossos packs</span><strong>4 kits gratuitos para conhecer a biblioteca</strong></div>
-          <a routerLink="/auth" [queryParams]="freeSignupParams()" data-cta="free-signup">Testar packs grátis</a>
+          <div class="free-copy">
+            <span class="free-label">Amostra gratuita</span>
+            <h3>Conheça a biblioteca antes de comprar.</h3>
+            <p>Crie sua conta e libere quatro kits. Sem pagamento.</p>
+          </div>
+          <ul class="free-kits" aria-label="Kits incluídos no acesso gratuito">
+            @for (feature of catalog.gratuito.features; track feature) {
+              <li><i class="bi bi-check2"></i>{{ feature }}</li>
+            }
+          </ul>
+          <a class="free-cta" routerLink="/auth" [queryParams]="freeSignupParams()" data-cta="free-signup">
+            <span>Liberar 4 kits grátis</span>
+            <small>Entrar ou criar conta</small>
+          </a>
         </article>
       </div>
     </section>
