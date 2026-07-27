@@ -26,7 +26,12 @@ export class OfferComponent implements OnInit, OnDestroy {
 
   readonly catalog = PLAN_CATALOG;
   readonly formatPrice = formatPlanPrice;
-  readonly paidPlans: PaidPlanSlug[] = ['basic', 'pro', 'premium'];
+  readonly paidPlans: PaidPlanSlug[] = ['premium', 'pro', 'basic'];
+  readonly planPositioning: Record<PaidPlanSlug, string> = {
+    premium: 'Acesso mais completo',
+    pro: 'Melhor custo-benefício',
+    basic: 'Bom para começar'
+  };
   readonly campaignKeys = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term'] as const;
   selectedPlan: PaidPlanSlug | null = null;
   private canonical?: HTMLLinkElement;

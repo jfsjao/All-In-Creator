@@ -41,10 +41,12 @@ describe('OfferComponent', () => {
     authService.setPendingCheckout.calls.reset();
   });
 
-  it('renderiza uma única heading principal e CTA Premium', () => {
+  it('renderiza uma única heading principal e prioriza CTA Basic', () => {
     const element = fixture.nativeElement as HTMLElement;
     expect(element.querySelectorAll('h1').length).toBe(1);
-    expect(element.querySelector('[data-cta="hero-premium"]')?.textContent).toContain('R$ 97,90');
+    expect(element.querySelector('[data-cta="hero-basic"]')?.textContent).toContain('R$ 29,90');
+    expect(element.querySelector('[data-cta="nav-basic"]')).toBeTruthy();
+    expect(element.querySelector('[data-cta="final-basic"]')).toBeTruthy();
   });
 
   it('preserva plano e campanha ao abrir autenticação', async () => {

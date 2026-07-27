@@ -3,8 +3,8 @@
     <a routerLink="/oferta" [queryParams]="campaignParams()" class="wordmark" aria-label="All In Creator">
       <span>ALL IN</span><strong>CREATOR</strong>
     </a>
-    <button type="button" class="nav-cta" data-cta="nav-premium" (click)="selectPlan('premium', 'nav')">
-      Quero acesso Premium
+    <button type="button" class="nav-cta" data-cta="nav-basic" (click)="selectPlan('basic', 'nav')">
+      Quero acesso Basic
     </button>
   </header>
 
@@ -15,8 +15,8 @@
         <h1>Menos tempo procurando.<br><em>Mais tempo criando.</em></h1>
         <p>Templates, elementos, presets, efeitos, vídeos, imagens e ferramentas reunidos para quem cria, edita e entrega conteúdo.</p>
         <div class="hero-actions">
-          <button type="button" class="button primary" data-cta="hero-premium" (click)="selectPlan('premium', 'hero')">
-            Quero acesso Premium — R$ {{ formatPrice(catalog.premium.price) }}
+          <button type="button" class="button primary" data-cta="hero-basic" (click)="selectPlan('basic', 'hero')">
+            Quero acesso Basic — R$ {{ formatPrice(catalog.basic.price) }}
           </button>
           <a href="#biblioteca" class="text-link">Ver o que vem na biblioteca</a>
         </div>
@@ -24,8 +24,8 @@
       </div>
 
       <div class="asset-stack" aria-label="Exemplos reais de packs da biblioteca">
-        <span class="stack-label">Pasta / Premium / Destaques</span>
-        @for (cover of packCovers.slice(0, 4); track cover.src; let i = $index) {
+        <span class="stack-label">Pasta / Basic / Destaques</span>
+        @for (cover of packCovers.slice(0, 3); track cover.src; let i = $index) {
           <figure [style.--order]="i">
             <img [src]="cover.src" [alt]="cover.alt" width="1545" height="1999"
                  [attr.fetchpriority]="i === 0 ? 'high' : null" decoding="async">
@@ -36,9 +36,27 @@
     </section>
 
     <section class="editing-rail" aria-label="Do trabalho repetitivo à biblioteca organizada">
-      <div><span class="rail-dot"></span><strong>Procurar</strong><small>pastas e links soltos</small></div>
-      <div><span class="rail-dot"></span><strong>Organizar</strong><small>formatos e referências</small></div>
-      <div class="rail-result"><span class="rail-dot"></span><strong>Criar</strong><small>com recursos prontos</small></div>
+      <header class="rail-heading">
+        <span>Fluxo de produção</span>
+        <small>da busca ao conteúdo pronto</small>
+      </header>
+      <div class="rail-steps">
+        <div>
+          <span class="rail-index">01</span>
+          <span class="rail-copy"><strong>Procurar</strong><small>pastas e links soltos</small></span>
+          <span class="rail-progress" aria-hidden="true"></span>
+        </div>
+        <div>
+          <span class="rail-index">02</span>
+          <span class="rail-copy"><strong>Organizar</strong><small>formatos e referências</small></span>
+          <span class="rail-progress" aria-hidden="true"></span>
+        </div>
+        <div class="rail-result">
+          <span class="rail-index">03</span>
+          <span class="rail-copy"><strong>Criar</strong><small>com recursos prontos</small></span>
+          <span class="rail-progress" aria-hidden="true"></span>
+        </div>
+      </div>
     </section>
 
     <section id="biblioteca" class="library">
@@ -99,8 +117,8 @@
       </div>
       <div class="plan-grid">
         @for (slug of paidPlans; track slug) {
-          <article class="plan" [class.featured]="slug === 'premium'">
-            @if (slug === 'premium') { <span class="recommendation">Biblioteca mais ampla</span> }
+          <article class="plan" [class.featured]="slug === 'basic'">
+            <span class="recommendation">{{ planPositioning[slug] }}</span>
             <h3>{{ catalog[slug].name }}</h3>
             <p>{{ catalog[slug].summary }}</p>
             <div class="price"><small>R$</small>{{ formatPrice(catalog[slug].price) }}</div>
@@ -108,14 +126,14 @@
             <ul>
               @for (feature of catalog[slug].features; track feature) { <li>{{ feature }}</li> }
             </ul>
-            <button type="button" class="button" [class.primary]="slug === 'premium'"
+            <button type="button" class="button" [class.primary]="slug === 'basic'"
                     [attr.data-cta]="'plan-' + slug" (click)="selectPlan(slug, 'pricing')">
               Comprar {{ catalog[slug].name }}
             </button>
           </article>
         }
         <article class="free-plan">
-          <div><span>Quer conhecer primeiro?</span><strong>4 kits gratuitos</strong></div>
+          <div><span>Experimente nossos packs</span><strong>4 kits gratuitos para conhecer a biblioteca</strong></div>
           <a routerLink="/auth" [queryParams]="freeSignupParams()" data-cta="free-signup">Testar packs grátis</a>
         </article>
       </div>
@@ -159,8 +177,8 @@
       <div>
         <span class="eyebrow">Sua próxima pasta pode estar pronta</span>
         <h2>Abra a biblioteca. Escolha o recurso. Continue criando.</h2>
-        <button type="button" class="button primary" data-cta="final-premium" (click)="selectPlan('premium', 'final')">
-          Quero acesso Premium — R$ {{ formatPrice(catalog.premium.price) }}
+        <button type="button" class="button primary" data-cta="final-basic" (click)="selectPlan('basic', 'final')">
+          Quero acesso Basic — R$ {{ formatPrice(catalog.basic.price) }}
         </button>
       </div>
     </section>
